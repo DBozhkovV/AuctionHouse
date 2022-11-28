@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "BYDM/NqQiwAs1GAD5I+kbp4mIV0fc4+qVoD8sQr2Qy9AzhkUwhnWO8GGLjMyobfVxI5hzTLMezWZKfrsTLlObw==",
+  "dgSpecHash": "yKTtQr5V6PWhP5xD+qRMGE6LxgCt4t1fBbNdHwsasOfp4xzQAS52vFbep2VKhblRUf1YEhoQ0VfqIVVlaxUJfQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\Bozhkov\\Desktop\\AuctionHouse\\AuctionHouse\\AuctionHouse.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\Bozhkov\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",
     "C:\\Users\\Bozhkov\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\Bozhkov\\.nuget\\packages\\microsoft.entityframeworkcore\\6.0.0\\microsoft.entityframeworkcore.6.0.0.nupkg.sha512",
     "C:\\Users\\Bozhkov\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\6.0.0\\microsoft.entityframeworkcore.abstractions.6.0.0.nupkg.sha512",

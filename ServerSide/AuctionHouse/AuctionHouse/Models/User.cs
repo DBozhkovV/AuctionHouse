@@ -18,14 +18,8 @@ namespace AuctionHouse.Models
 
         public List<Item> Items { get; set; } = new List<Item>();
 
-        public User(string firstName, string lastName, string username, string email, string password, string phoneNumber)
+        public User()
         {
-            FirstName = firstName;
-            LastName = lastName;
-            Username = username;
-            Email = email;
-            Password = password;
-            PhoneNumber = phoneNumber;
         }
     }
 }
