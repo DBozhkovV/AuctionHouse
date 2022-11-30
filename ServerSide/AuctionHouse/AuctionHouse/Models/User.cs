@@ -14,7 +14,8 @@ namespace AuctionHouse.Models
         [Required] public string Email { get; set; }
         [Required] public string Password { get; set; }
         [Required] public string PhoneNumber { get; set; }
-        [Required] public bool IsAdmin { get; set; } = false;
+        [Required] public Boolean IsAdmin { get; set; } = false;
+        [Required] public float Money { get; set; } = 0;
 
         public List<Item> Items { get; set; } = new List<Item>();
 

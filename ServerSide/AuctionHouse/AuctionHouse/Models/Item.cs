@@ -16,6 +16,9 @@ namespace AuctionHouse.Models
         [Required] public DateTime DateAdded { get; set; }
         [Required] public DateTime StartingBidDate { get; set; }
         [Required] public DateTime EndBidDate { get; set; }
+        public float BoughtFor { get; set; } = 0;
+        public int UserBoughtIt { get; set; }
+        public Boolean IsAvailable { get; set; } = true;
         [ForeignKey("UserId")] public int UserId { get; set; }
 
         public Item()

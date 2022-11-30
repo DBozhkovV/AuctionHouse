@@ -1,9 +1,8 @@
-﻿using AuctionHouse.Data;
-using AuctionHouse.DTOs;
+﻿using AuctionHouse.DTOs;
 using AuctionHouse.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using BCrypt.Net;
+using AuctionHouse.Services.UserService;
+using AuctionHouse.Data;
 
 namespace AuctionHouse.Controllers
 {
@@ -50,15 +49,16 @@ namespace AuctionHouse.Controllers
 
             foreach (User user in dataContext.Users)
             {
-                if (user.Username == loginDTO.Username) 
+                if (user.Username == loginDTO.Username)
                 {
-                    if (user.Password == BCrypt.Net.BCrypt.HashPassword(loginDTO.Password)) 
+                    var isValid = BCrypt.Net.BCrypt.Verify(loginDTO.Password, user.Password);
+                    if (isValid)
                     {
-                        return Ok(user.Password);   
+                        return Ok(); // Pravim sesiq
                     }
                 }
             }
-            return BadRequest(301);
+            return BadRequest();
         }
 
     }

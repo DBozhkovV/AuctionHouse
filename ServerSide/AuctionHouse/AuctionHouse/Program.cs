@@ -1,4 +1,6 @@
 using AuctionHouse.Data;
+using AuctionHouse.Services.ItemService;
+using AuctionHouse.Services.UserService;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +13,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<DataContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresDatabase")));
+
+//builder.Services.AddScoped<IitemRepository, ItemRepository>();
+//builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 var app = builder.Build();
 

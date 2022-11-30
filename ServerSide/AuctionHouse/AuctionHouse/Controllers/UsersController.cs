@@ -1,7 +1,6 @@
-﻿using AuctionHouse.Data;
-using AuctionHouse.DTOs;
-using AuctionHouse.Models;
+﻿using AuctionHouse.Models;
 using Microsoft.AspNetCore.Mvc;
+using AuctionHouse.Data;
 
 namespace AuctionHouse.Controllers
 {
@@ -21,7 +20,6 @@ namespace AuctionHouse.Controllers
         {
             User deletedUser = dataContext.Users.Where(o => o.Id == id).Single();
             dataContext.Users.Remove(deletedUser);
-           
             dataContext.SaveChanges();
             return Ok();
         }
