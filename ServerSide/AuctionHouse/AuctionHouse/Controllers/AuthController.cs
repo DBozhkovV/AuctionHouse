@@ -1,8 +1,6 @@
 ﻿using AuctionHouse.DTOs;
-using AuctionHouse.Models;
 using Microsoft.AspNetCore.Mvc;
 using AuctionHouse.Services.UserService;
-using AuctionHouse.Data;
 
 namespace AuctionHouse.Controllers
 {
@@ -10,56 +8,46 @@ namespace AuctionHouse.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly DataContext dataContext;
+        private IUserRepository userRepository;
 
-        public AuthController(DataContext dataContext)
+        public AuthController(IUserRepository userRepository)
         {
-            this.dataContext = dataContext;
+            this.userRepository = userRepository;
         }
 
         [HttpPost("register")]
-        public IActionResult Register(UserDTO userDTO)
+        public IActionResult Register(RegisterDTO userDTO)
         {
-            if (userDTO is null)
+            // Da dobavq proverka dali email-a veche e izpolzvan za reg
+            try 
             {
-                throw new ArgumentNullException(nameof(userDTO));
+                userRepository.Register(userDTO);
             }
-
-            User user = new User()
+            catch (Exception exception) 
             {
-                FirstName = userDTO.FirstName,
-                LastName = userDTO.LastName,
-                Username = userDTO.Username,
-                Email = userDTO.Email,
-                Password = BCrypt.Net.BCrypt.HashPassword(userDTO.Password),
-                PhoneNumber = userDTO.PhoneNumber
-            };
-            dataContext.Users.Add(user);
-            dataContext.SaveChanges();
+                return BadRequest(exception.Message);
+            }
             return Ok();
         }
 
         [HttpPost("login")]
         public IActionResult Login(LoginDTO loginDTO) 
         {
-            if (loginDTO is null)
+            try
             {
-                throw new ArgumentNullException(nameof(loginDTO));
-            }
-
-            foreach (User user in dataContext.Users)
-            {
-                if (user.Username == loginDTO.Username)
+                Guid? userId = userRepository.Login(loginDTO);
+                if (userId is null)
                 {
-                    var isValid = BCrypt.Net.BCrypt.Verify(loginDTO.Password, user.Password);
-                    if (isValid)
-                    {
-                        return Ok(); // Pravim sesiq
-                    }
+                    return BadRequest();
                 }
+                //String stringToSave = JsonSerializer.Serialize(userDTO); // Transform object to String
+                HttpContext.Session.SetString("userId", userId.ToString());
             }
-            return BadRequest();
+            catch (Exception exception) 
+            {
+                return BadRequest(exception.Message);
+            }
+            return Ok();
         }
-
     }
 }

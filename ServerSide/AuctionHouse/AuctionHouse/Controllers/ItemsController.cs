@@ -1,6 +1,6 @@
-﻿using AuctionHouse.Data;
-using AuctionHouse.DTOs;
+﻿using AuctionHouse.DTOs;
 using AuctionHouse.Models;
+using AuctionHouse.Services.ItemService;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AuctionHouse.Controllers
@@ -9,96 +9,94 @@ namespace AuctionHouse.Controllers
     [ApiController]
     public class ItemsController : ControllerBase
     {
-        private readonly DataContext dataContext;
+        private readonly IitemRepository itemRepository;
 
-        public ItemsController(DataContext dataContext)
+        public ItemsController(IitemRepository itemRepository)
         {
-            this.dataContext = dataContext;
+            this.itemRepository = itemRepository;
         }
 
         [HttpGet]
         public IActionResult GetItems()
         {
-            return Ok(dataContext.Items);
+            try
+            {
+                IEnumerable<Item> items = itemRepository.GetItems();
+                if (items.Count() == 0) 
+                {
+                    return BadRequest("There is no Items.");
+                }
+                return Ok(items);
+            }
+            catch (Exception exception) 
+            {
+                return BadRequest(exception.Message);
+            }
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetItem(Guid id)
+        {
+            try
+            {
+                Item item = itemRepository.GetItem(id);
+                if (item is null)
+                {
+                    return BadRequest("There is no item with given id.");
+                }
+                return Ok(item);
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
         }
 
         [HttpPost]
         public IActionResult PostItem(ItemDTO itemDTO)
         {
-            if (itemDTO is null)
+            try
             {
-                throw new ArgumentNullException(nameof(itemDTO));
+                if (HttpContext.Session.GetString("userId") is null) 
+                {
+                    return BadRequest("Don't have exist session.");
+                }
+                Guid userId = Guid.Parse(HttpContext.Session.GetString("userId"));
+                itemRepository.PostItem(itemDTO, userId);
             }
-
-            Item item = new Item()
+            catch (Exception exception) 
             {
-                Name = itemDTO.Name,
-                Description = itemDTO.Description,
-                BuyPrice = itemDTO.BuyPrice,
-                StartingPrice = itemDTO.StartingPrice,
-                DateAdded = itemDTO.DateAdded,
-                StartingBidDate = itemDTO.StartingBidDate,
-                EndBidDate = itemDTO.EndBidDate,
-                Bid = itemDTO.StartingPrice,
-                UserId = itemDTO.UserId
-            };
-            dataContext.Items.Add(item);
-            dataContext.SaveChanges();
+                return BadRequest(exception.Message);
+            }
             return Ok();
         }
 
-        [HttpPut]
-        public IActionResult Bid(BidDTO bidDTO) // da pitam milenkata
+        [HttpPut("{id}/bid")]
+        public IActionResult Bid(Guid id, BidDTO bidDTO) // da pitam milenkata
         {
-            if (bidDTO is null)
-            {
-                throw new ArgumentNullException(nameof(bidDTO));
-            }
-
-            User BidUser = new User(); // da pitam nachalnika
-            foreach (User user in dataContext.Users)
-            {
-                if (user.Id == bidDTO.BidUser)
-                {
-                    BidUser = user;
-                }
-            }
-
-            Item BidItem = new Item(); // da pitam nachalnika
-            foreach (Item item in dataContext.Items)
-            {
-                if (item.Id == bidDTO.ItemId)
-                {
-                    BidItem = item;
-                }
-            }
-
-            if (BidUser.Money >= BidItem.Bid)
-            {
-                BidUser.Money -= BidItem.Bid;
-                BidItem.Bid = bidDTO.Bid;
-                dataContext.SaveChanges();
-            }
+            
+            // proverka za sessiqta
             return Ok();
         }
 
         [HttpPut("{id}")]
-        public IActionResult BuyNow(int id)
+        public ActionResult<Item> BuyNow(Guid id) // Da pitam dali da ima async
         {
-            foreach (Item item in dataContext.Items)
+            try
             {
-                if (item.Id == id)
+                if (HttpContext.Session.GetString("userId") is null)
                 {
-                    item.IsAvailable = false;
-                    item.BoughtFor = item.BuyPrice;
-                    item.EndBidDate = DateTime.Now;
-                    dataContext.SaveChanges();
-                    // parite na usera
-                    return Ok();
+                    return BadRequest("Don't have exist session.");
                 }
+                Guid userId = Guid.Parse(HttpContext.Session.GetString("userId"));
+                User user = itemRepository.FindUserByGuid(userId);
+                Item item = itemRepository.BuyNow(id, user);
+                return Ok(item);
             }
-            // Trqbva da se vzemem sesiqta na usera
-            return BadRequest();
+            catch (Exception exception) 
+            {
+                return BadRequest(exception.Message);
+            }
         }
     
     }

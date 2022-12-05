@@ -24,17 +24,21 @@ namespace AuctionHouse.Migrations
 
             modelBuilder.Entity("AuctionHouse.Models.Item", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("uuid");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    b.Property<Guid>("AuthorUserId")
+                        .HasColumnType("uuid");
 
                     b.Property<float>("Bid")
                         .HasColumnType("real");
 
                     b.Property<float>("BoughtFor")
                         .HasColumnType("real");
+
+                    b.Property<Guid?>("BoughtUserId")
+                        .HasColumnType("uuid");
 
                     b.Property<float>("BuyPrice")
                         .HasColumnType("real");
@@ -62,26 +66,20 @@ namespace AuctionHouse.Migrations
                     b.Property<float>("StartingPrice")
                         .HasColumnType("real");
 
-                    b.Property<int>("UserBoughtIt")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("AuthorUserId");
+
+                    b.HasIndex("BoughtUserId");
 
                     b.ToTable("Items");
                 });
 
             modelBuilder.Entity("AuctionHouse.Models.User", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -120,16 +118,26 @@ namespace AuctionHouse.Migrations
 
             modelBuilder.Entity("AuctionHouse.Models.Item", b =>
                 {
-                    b.HasOne("AuctionHouse.Models.User", null)
-                        .WithMany("Items")
-                        .HasForeignKey("UserId")
+                    b.HasOne("AuctionHouse.Models.User", "Author")
+                        .WithMany("AuthoredItems")
+                        .HasForeignKey("AuthorUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("AuctionHouse.Models.User", "Bought")
+                        .WithMany("BoughtItems")
+                        .HasForeignKey("BoughtUserId");
+
+                    b.Navigation("Author");
+
+                    b.Navigation("Bought");
                 });
 
             modelBuilder.Entity("AuctionHouse.Models.User", b =>
                 {
-                    b.Navigation("Items");
+                    b.Navigation("AuthoredItems");
+
+                    b.Navigation("BoughtItems");
                 });
 #pragma warning restore 612, 618
         }

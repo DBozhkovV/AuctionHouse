@@ -18,7 +18,7 @@ namespace AuctionHouse.Controllers
         [HttpDelete]
         public IActionResult DeleteUser(int id)
         {
-            User deletedUser = dataContext.Users.Where(o => o.Id == id).Single();
+            User deletedUser = dataContext.Users.Where(o => o.Id.Equals(id)).Single();
             dataContext.Users.Remove(deletedUser);
             dataContext.SaveChanges();
             return Ok();

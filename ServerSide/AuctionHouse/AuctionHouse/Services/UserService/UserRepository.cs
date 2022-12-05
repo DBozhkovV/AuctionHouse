@@ -1,6 +1,7 @@
 ﻿using AuctionHouse.Data;
 using AuctionHouse.DTOs;
 using AuctionHouse.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace AuctionHouse.Services.UserService
 {
@@ -14,12 +15,12 @@ namespace AuctionHouse.Services.UserService
 
         public void DeleteUser(int id)
         {
-            User deletedUser = dataContext.Users.Where(o => o.Id == id).Single();
+            User deletedUser = dataContext.Users.Where(o => o.Id.Equals(id)).Single();
             dataContext.Users.Remove(deletedUser);
             dataContext.SaveChanges();
         }
 
-        public void Login(LoginDTO loginDTO)
+        public Guid? Login(LoginDTO loginDTO)
         {
             if (loginDTO is null)
             {
@@ -30,30 +31,44 @@ namespace AuctionHouse.Services.UserService
             {
                 if (user.Username == loginDTO.Username)
                 {
-                    if (user.Password == BCrypt.Net.BCrypt.HashPassword(loginDTO.Password))
+                    bool isValid = BCrypt.Net.BCrypt.Verify(loginDTO.Password, user.Password);
+                    if (isValid)
                     {
-                        return; // Pravim sesiq
+                        return user.Id;
                     }
                 }
             }
-            throw new Exception("Invalid user.");
+            return null;
         }
 
-        public void Register(UserDTO userDTO)
+        public void Register(RegisterDTO registerDTO)
         {
-            if (userDTO is null)
+            if (registerDTO is null)
             {
-                throw new ArgumentNullException(nameof(userDTO));
+                throw new ArgumentNullException(nameof(registerDTO));
+            }
+
+            if (!registerDTO.Password.Equals(registerDTO.ConfirmPassword)) 
+            {
+                throw new Exception("Invalid confirmed password");
+            }
+
+            foreach (User userI in dataContext.Users)
+            {
+                if (userI.Username == registerDTO.Username)
+                {
+                    throw new Exception("Username is already used.");
+                }
             }
 
             User user = new User()
             {
-                FirstName = userDTO.FirstName,
-                LastName = userDTO.LastName,
-                Username = userDTO.Username,
-                Email = userDTO.Email,
-                Password = BCrypt.Net.BCrypt.HashPassword(userDTO.Password),
-                PhoneNumber = userDTO.PhoneNumber
+                FirstName = registerDTO.FirstName,
+                LastName = registerDTO.LastName,
+                Username = registerDTO.Username,
+                Email = registerDTO.Email,
+                Password = BCrypt.Net.BCrypt.HashPassword(registerDTO.Password),
+                PhoneNumber = registerDTO.PhoneNumber
             };
             dataContext.Users.Add(user);
             dataContext.SaveChanges();

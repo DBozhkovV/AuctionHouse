@@ -1,6 +1,7 @@
 ﻿using AuctionHouse.Data;
 using AuctionHouse.DTOs;
 using AuctionHouse.Models;
+using System.Text.Json;
 
 namespace AuctionHouse.Services.ItemService
 {
@@ -12,83 +13,112 @@ namespace AuctionHouse.Services.ItemService
             this.dataContext = dataContext;
         }
 
-        public void Bid(BidDTO bidDTO)
+        public void Bid(Guid itemId, BidDTO bidDTO, Guid userId)
         {
             if (bidDTO is null)
             {
                 throw new ArgumentNullException(nameof(bidDTO));
             }
 
-            User BidUser = new User(); // da pitam 
-            foreach (User user in dataContext.Users)
+            Item item = FindItemByGuid(itemId);
+            User user = FindUserByGuid(userId);
+
+            if (bidDTO.Bid > user.Money) 
             {
-                if (user.Id == bidDTO.BidUser)
-                {
-                    BidUser = user;
-                }
+                throw new Exception("You don't have enough money.");
             }
 
-            Item BidItem = new Item(); // da pitam 
-            foreach (Item item in dataContext.Items)
+            if (user.Money < item.Bid) 
             {
-                if (item.Id == bidDTO.ItemId)
-                {
-                    BidItem = item;
-                }
+                throw new Exception("You don't have enough money.");
             }
 
-            if (BidUser.Money >= BidItem.Bid)
-            {
-                BidUser.Money -= BidItem.Bid;
-                BidItem.Bid = bidDTO.Bid;
-                dataContext.SaveChanges();
-            }
+            item.Bid = bidDTO.Bid;
+            // Da dovursha
+
         }
 
-        public void BuyNow(int id)
+        public Item GetItem(Guid id) // Da opravq tazi funkciq
         {
-            foreach (Item item in dataContext.Items)
+            Item item = dataContext.Items.Single(x => x.Id == id);
+            return item;
+        }
+
+        public Item BuyNow(Guid id, User user)
+        {
+            Item item = dataContext.Items.Single(x => x.Id == id);
+            
+            if (item.IsAvailable == false) 
             {
-                if (item.Id == id)
-                {
-                    item.IsAvailable = false;
-                    item.BoughtFor = item.BuyPrice;
-                    item.EndBidDate = DateTime.Now;
-                    dataContext.SaveChanges();
-                    // parite na usera
-                    return;
-                }
+                throw new Exception("This item is sold.");
             }
-            // Trqbva da se vzemem sesiqta na usera
-            throw new Exception("Can't find item with given id.");
+            
+            if (user.Money < item.BuyPrice) 
+            {
+                throw new Exception("You don't have enough money.");
+            }
+            
+            item.IsAvailable = false;
+            item.BoughtFor = item.BuyPrice;
+            item.EndBidDate = DateTime.UtcNow;
+            item.BoughtUserId = user.Id;
+            user.Money = user.Money - item.BuyPrice;
+            dataContext.SaveChanges();
+            return item;
         }
 
         public IEnumerable<Item> GetItems()
         {
-            return dataContext.Items;
+            return dataContext.Items.ToList();
         }
 
-        public void PostItem(ItemDTO itemDTO)
+        public void PostItem(ItemDTO itemDTO, Guid userId)
         {
             if (itemDTO is null)
             {
                 throw new ArgumentNullException(nameof(itemDTO));
             }
-
-            Item item = new Item()
+            try
             {
-                Name = itemDTO.Name,
-                Description = itemDTO.Description,
-                BuyPrice = itemDTO.BuyPrice,
-                StartingPrice = itemDTO.StartingPrice,
-                DateAdded = itemDTO.DateAdded,
-                StartingBidDate = itemDTO.StartingBidDate,
-                EndBidDate = itemDTO.EndBidDate,
-                Bid = itemDTO.StartingPrice,
-                UserId = itemDTO.UserId
-            };
-            dataContext.Items.Add(item);
-            dataContext.SaveChanges();
+                Item item = new Item()
+                {
+                    Name = itemDTO.Name,
+                    Description = itemDTO.Description,
+                    BuyPrice = itemDTO.BuyPrice,
+                    StartingPrice = itemDTO.StartingPrice,
+                    DateAdded = itemDTO.DateAdded,
+                    StartingBidDate = itemDTO.StartingBidDate,
+                    EndBidDate = itemDTO.EndBidDate,
+                    Bid = itemDTO.StartingPrice,
+                    AuthorUserId = userId
+                };
+                dataContext.Items.Add(item);
+                dataContext.SaveChanges();
+            } 
+            catch (Exception)
+            {
+                throw new Exception("Invalid user.");
+            }
+        }
+
+        public User FindUserByGuid(Guid userId)
+        {
+            User user = dataContext.Users.Where(user => user.Id == userId).Single();
+            if (user is null)
+            {
+                throw new Exception("Invalid user id.");
+            }
+            return user;
+        }
+
+        public Item FindItemByGuid(Guid itemId)
+        {
+            Item item = dataContext.Items.Where(item => item.Id == itemId).Single();
+            if (item is null) 
+            {
+                throw new Exception("Invalid item id.");
+            }
+            return item;
         }
     }
 }

@@ -6,18 +6,21 @@ namespace AuctionHouse.Models
     public class User
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)] // A new key will be generated when a user is added
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         [Required] public string FirstName { get; set; }
         [Required] public string LastName { get; set; }
         [Required] public string Username { get; set; }
         [Required] public string Email { get; set; }
         [Required] public string Password { get; set; }
         [Required] public string PhoneNumber { get; set; }
-        [Required] public Boolean IsAdmin { get; set; } = false;
-        [Required] public float Money { get; set; } = 0;
+        public bool IsAdmin { get; set; } = false;
+        public float Money { get; set; } = 0;
 
-        public List<Item> Items { get; set; } = new List<Item>();
+        [InverseProperty("Author")]
+        public virtual ICollection<Item> AuthoredItems { get; set; }
+        
+        [InverseProperty("Bought")]
+        public virtual ICollection<Item> BoughtItems { get; set; }
 
         public User()
         {
