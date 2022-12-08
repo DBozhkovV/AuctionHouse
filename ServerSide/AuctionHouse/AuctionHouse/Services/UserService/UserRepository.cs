@@ -59,6 +59,11 @@ namespace AuctionHouse.Services.UserService
                 {
                     throw new Exception("Username is already used.");
                 }
+
+                if (userI.Email == registerDTO.Email) 
+                {
+                    throw new Exception("This email is already used.");
+                }
             }
 
             User user = new User()

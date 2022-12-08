@@ -18,7 +18,6 @@ namespace AuctionHouse.Controllers
         [HttpPost("register")]
         public IActionResult Register(RegisterDTO userDTO)
         {
-            // Da dobavq proverka dali email-a veche e izpolzvan za reg
             try 
             {
                 userRepository.Register(userDTO);
