@@ -10,3 +10,22 @@
     flex-wrap: wrap;
     justify-content: space-around;
 }
+
+/* Make frame for registration form */
+.register-frame { 
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+}
+
+/* Make header for registration form */
+.register-header {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.register-header img {
+    width: 10rem;
+}

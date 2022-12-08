@@ -4,7 +4,7 @@ import Layout from './Layout/Layout';
 import Home from './Views/Pages/Home';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Login from './Views/Pages/Login';
-import Register from './Views/Pages/Register';
+import RegistrationForm from './Views/Pages/Register';
 import ItemsApi from './Components/ItemsApi';
 
 function App() {
@@ -14,7 +14,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+          <Route path="/register" element={<RegistrationForm />} />
           <Route path="/items" element={<ItemsApi />} />
         </Routes>
       </Layout>
