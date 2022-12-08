@@ -1,0 +1,12 @@
+/* Add gap to the original model */
+.justify-content-end {
+    gap: 1rem;
+}
+
+.items-frame {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
