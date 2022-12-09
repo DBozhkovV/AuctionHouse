@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import BrandLogo from "../../Assets/images/BigBrandLogo.png";
 
+// Da dobavq proverka dali password i confrimed password sa ednakvi
 const RegistrationForm = () => {
     
     const [firstName, setFirstName] = useState(null);
@@ -23,11 +24,12 @@ const RegistrationForm = () => {
     return (
         <div>
             <header className="register-header">
+                {/* eslint-disable-next-line  */} {/*Remove the warning of the next line because in img tag we should have alt */}
                 <img src={BrandLogo} />
                 <br />
                 Welcome to Auction house!
             </header>
-            <div className="register-frame">
+            <div className="form-frame">
                 <form>
                     <div className="row my-3">
                         <div className="col-md-6">

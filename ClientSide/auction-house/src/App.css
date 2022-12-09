@@ -9,10 +9,11 @@
     gap: 1rem;
     flex-wrap: wrap;
     justify-content: space-around;
+    margin: 2rem;
 }
 
 /* Make frame for registration form */
-.register-frame { 
+.form-frame { 
     display: flex;
     flex-direction: column;
     gap: 1rem;
@@ -28,4 +29,11 @@
 
 .register-header img {
     width: 10rem;
+}
+
+.items-header {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 1rem;
 }
