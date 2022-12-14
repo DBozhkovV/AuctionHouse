@@ -4,8 +4,8 @@ namespace AuctionHouse.Services.UserService
 {
     public interface IUserRepository
     {
-        void Register(RegisterDTO userDTO);
+        void Register(RegisterDTO registerDTO);
         Guid? Login(LoginDTO loginDTO);
-        void DeleteUser(int id);
+        void DeleteUser(Guid userId);
     }
 }

@@ -16,11 +16,11 @@ namespace AuctionHouse.Controllers
         }
 
         [HttpPost("register")]
-        public IActionResult Register(RegisterDTO userDTO)
+        public IActionResult Register(RegisterDTO registerDTO)
         {
             try 
             {
-                userRepository.Register(userDTO);
+                userRepository.Register(registerDTO);
             }
             catch (Exception exception) 
             {
@@ -39,10 +39,39 @@ namespace AuctionHouse.Controllers
                 {
                     return BadRequest();
                 }
-                //String stringToSave = JsonSerializer.Serialize(userDTO); // Transform object to String
                 HttpContext.Session.SetString("userId", userId.ToString());
             }
             catch (Exception exception) 
+            {
+                return BadRequest(exception.Message);
+            }
+            return Ok();
+        }
+
+        [HttpPost("logout")]
+        public IActionResult Logout()
+        {
+            if (HttpContext.Session.GetString("userId") is null)
+            {
+                return BadRequest("Don't have exist session.");
+            }
+            HttpContext.Session.Remove("userId");
+            return Ok();
+        }
+
+        [HttpDelete]
+        public IActionResult DeleteUser()
+        {
+            try 
+            {
+                if (HttpContext.Session.GetString("userId") is null)
+                {
+                    return BadRequest("Don't have exist session.");
+                }
+                Guid userId = Guid.Parse(HttpContext.Session.GetString("userId"));
+                userRepository.DeleteUser(userId);
+            }
+            catch (Exception exception)
             {
                 return BadRequest(exception.Message);
             }

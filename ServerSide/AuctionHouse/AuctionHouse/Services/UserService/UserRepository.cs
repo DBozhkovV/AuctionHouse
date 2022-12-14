@@ -1,7 +1,6 @@
 ﻿using AuctionHouse.Data;
 using AuctionHouse.DTOs;
 using AuctionHouse.Models;
-using Microsoft.AspNetCore.Http;
 
 namespace AuctionHouse.Services.UserService
 {
@@ -11,34 +10,6 @@ namespace AuctionHouse.Services.UserService
         public UserRepository(DataContext dataContext)
         {
             this.dataContext = dataContext;
-        }
-
-        public void DeleteUser(int id)
-        {
-            User deletedUser = dataContext.Users.Where(o => o.Id.Equals(id)).Single();
-            dataContext.Users.Remove(deletedUser);
-            dataContext.SaveChanges();
-        }
-
-        public Guid? Login(LoginDTO loginDTO)
-        {
-            if (loginDTO is null)
-            {
-                throw new ArgumentNullException(nameof(loginDTO));
-            }
-
-            foreach (User user in dataContext.Users)
-            {
-                if (user.Username == loginDTO.Username)
-                {
-                    bool isValid = BCrypt.Net.BCrypt.Verify(loginDTO.Password, user.Password);
-                    if (isValid)
-                    {
-                        return user.Id;
-                    }
-                }
-            }
-            return null;
         }
 
         public void Register(RegisterDTO registerDTO)
@@ -76,6 +47,34 @@ namespace AuctionHouse.Services.UserService
                 PhoneNumber = registerDTO.PhoneNumber
             };
             dataContext.Users.Add(user);
+            dataContext.SaveChanges();
+        }
+
+        public Guid? Login(LoginDTO loginDTO)
+        {
+            if (loginDTO is null)
+            {
+                throw new ArgumentNullException(nameof(loginDTO));
+            }
+
+            foreach (User user in dataContext.Users)
+            {
+                if (user.Username == loginDTO.Username)
+                {
+                    bool isValid = BCrypt.Net.BCrypt.Verify(loginDTO.Password, user.Password);
+                    if (isValid)
+                    {
+                        return user.Id;
+                    }
+                }
+            }
+            return null;
+        }
+
+        public void DeleteUser(Guid userId)
+        {
+            User deletedUser = dataContext.Users.Where(o => o.Id.Equals(userId)).Single();
+            dataContext.Users.Remove(deletedUser);
             dataContext.SaveChanges();
         }
     }

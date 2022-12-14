@@ -17,18 +17,54 @@ namespace AuctionHouse.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetItems()
+        public IActionResult GetAvailableItems()
         {
             try
             {
-                IEnumerable<Item> items = itemRepository.GetItems();
+                IEnumerable<Item> items = itemRepository.GetAvailableItems();
                 if (items.Count() == 0) 
+                {
+                    return BadRequest("There is no available items.");
+                }
+                return Ok(items);
+            }
+            catch (Exception exception) 
+            {
+                return BadRequest(exception.Message);
+            }
+        }
+
+        [HttpGet("not-accepted")]
+        public IActionResult GetNotAcceptedItems()
+        {
+            try
+            {
+                IEnumerable<Item> items = itemRepository.GetNotAcceptedItems();
+                if (items.Count() == 0)
+                {
+                    return BadRequest("There is no not-accepted items.");
+                }
+                return Ok(items);
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
+        }
+
+        [HttpGet("search")]
+        public IActionResult SearchItems(string search)
+        {
+            try
+            {
+                IEnumerable<Item> items = itemRepository.SearchItems(search);
+                if (items.Count() == 0)
                 {
                     return BadRequest("There is no Items.");
                 }
                 return Ok(items);
             }
-            catch (Exception exception) 
+            catch (Exception exception)
             {
                 return BadRequest(exception.Message);
             }
@@ -72,7 +108,7 @@ namespace AuctionHouse.Controllers
         }
 
         [HttpPut("{id}/bid")]
-        public IActionResult Bid(Guid id, BidDTO bidDTO) // da pitam milenkata
+        public IActionResult Bid(Guid id, [FromBody] float Bid) // da pitam milenkata
         {
             
             // proverka za sessiqta
@@ -80,7 +116,7 @@ namespace AuctionHouse.Controllers
         }
 
         [HttpPut("{id}")]
-        public ActionResult<Item> BuyNow(Guid id) // Da pitam dali da ima async
+        public async Task<ActionResult<Item>> BuyNowAsync(Guid id) // Da dobavq await nqkude tuk
         {
             try
             {
@@ -90,7 +126,7 @@ namespace AuctionHouse.Controllers
                 }
                 Guid userId = Guid.Parse(HttpContext.Session.GetString("userId"));
                 User user = itemRepository.FindUserByGuid(userId);
-                Item item = itemRepository.BuyNow(id, user);
+                Item item = await itemRepository.BuyNowAsync(id, user);
                 return Ok(item);
             }
             catch (Exception exception) 
@@ -98,6 +134,5 @@ namespace AuctionHouse.Controllers
                 return BadRequest(exception.Message);
             }
         }
-    
     }
 }

@@ -37,9 +37,6 @@ namespace AuctionHouse.Migrations
                     b.Property<float>("BoughtFor")
                         .HasColumnType("real");
 
-                    b.Property<Guid?>("BoughtUserId")
-                        .HasColumnType("uuid");
-
                     b.Property<float>("BuyPrice")
                         .HasColumnType("real");
 
@@ -52,6 +49,9 @@ namespace AuctionHouse.Migrations
 
                     b.Property<DateTime>("EndBidDate")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsAccepted")
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("IsAvailable")
                         .HasColumnType("boolean");
@@ -70,9 +70,38 @@ namespace AuctionHouse.Migrations
 
                     b.HasIndex("AuthorUserId");
 
-                    b.HasIndex("BoughtUserId");
-
                     b.ToTable("Items");
+                });
+
+            modelBuilder.Entity("AuctionHouse.Models.Order", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("DateOrdered")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsOrderActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsOrderCompleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid>("ItemId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ItemId")
+                        .IsUnique();
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("AuctionHouse.Models.User", b =>
@@ -80,6 +109,9 @@ namespace AuctionHouse.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<float>("Balance")
+                        .HasColumnType("real");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -95,9 +127,6 @@ namespace AuctionHouse.Migrations
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<float>("Money")
-                        .HasColumnType("real");
 
                     b.Property<string>("Password")
                         .IsRequired()
@@ -124,20 +153,39 @@ namespace AuctionHouse.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("AuctionHouse.Models.User", "Bought")
-                        .WithMany("BoughtItems")
-                        .HasForeignKey("BoughtUserId");
-
                     b.Navigation("Author");
+                });
 
-                    b.Navigation("Bought");
+            modelBuilder.Entity("AuctionHouse.Models.Order", b =>
+                {
+                    b.HasOne("AuctionHouse.Models.Item", "Item")
+                        .WithOne("Order")
+                        .HasForeignKey("AuctionHouse.Models.Order", "ItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AuctionHouse.Models.User", "User")
+                        .WithMany("Orders")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Item");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("AuctionHouse.Models.Item", b =>
+                {
+                    b.Navigation("Order")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("AuctionHouse.Models.User", b =>
                 {
                     b.Navigation("AuthoredItems");
 
-                    b.Navigation("BoughtItems");
+                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }

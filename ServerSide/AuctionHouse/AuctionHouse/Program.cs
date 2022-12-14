@@ -1,5 +1,6 @@
 using AuctionHouse.Data;
 using AuctionHouse.Services.ItemService;
+using AuctionHouse.Services.OrderService;
 using AuctionHouse.Services.UserService;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
@@ -17,6 +18,8 @@ builder.Services.AddDbContext<DataContext>(options => options.UseNpgsql(builder.
 
 builder.Services.AddScoped<IitemRepository, ItemRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+
 
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
