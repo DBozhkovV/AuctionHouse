@@ -37,3 +37,7 @@
     flex-direction: column;
     margin-top: 1rem;
 }
+
+.d-flex {
+    width: 35rem;
+}

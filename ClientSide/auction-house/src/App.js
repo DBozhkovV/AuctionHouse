@@ -6,6 +6,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Login from './Views/Pages/Login';
 import RegistrationForm from './Views/Pages/Register';
 import ItemsApi from './Components/ItemsApi';
+import SearchedItems from './Components/SearchedItems';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<RegistrationForm />} />
           <Route path="/items" element={<ItemsApi />} />
+          <Route path="/items/search/:search" element={<SearchedItems />} />
         </Routes>
       </Layout>
     </BrowserRouter>
