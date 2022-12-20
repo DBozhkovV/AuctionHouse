@@ -1,7 +1,11 @@
 using AuctionHouse.Data;
+using AuctionHouse.Models;
+using AuctionHouse.Services.CustomAuthorization;
 using AuctionHouse.Services.ItemService;
 using AuctionHouse.Services.OrderService;
 using AuctionHouse.Services.UserService;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 
@@ -20,7 +24,6 @@ builder.Services.AddScoped<IitemRepository, ItemRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 
-
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
@@ -28,14 +31,24 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 });
 
 builder.Services.AddDistributedMemoryCache();
-/*
-builder.Services.AddSession(options => 
-{
-    options.IdleTimeout = TimeSpan.FromMinutes(10);
-});
-*/
 
 builder.Services.AddSession();
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/login";
+        options.LogoutPath = "/logout";
+    });
+
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddSingleton<IAuthorizationHandler, SessionBasedAuthorizationHandler>();
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("Admin", policy => policy.Requirements.Add(new SessionBasedAuthorizationRequirement(Role.Admin)));
+    options.AddPolicy("User", policy => policy.Requirements.Add(new SessionBasedAuthorizationRequirement(Role.User)));
+});
 
 builder.Services.AddCors(options =>
 {

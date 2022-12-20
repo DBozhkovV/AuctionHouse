@@ -1,6 +1,7 @@
 ﻿using AuctionHouse.DTOs;
 using AuctionHouse.Models;
 using AuctionHouse.Services.ItemService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AuctionHouse.Controllers
@@ -17,6 +18,7 @@ namespace AuctionHouse.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult GetAvailableItems()
         {
             try
@@ -35,6 +37,7 @@ namespace AuctionHouse.Controllers
         }
 
         [HttpGet("not-accepted")]
+        [Authorize(Policy = "Admin")]
         public IActionResult GetNotAcceptedItems()
         {
             try
@@ -53,6 +56,7 @@ namespace AuctionHouse.Controllers
         }
 
         [HttpGet("search")]
+        [AllowAnonymous]
         public IActionResult SearchItems(string search)
         {
             try
@@ -71,6 +75,7 @@ namespace AuctionHouse.Controllers
         }
 
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public IActionResult GetItem(Guid id)
         {
             try
@@ -89,6 +94,7 @@ namespace AuctionHouse.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "User")]
         public IActionResult PostItem(ItemDTO itemDTO)
         {
             try
@@ -108,6 +114,7 @@ namespace AuctionHouse.Controllers
         }
 
         [HttpPut("{id}/bid")]
+        [Authorize(Policy = "User")]
         public IActionResult Bid(Guid id, [FromBody] float Bid) // da pitam milenkata
         {
             
@@ -116,6 +123,7 @@ namespace AuctionHouse.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Policy = "User")]
         public async Task<ActionResult<Item>> BuyNowAsync(Guid id) // Da dobavq await nqkude tuk
         {
             try

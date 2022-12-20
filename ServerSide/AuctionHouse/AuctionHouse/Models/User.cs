@@ -19,8 +19,14 @@ namespace AuctionHouse.Models
         public string Password { get; set; }
         [Required] 
         public string PhoneNumber { get; set; }
-        public bool IsAdmin { get; set; } = false;       
         public float Balance { get; set; } = 0;
+        public Role Role { get; set; } = Role.User;
+        public Guid VerificationToken { get; set; } = Guid.NewGuid();
+        public bool IsVerified { get; set; } = false;
+        public DateTime? VerifiedAt { get; set; } = null;
+        public Guid? PasswordResetToken { get; set; } = null;
+        public DateTime? PasswordResetTokenExpires { get; set; } = null;
+
         [InverseProperty("Author")]
         public virtual ICollection<Item> AuthoredItems { get; set; }
         [InverseProperty("User")]

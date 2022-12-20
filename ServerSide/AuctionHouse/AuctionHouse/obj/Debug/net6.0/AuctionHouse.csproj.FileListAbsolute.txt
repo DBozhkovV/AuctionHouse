@@ -39,3 +39,11 @@ C:\Users\Bozhkov\Desktop\AuctionHouse\AuctionHouse\bin\Debug\net6.0\System.Web.H
 C:\Users\Bozhkov\Desktop\AuctionHouse\AuctionHouse\bin\Debug\net6.0\System.Web.Http.Cors.dll
 C:\Users\Bozhkov\Desktop\AuctionHouse\AuctionHouse\bin\Debug\net6.0\Newtonsoft.Json.dll
 C:\Users\Bozhkov\Desktop\AuctionHouse\AuctionHouse\bin\Debug\net6.0\Newtonsoft.Json.Bson.dll
+C:\Users\Bozhkov\Desktop\AuctionHouse\AuctionHouse\bin\Debug\net6.0\SendGrid.dll
+C:\Users\Bozhkov\Desktop\AuctionHouse\AuctionHouse\bin\Debug\net6.0\StarkbankEcdsa.dll
+C:\Users\Bozhkov\Desktop\AuctionHouse\AuctionHouse\bin\Debug\net6.0\Microsoft.AspNetCore.Authorization.dll
+C:\Users\Bozhkov\Desktop\AuctionHouse\AuctionHouse\bin\Debug\net6.0\Microsoft.AspNetCore.Metadata.dll
+C:\Users\Bozhkov\Desktop\AuctionHouse\AuctionHouse\bin\Debug\net6.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\Bozhkov\Desktop\AuctionHouse\AuctionHouse\bin\Debug\net6.0\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\Bozhkov\Desktop\AuctionHouse\AuctionHouse\bin\Debug\net6.0\Microsoft.Extensions.Options.dll
+C:\Users\Bozhkov\Desktop\AuctionHouse\AuctionHouse\bin\Debug\net6.0\Microsoft.Extensions.Primitives.dll

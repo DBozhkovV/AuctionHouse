@@ -1,6 +1,6 @@
 ﻿using AuctionHouse.Models;
 using AuctionHouse.Services.OrderService;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AuctionHouse.Controllers
@@ -16,8 +16,8 @@ namespace AuctionHouse.Controllers
             this.orderRepository = orderRepository;
         }
 
-
         [HttpGet]
+        [Authorize(Policy = "User")]
         public IActionResult GetOrders()
         {
             try
@@ -41,6 +41,7 @@ namespace AuctionHouse.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Policy = "User")]
         public IActionResult GetOrder(Guid id)
         {
             try
@@ -60,6 +61,7 @@ namespace AuctionHouse.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Policy = "User")]
         public IActionResult DeleteOrder(Guid id)
         {
             try

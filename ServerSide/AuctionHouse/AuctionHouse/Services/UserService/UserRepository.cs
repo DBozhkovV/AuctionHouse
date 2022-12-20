@@ -1,6 +1,8 @@
 ﻿using AuctionHouse.Data;
 using AuctionHouse.DTOs;
 using AuctionHouse.Models;
+using SendGrid;
+using SendGrid.Helpers.Mail;
 
 namespace AuctionHouse.Services.UserService
 {
@@ -61,6 +63,11 @@ namespace AuctionHouse.Services.UserService
             {
                 if (user.Username == loginDTO.Username)
                 {
+                    if (user.IsVerified == false)
+                    {
+                        throw new Exception("User is not verified.");
+                    }
+
                     bool isValid = BCrypt.Net.BCrypt.Verify(loginDTO.Password, user.Password);
                     if (isValid)
                     {
@@ -71,11 +78,55 @@ namespace AuctionHouse.Services.UserService
             return null;
         }
 
+        public void VerifyAccount(Guid token)
+        {
+            User user = dataContext.Users.Where(u => u.VerificationToken == token).Single();
+            user.IsVerified = true;
+            user.VerifiedAt = DateTime.UtcNow;
+            dataContext.SaveChanges();
+        }
+
+        public void ForgotPassword(string email) 
+        {
+            User user = dataContext.Users.Where(u => u.Email == email).Single();
+            user.PasswordResetToken = Guid.NewGuid();
+            user.PasswordResetTokenExpires = DateTime.UtcNow.AddDays(1);
+            dataContext.SaveChanges();
+        }
+
+        public void ResetPassword(ResetPasswordDTO resetPasswordDTO) 
+        {
+            User user = dataContext.Users.Where(u => u.PasswordResetToken == resetPasswordDTO.Token).Single();
+            if (user.PasswordResetTokenExpires < DateTime.UtcNow)
+            {
+                throw new Exception("Password reset token has expired.");
+            }
+
+            user.Password = BCrypt.Net.BCrypt.HashPassword(resetPasswordDTO.Password);
+            user.PasswordResetToken = null;
+            user.PasswordResetTokenExpires = null;
+            dataContext.SaveChanges();
+        }
+
         public void DeleteUser(Guid userId)
         {
             User deletedUser = dataContext.Users.Where(o => o.Id.Equals(userId)).Single();
             dataContext.Users.Remove(deletedUser);
             dataContext.SaveChanges();
         }
+
+        public bool IsRoled(Guid userId, Role role) 
+        {
+            User user = dataContext.Users.Where(o => o.Id == userId).Single();
+            if (user.Role == role)
+            {
+                return true;
+            }
+            else 
+            {
+                return false;
+            }
+        }
+
     }
 }
