@@ -23,12 +23,12 @@ namespace AuctionHouse.Services.ItemService
             Item item = FindItemByGuid(itemId);
             User user = FindUserByGuid(userId);
 
-            if (Bid > user.Balance) 
+            if (Bid > user.Balance)
             {
                 throw new Exception("You don't have enough balance.");
             }
 
-            if (user.Balance < item.Bid) 
+            if (user.Balance < item.Bid)
             {
                 throw new Exception("You don't have enough balance.");
             }
@@ -41,17 +41,17 @@ namespace AuctionHouse.Services.ItemService
         public async Task<Item> BuyNowAsync(Guid id, User user)
         {
             Item item = dataContext.Items.Single(x => x.Id == id);
-            
-            if (item.IsAvailable == false) 
+
+            if (item.IsAvailable == false)
             {
                 throw new Exception("This item is sold.");
             }
-            
-            if (user.Balance < item.BuyPrice) 
+
+            if (user.Balance < item.BuyPrice)
             {
                 throw new Exception("You don't have enough money.");
             }
-            
+
             item.IsAvailable = false;
             item.BoughtFor = item.BuyPrice;
             item.EndBidDate = DateTime.UtcNow;
@@ -74,7 +74,7 @@ namespace AuctionHouse.Services.ItemService
             return dataContext.Items.Where(item => item.IsAvailable == true && item.IsAccepted == true).ToList();
         }
 
-        public IEnumerable<Item> GetNotAcceptedItems() 
+        public IEnumerable<Item> GetNotAcceptedItems()
         {
             return dataContext.Items.Where(item => item.IsAccepted == false).ToList();
         }
@@ -101,7 +101,7 @@ namespace AuctionHouse.Services.ItemService
                 };
                 dataContext.Items.Add(item);
                 dataContext.SaveChanges();
-            } 
+            }
             catch (Exception)
             {
                 throw new Exception("Invalid user.");
@@ -121,7 +121,7 @@ namespace AuctionHouse.Services.ItemService
         public Item FindItemByGuid(Guid itemId)
         {
             Item item = dataContext.Items.Where(item => item.Id == itemId).Single();
-            if (item is null) 
+            if (item is null)
             {
                 throw new Exception("Invalid item id.");
             }
@@ -131,12 +131,19 @@ namespace AuctionHouse.Services.ItemService
         public IEnumerable<Item> SearchItems(string search)
         {
             IEnumerable<Item> items = dataContext.Items.Where(item => item.Name.Contains(search)).ToList();
-            if (items is null) 
+            if (items is null)
             {
                 throw new Exception("There is no item with this name.");
             }
-            
+
             return items;
+        }
+
+        public void AcceptItem(Guid itemId) 
+        {
+            Item item = FindItemByGuid(itemId);
+            item.IsAccepted = true;
+            dataContext.SaveChanges();
         }
     }
 }

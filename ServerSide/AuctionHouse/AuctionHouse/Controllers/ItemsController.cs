@@ -55,6 +55,21 @@ namespace AuctionHouse.Controllers
             }
         }
 
+        [HttpPut("accept")]
+        [Authorize(Policy = "Admin")]
+        public IActionResult AcceptItem([FromBody] Guid id) 
+        {
+            try
+            {
+                itemRepository.AcceptItem(id);
+                return Ok();
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
+        }
+        
         [HttpGet("search")]
         [AllowAnonymous]
         public IActionResult SearchItems(string search)

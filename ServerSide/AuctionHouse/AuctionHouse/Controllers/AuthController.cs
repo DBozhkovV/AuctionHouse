@@ -19,26 +19,42 @@ namespace AuctionHouse.Controllers
             this.userRepository = userRepository;
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("send-text-mail")]
-        [Authorize(Policy = "Admin")]
-        public async Task<IActionResult> SendPlainTextEmail(string toEmail, string name)
+        [AllowAnonymous]
+        public async Task<IActionResult> SendPlainTextEmail(EmailDTO emailDTO)
         {
-            var apiKey = "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";
+            // Replace YOUR_API_KEY with your actual SendGrid API key
+            string apiKey = "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";
             var client = new SendGridClient(apiKey);
-            var msg = new SendGridMessage()
-            {
-                From = new EmailAddress("houseauction89@gmail.com", "AuctionHouse"),
-                Subject = "Sending with Twilio SendGrid is Fun",
-                PlainTextContent = "and easy to do anywhere, especially with C#"
-            };
-            msg.AddTo(new EmailAddress(toEmail, name));
-            var response = await client.SendEmailAsync(msg);
-            string message = response.IsSuccessStatusCode ? "Email Send Successfully" :
-            "Email Sending Failed";
-            return Ok(message);
-        }
 
+            // Generate a unique token for the user's email verification
+            Guid guid = Guid.NewGuid();
+            string emailVerificationToken = guid.ToString();
+
+            // Store the email verification token and email address in a persistent store
+            //StoreEmailVerificationToken(toEmail, emailVerificationToken);
+
+            // Construct the email verification link
+            string emailVerificationLink = $"https://example.com/verify-email?token={emailVerificationToken}";
+
+            var message = new SendGridMessage();
+            message.SetFrom("houseauction89@gmail.com", "Auction House");
+            message.AddTo(emailDTO.Email, emailDTO.Name);
+            message.SetSubject("Email Verification");
+            message.AddContent(MimeType.Text, $"Click this link to verify your email address: {emailVerificationLink}");
+
+            var response = await client.SendEmailAsync(message);
+
+            if (response.StatusCode == System.Net.HttpStatusCode.Accepted)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest(response);
+            }
+        }
         
         [HttpPost("register")]
         [AllowAnonymous]
@@ -92,12 +108,13 @@ namespace AuctionHouse.Controllers
                 return BadRequest("Don't have exist session.");
             }
             HttpContext.Session.Clear(); // da proverq kak bachka
-            HttpContext.Session.Remove("userId");
-            HttpContext.Session.Remove("Role");
-            return Ok();
+            //HttpContext.Session.Remove("userId");
+            //HttpContext.Session.Remove("Role");
+            //HttpContext.Abort();
+            return NoContent();
         }
 
-        [HttpPost("verify/{token}")]
+        [HttpPut("verify/{token}")]
         [AllowAnonymous]
         public IActionResult VerifyAccount(Guid token)
         {
@@ -112,7 +129,7 @@ namespace AuctionHouse.Controllers
             return Ok();
         }
 
-        [HttpPost("forgot-password")]
+        [HttpPut("forgot-password")]
         [AllowAnonymous]
         public IActionResult ForgotPassword(string email) 
         {
@@ -127,7 +144,7 @@ namespace AuctionHouse.Controllers
             return Ok();
         }
 
-        [HttpPost("reset-password")]
+        [HttpPut("reset-password")]
         [AllowAnonymous]
         public IActionResult ResetPassword(ResetPasswordDTO resetPasswordDTO)
         {

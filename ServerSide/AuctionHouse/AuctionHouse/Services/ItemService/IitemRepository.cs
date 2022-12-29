@@ -14,5 +14,6 @@ namespace AuctionHouse.Services.ItemService
         User FindUserByGuid(Guid userId);
         Item FindItemByGuid(Guid itemId);
         IEnumerable<Item> SearchItems(string search);
+        void AcceptItem(Guid itemId);
     }
 }

@@ -158,6 +158,22 @@ namespace AuctionHouse.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("28862ade-505b-4fa4-9fc5-19c40af37033"),
+                            Balance = 0f,
+                            Email = "admin@gmail.com",
+                            FirstName = "Admin",
+                            IsVerified = true,
+                            LastName = "Admin",
+                            Password = "$2a$11$DYxaWSyNjwJHZMrsDXCP7O/lqoDAw6nyqIQQa4hUzJbhlk36UCUde",
+                            PhoneNumber = "admin",
+                            Role = 1,
+                            Username = "admin",
+                            VerificationToken = new Guid("14aa9801-4fb3-4ada-b499-d82294dacea9")
+                        });
                 });
 
             modelBuilder.Entity("AuctionHouse.Models.Item", b =>
