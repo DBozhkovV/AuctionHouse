@@ -1,0 +1,15 @@
+.item-frame {
+    display: flex;
+    flex-direction: row;
+    gap: 0.1rem;
+    flex-wrap: nowrap;
+    margin: 2rem;
+    justify-content: space-around;
+    margin-top: 10rem;
+}
+
+.item-head {
+    display: flex;
+    justify-content: center;
+    margin-top: 5rem;
+}

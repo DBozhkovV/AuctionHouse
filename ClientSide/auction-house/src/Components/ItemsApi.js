@@ -2,13 +2,19 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
+import { Button } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import Cookies from 'js-cookie';
 
 const ItemsApi = () => {
     const [items, setItems] = useState([]);
-    
+    const navigate = useNavigate();
+
+    console.log(Cookies.get('https://localhost:3000'));
+
     useEffect(() => {
         const getItems = async () => {
-            axios.get(`http://localhost:5153/items`)
+            axios.get(`https://localhost:7153/items`)
                 .then(response => {
                     setItems(response.data);
                 })
@@ -18,6 +24,13 @@ const ItemsApi = () => {
         }
         getItems();
     }, []);
+
+    if(!items) return null;
+
+    const routeChange = (id) =>{ 
+        navigate(`/item/${id}`);
+        window.location.reload();
+    }
 
     return (
         <div>
@@ -35,11 +48,10 @@ const ItemsApi = () => {
                         <ListGroup className="list-group-flush">
                         <ListGroup.Item>buyPrice: {item.buyPrice} </ListGroup.Item>
                         <ListGroup.Item>startingPrice: {item.startingPrice} </ListGroup.Item>
-                        <ListGroup.Item>endBidDate: {item.endBidDate} </ListGroup.Item>
+                        {/* <ListGroup.Item>endBidDate: {item.endBidDate} </ListGroup.Item> */}
                         </ListGroup>
                         <Card.Body>
-                        <Card.Link href="#">Card Link</Card.Link>
-                        <Card.Link href="#">Another Link</Card.Link>
+                            <Button className="button" onClick={() => routeChange(item.id)}>View</Button>
                         </Card.Body>
                     </Card>
                 ))}

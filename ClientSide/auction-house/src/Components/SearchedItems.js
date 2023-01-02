@@ -13,12 +13,12 @@ const SearchedItems = () => {
     
     useEffect(() => {
         const getItems = async () => {
-            axios.get(`http://localhost:5153/items/search`, { params })
+            axios.get(`${process.env.API_URL}/items/search`, { params })
                 .then(response => {
                     setItems(response.data);
                 })
                 .catch(error => {
-                    console.log(error)
+                    console.log(error);
                 })
         }
         getItems();

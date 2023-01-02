@@ -7,7 +7,15 @@ const Login = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.post(`http://localhost:5153/login`, {username, password})
+        axios.post(`https://localhost:7153/login`, {
+            username: username,
+            password: password
+        }, {
+            withCredentials: true
+        })
+        .then(response => {
+            console.log(response.headers);
+        })
         .catch(error => {
             console.log(error)
         })
