@@ -1,9 +1,17 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
     const [username, setUsername] = useState(null);
     const [password, setPassword] = useState(null);
+
+    const navigate = useNavigate();
+
+    const routeChange = () =>{ 
+        navigate(`/`);
+        window.location.reload();
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -14,7 +22,7 @@ const Login = () => {
             withCredentials: true
         })
         .then(response => {
-            console.log(response.headers);
+            routeChange();
         })
         .catch(error => {
             console.log(error)

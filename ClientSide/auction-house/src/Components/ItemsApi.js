@@ -4,13 +4,10 @@ import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import Cookies from 'js-cookie';
 
 const ItemsApi = () => {
     const [items, setItems] = useState([]);
     const navigate = useNavigate();
-
-    console.log(Cookies.get('https://localhost:3000'));
 
     useEffect(() => {
         const getItems = async () => {

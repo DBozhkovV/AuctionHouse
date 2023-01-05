@@ -7,9 +7,9 @@ const Logout = (props) => {
     
     const handleLogout = (e) => {
         e.preventDefault();
-        axios.post(`${process.env.API_URL}/logout`, {})
+        axios.post(`https://localhost:7153/logout`,  { withCredentials: true })
         .catch(error => {
-            console.log(error)
+            console.log(error);
         })
     }
     

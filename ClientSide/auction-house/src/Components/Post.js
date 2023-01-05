@@ -10,8 +10,21 @@ const Post = () => {
     const [file, setFile] = useState(null);
 
     const handleSubmit = (e) => {
-        e.preventDefault();
-        axios.post(`http://localhost:5153/register`, {})
+        e.preventDefault(); // da procheta kak raboti
+        const formData = new FormData();
+        formData.append("file", file);
+
+        axios.post(`https://localhost:7153/items`, {
+            name: name,
+            description: description,
+            buyPrice: buyPrice,
+            startingPrice: startingPrice,
+            endDate: endDate,
+            file: formData
+        }, { 
+            withCredentials: true,
+            headers: { "Content-Type": "multipart/form-data" }
+        })
         .catch(error => {
             console.log(error)
         })
@@ -94,7 +107,7 @@ const Post = () => {
                         </div>
                     </div>
                     <div className="d-flex justify-content-center">
-                        <button type="submit" className="btn btn-primary" onClick={handleSubmit}>Sign up</button>
+                        <button type="submit" className="btn btn-primary" onClick={handleSubmit}>Post</button>
                     </div>
                 </form>
                 <div>
