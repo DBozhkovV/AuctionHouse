@@ -47,3 +47,4 @@ C:\Users\Bozhkov\Desktop\AuctionHouse\AuctionHouse\bin\Debug\net6.0\Microsoft.Ex
 C:\Users\Bozhkov\Desktop\AuctionHouse\AuctionHouse\bin\Debug\net6.0\Microsoft.Extensions.Logging.Abstractions.dll
 C:\Users\Bozhkov\Desktop\AuctionHouse\AuctionHouse\bin\Debug\net6.0\Microsoft.Extensions.Options.dll
 C:\Users\Bozhkov\Desktop\AuctionHouse\AuctionHouse\bin\Debug\net6.0\Microsoft.Extensions.Primitives.dll
+C:\Users\Bozhkov\Desktop\AuctionHouse\AuctionHouse\bin\Debug\net6.0\Microsoft.WindowsAzure.Storage.dll

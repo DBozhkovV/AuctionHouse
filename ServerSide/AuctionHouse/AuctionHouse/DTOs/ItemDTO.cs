@@ -9,5 +9,6 @@
         public DateTime DateAdded { get; set; }
         public DateTime StartingBidDate { get; set; }
         public DateTime EndBidDate { get; set; }
+        public IFormFile Image { get; set; }
     }
 }

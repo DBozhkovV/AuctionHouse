@@ -78,6 +78,20 @@ namespace AuctionHouse.Services.UserService
             return null;
         }
 
+        public UserDTO Profile(Guid userId) 
+        {
+            User user = dataContext.Users.Where(u => u.Id == userId).Single();
+            UserDTO userDTO = new UserDTO()
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Username = user.Username,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                Balance = user.Balance
+            };
+            return userDTO;
+        }
         public void VerifyAccount(Guid token)
         {
             User user = dataContext.Users.Where(u => u.VerificationToken == token).Single();

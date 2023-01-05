@@ -107,9 +107,10 @@ namespace AuctionHouse.Controllers
             {
                 return BadRequest("Don't have exist session.");
             }
-            HttpContext.Session.Clear(); // da proverq kak bachka
-            //HttpContext.Session.Remove("userId");
-            //HttpContext.Session.Remove("Role");
+            //HttpContext.Session.Clear(); // da proverq kak bachka
+            HttpContext.Session.Remove("userId");
+            HttpContext.Session.Remove("Role");
+            HttpContext.Session.Clear();
             //HttpContext.Abort();
             return NoContent();
         }
@@ -157,6 +158,36 @@ namespace AuctionHouse.Controllers
                 return BadRequest(exception.Message);
             }
             return Ok();
+        }
+
+        [HttpGet("isLogged")]
+        [AllowAnonymous]
+        public IActionResult IsLogged()
+        {
+            if (HttpContext.Session.GetString("userId") is null)
+            {
+                return BadRequest("Don't have exist session.");
+            }
+            return Ok();
+        }
+
+        [HttpGet("profile")]
+        [Authorize(Policy = "User")]
+        public IActionResult Profile() 
+        {
+            if (HttpContext.Session.GetString("userId") is null) 
+            {
+                return Unauthorized();
+            }
+            try
+            {
+                Guid userId = Guid.Parse(HttpContext.Session.GetString("userId"));
+                UserDTO userDTO = userRepository.Profile(userId);
+                return Ok(userDTO);
+            } catch (Exception exception) 
+            {
+                return BadRequest(exception.Message);
+            }
         }
 
         [HttpDelete]

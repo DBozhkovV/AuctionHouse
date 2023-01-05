@@ -1,6 +1,8 @@
 ﻿using AuctionHouse.Data;
 using AuctionHouse.DTOs;
 using AuctionHouse.Models;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace AuctionHouse.Services.ItemService
 {
@@ -79,7 +81,7 @@ namespace AuctionHouse.Services.ItemService
             return dataContext.Items.Where(item => item.IsAccepted == false).ToList();
         }
 
-        public void PostItem(ItemDTO itemDTO, Guid userId)
+        public async Task PostItemAsync(ItemDTO itemDTO, Guid userId)
         {
             if (itemDTO is null)
             {
@@ -99,6 +101,13 @@ namespace AuctionHouse.Services.ItemService
                     EndBidDate = itemDTO.EndBidDate,
                     AuthorUserId = userId
                 };
+
+                var stream = itemDTO.Image.OpenReadStream();
+                byte[] imageBytes = new byte[itemDTO.Image.Length];
+                await stream.ReadAsync(imageBytes, 0, (int)itemDTO.Image.Length);
+
+                await SaveImageAsync(imageBytes, "firstTry");
+
                 dataContext.Items.Add(item);
                 dataContext.SaveChanges();
             }
@@ -145,5 +154,20 @@ namespace AuctionHouse.Services.ItemService
             item.IsAccepted = true;
             dataContext.SaveChanges();
         }
+
+        public async Task SaveImageAsync(byte[] image, string blobName) 
+        {
+            string connectionString = "DefaultEndpointsProtocol=https;AccountName=auctionhouseimagestorage;AccountKey=KUV+hqmdh/9IrkvE9aAhfGlsxiti13xvyMTuw1piNQPSHt7DnvIfNNDj7XwHhlLop15LSWaxGt4v+AStpF3Cpw==;EndpointSuffix=core.windows.net";
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(connectionString);
+
+            CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
+
+            CloudBlobContainer container = blobClient.GetContainerReference("itemimage");
+
+            CloudBlockBlob blockBlob = container.GetBlockBlobReference(blobName);
+            var stream = new MemoryStream(image);
+            await blockBlob.UploadFromStreamAsync(stream);
+        }
+
     }
 }

@@ -10,10 +10,11 @@ namespace AuctionHouse.Services.ItemService
         Task<Item> BuyNowAsync(Guid id, User user);
         IEnumerable<Item> GetAvailableItems();
         IEnumerable<Item> GetNotAcceptedItems();
-        void PostItem(ItemDTO itemDTO, Guid userId);
+        Task PostItemAsync(ItemDTO itemDTO, Guid userId);
         User FindUserByGuid(Guid userId);
         Item FindItemByGuid(Guid itemId);
         IEnumerable<Item> SearchItems(string search);
         void AcceptItem(Guid itemId);
+        Task SaveImageAsync(byte[] image, string blobName);
     }
 }

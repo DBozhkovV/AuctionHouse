@@ -119,7 +119,7 @@ namespace AuctionHouse.Controllers
                     return BadRequest("Don't have exist session.");
                 }
                 Guid userId = Guid.Parse(HttpContext.Session.GetString("userId"));
-                itemRepository.PostItem(itemDTO, userId);
+                itemRepository.PostItemAsync(itemDTO, userId);
             }
             catch (Exception exception) 
             {

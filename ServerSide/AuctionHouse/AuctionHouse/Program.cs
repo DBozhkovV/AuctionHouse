@@ -34,10 +34,10 @@ builder.Services.AddDistributedMemoryCache();
 
 builder.Services.AddSession(options =>
 {
-    options.Cookie.Name = "User.Session";
+    options.Cookie.Name = "ASP";
     options.IdleTimeout = TimeSpan.FromHours(1);
-    options.Cookie.HttpOnly = false;
-    options.Cookie.IsEssential = false; // beshe true
+    options.Cookie.IsEssential = true;
+    options.Cookie.HttpOnly = true;
 });
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -56,30 +56,33 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("User", policy => policy.Requirements.Add(new SessionBasedAuthorizationRequirement(Role.User)));
 });
 
-builder.Services.AddCors();
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(
+        builder =>
+        {
+            builder.WithOrigins("https://localhost:3000")
+                   .AllowAnyMethod()
+                   .AllowAnyHeader()
+                   .AllowCredentials();
+        });
+});
 
 var app = builder.Build();
+
+app.UseSession();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    app.UseCors(builder =>
-    {
-        builder
-            .WithOrigins("http://localhost:3000")
-            .WithMethods("GET", "POST", "DELETE", "PUT")
-            .WithHeaders("Content-Type")
-            .AllowCredentials();
-    });
+    app.UseCors();
 }
 
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
-
-app.UseSession();
 
 app.MapControllers();
 
