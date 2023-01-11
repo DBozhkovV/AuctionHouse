@@ -13,3 +13,14 @@
     justify-content: center;
     margin-top: 5rem;
 }
+
+.not-accepted-buttons {
+    display: flex;
+    gap: 0.1rem;
+    margin: 2rem;
+    margin-top: 10rem;
+    align-content: stretch;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-direction: row;
+}

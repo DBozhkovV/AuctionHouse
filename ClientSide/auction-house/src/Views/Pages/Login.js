@@ -13,15 +13,15 @@ const Login = () => {
         window.location.reload();
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        axios.post(`https://localhost:7153/login`, {
+        await axios.post(`https://localhost:7153/login`, {
             username: username,
             password: password
         }, {
             withCredentials: true
         })
-        .then(response => {
+        .then(() => {
             routeChange();
         })
         .catch(error => {

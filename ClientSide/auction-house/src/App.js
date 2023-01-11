@@ -11,6 +11,7 @@ import Admin from './Views/Pages/Admin';
 import Item from './Components/Item';
 import Post from './Components/Post';
 import Profile from './Views/Pages/Profile';
+import NotAcceptedItem from './Components/NotAcceptedItem';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
           <Route path="/item/:id" element={<Item />} />
           <Route path="/post" element={<Post />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/notaccepteditem/:id" element={<NotAcceptedItem />} />
         </Routes>
       </Layout>
     </BrowserRouter>

@@ -7,12 +7,13 @@ const Post = () => {
     const [buyPrice, setBuyPrice] = useState(null);
     const [startingPrice, setStartingPrice] = useState(null);
     const [endDate, setEndDate] = useState(null);
-    const [file, setFile] = useState(null);
+    const [mainImage, setMainImage] = useState(null);
+    const [images, setImages] = useState(null);
 
     const handleSubmit = (e) => {
         e.preventDefault(); // da procheta kak raboti
-        const formData = new FormData();
-        formData.append("file", file);
+        // const formData = new FormData();
+        // formData.append("file", file);
 
         axios.post(`https://localhost:7153/items`, {
             name: name,
@@ -20,7 +21,8 @@ const Post = () => {
             buyPrice: buyPrice,
             startingPrice: startingPrice,
             endDate: endDate,
-            file: formData
+            MainImage: mainImage,
+            Images: images
         }, { 
             withCredentials: true,
             headers: { "Content-Type": "multipart/form-data" }
@@ -30,8 +32,12 @@ const Post = () => {
         })
     }
     
-    const handleChange = (event) => {
-        setFile(event.target.files[0]);
+    const handleChangeForMainImage = (event) => {
+        setMainImage(event.target.files[0]);
+    }
+
+    const handleChangeForImages = (event) => {
+        setImages(event.target.files[0]);
     }
 
     return (
@@ -111,8 +117,16 @@ const Post = () => {
                     </div>
                 </form>
                 <div>
+                    Main Image
                     <form>
-                        <input type="file" onChange={handleChange} />
+                        <input type="file" onChange={handleChangeForMainImage} />
+                        <button type="submit">Upload</button>
+                    </form>
+                </div>
+                <div>
+                    Images
+                    <form>
+                        <input type="file" onChange={handleChangeForImages} />
                         <button type="submit">Upload</button>
                     </form>
                 </div>

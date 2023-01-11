@@ -2,12 +2,19 @@ import React from "react";
 import Modal from "react-bootstrap/Modal";
 import { Button, ModalBody, ModalTitle} from 'react-bootstrap';
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Logout = (props) => {
-    
-    const handleLogout = (e) => {
+    const navigate = useNavigate();
+
+    const routeChange = () =>{ 
+        navigate(`/`);
+        window.location.reload();
+    }
+
+    const handleLogout = async (e) => {
         e.preventDefault();
-        axios.post(`https://localhost:7153/logout`,  { withCredentials: true })
+        await axios.post(`https://localhost:7153/logout`,  { withCredentials: true })
         .catch(error => {
             console.log(error);
         })
@@ -28,7 +35,7 @@ const Logout = (props) => {
                 <p>Are you sure you want to logout?</p>
             </ModalBody>
             <Modal.Footer>
-                <Button onClick={handleLogout} variant="primary">Yes</Button>
+                <Button onClick={() => {handleLogout(); routeChange();}} variant="primary">Yes</Button>
                 <Button onClick={props.onHide}>Close</Button>
             </Modal.Footer>
         </Modal>

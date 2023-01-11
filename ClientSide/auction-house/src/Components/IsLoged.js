@@ -8,8 +8,7 @@ const IsLoged = () => {
         .then(() => {
             setIsLogged(true);
         })
-        .catch((error) => {
-            console.log(error);
+        .catch(() => {
             setIsLogged(false);
         })
     

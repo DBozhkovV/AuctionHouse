@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Container, Nav, Navbar, NavDropdown, Form, Button } from 'react-bootstrap';
 import Logout from '../Components/Logout';
 import IsLoged from '../Components/IsLoged';
+import IsAdmin from '../Components/IsAdmin';
 import logo from '../Assets/images/user-profile-icon.svg';
 
 const NavbarComponent = () => {
@@ -12,6 +13,8 @@ const NavbarComponent = () => {
         window.location.href = `/items/search/${search}`;
     }
 
+    const isAdmin = IsAdmin();
+
     const ShowAuthNavigation = () => { // async???
         if (IsLoged()) {
             return  (
@@ -19,23 +22,37 @@ const NavbarComponent = () => {
                     <Nav.Link href="/post">Post</Nav.Link>
                     <Nav.Link onClick={() => setLogoutShow(true)}>Logout</Nav.Link>
                         <Logout show = {LogoutShow} onHide={() => setLogoutShow(false)}/> 
-                        <Navbar.Brand href="/profile">
-                        <img
-                            src={logo}
-                            width="30"
-                            height="30"
-                            className="d-inline-block align-top"
-                        />
+                    <Navbar.Brand href="/profile">
+                    <img
+                        src={logo}
+                        width="30"
+                        height="30"
+                        className="d-inline-block align-top"
+                    />
                     </Navbar.Brand>
                 </>
             );
         }
-        return (
-            <>
-                <Nav.Link href="/login">Login</Nav.Link>
-                <Nav.Link href="/register">Register</Nav.Link>
-            </>
-        );
+        if (isAdmin === false) {
+            return (
+                <>
+                    <Nav.Link href="/login">Login</Nav.Link>
+                    <Nav.Link href="/register">Register</Nav.Link>
+                </>
+            );
+        }
+    };
+
+    const ShowAdminNavigation = () => {
+        if (isAdmin) {
+            return (
+                <>
+                    <Nav.Link href="/admin">Admin</Nav.Link>
+                    <Nav.Link onClick={() => setLogoutShow(true)}>Logout</Nav.Link>
+                        <Logout show = {LogoutShow} onHide={() => setLogoutShow(false)}/> 
+                </>
+            );
+        }
     };
 
     return(
@@ -70,6 +87,7 @@ const NavbarComponent = () => {
                 </Navbar.Collapse>
                 <Navbar.Collapse className="justify-content-end">
                     {ShowAuthNavigation()}
+                    {ShowAdminNavigation()}
                 </Navbar.Collapse>
             </Container>
         </Navbar>
