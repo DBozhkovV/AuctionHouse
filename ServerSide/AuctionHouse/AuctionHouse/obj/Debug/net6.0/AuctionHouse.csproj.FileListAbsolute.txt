@@ -48,3 +48,9 @@ C:\Users\Bozhkov\Desktop\AuctionHouse\AuctionHouse\bin\Debug\net6.0\Microsoft.Ex
 C:\Users\Bozhkov\Desktop\AuctionHouse\AuctionHouse\bin\Debug\net6.0\Microsoft.Extensions.Options.dll
 C:\Users\Bozhkov\Desktop\AuctionHouse\AuctionHouse\bin\Debug\net6.0\Microsoft.Extensions.Primitives.dll
 C:\Users\Bozhkov\Desktop\AuctionHouse\AuctionHouse\bin\Debug\net6.0\Microsoft.WindowsAzure.Storage.dll
+C:\Users\Bozhkov\Desktop\AuctionHouse\AuctionHouse\bin\Debug\net6.0\Azure.Core.dll
+C:\Users\Bozhkov\Desktop\AuctionHouse\AuctionHouse\bin\Debug\net6.0\Azure.Storage.Blobs.dll
+C:\Users\Bozhkov\Desktop\AuctionHouse\AuctionHouse\bin\Debug\net6.0\Azure.Storage.Common.dll
+C:\Users\Bozhkov\Desktop\AuctionHouse\AuctionHouse\bin\Debug\net6.0\Microsoft.Bcl.AsyncInterfaces.dll
+C:\Users\Bozhkov\Desktop\AuctionHouse\AuctionHouse\bin\Debug\net6.0\System.IO.Hashing.dll
+C:\Users\Bozhkov\Desktop\AuctionHouse\AuctionHouse\bin\Debug\net6.0\System.Memory.Data.dll

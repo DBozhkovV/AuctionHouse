@@ -4,6 +4,7 @@ using AuctionHouse.Services.CustomAuthorization;
 using AuctionHouse.Services.ItemService;
 using AuctionHouse.Services.OrderService;
 using AuctionHouse.Services.UserService;
+using AuctionHouse.Services.AzureStorageService;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -23,6 +24,7 @@ builder.Services.AddDbContext<DataContext>(options => options.UseNpgsql(builder.
 builder.Services.AddScoped<IitemRepository, ItemRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IAzureStorageRepository, AzureStorageRepository>();
 
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
@@ -35,7 +37,7 @@ builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
     options.Cookie.Name = "ASP";
-    options.IdleTimeout = TimeSpan.FromHours(1);
+    options.IdleTimeout = TimeSpan.FromDays(7);
     options.Cookie.IsEssential = true;
     options.Cookie.HttpOnly = true;
 });

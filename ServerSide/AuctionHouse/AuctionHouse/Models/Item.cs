@@ -25,6 +25,8 @@ namespace AuctionHouse.Models
         public float BoughtFor { get; set; } = 0;   
         public bool IsAvailable { get; set; } = true;
         public bool IsAccepted { get; set; } = false;
+        public string? MainImageName { get; set; } = null;
+        public List<string>? ImagesNames { get; set; } = null; 
         public Guid AuthorUserId { get; set; }
         [ForeignKey("AuthorUserId")]
         public virtual User Author { get; set; }

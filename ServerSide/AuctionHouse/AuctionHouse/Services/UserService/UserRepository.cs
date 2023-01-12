@@ -1,8 +1,6 @@
 ﻿using AuctionHouse.Data;
 using AuctionHouse.DTOs;
 using AuctionHouse.Models;
-using SendGrid;
-using SendGrid.Helpers.Mail;
 
 namespace AuctionHouse.Services.UserService
 {

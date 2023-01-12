@@ -1,8 +1,11 @@
 ﻿using AuctionHouse.DTOs;
 using AuctionHouse.Models;
+using AuctionHouse.Services.AzureStorageService;
 using AuctionHouse.Services.ItemService;
+using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.WindowsAzure.Storage;
 
 namespace AuctionHouse.Controllers
 {
@@ -11,10 +14,12 @@ namespace AuctionHouse.Controllers
     public class ItemsController : ControllerBase
     {
         private readonly IitemRepository itemRepository;
+        private readonly IAzureStorageRepository azureStorageRepository;
 
-        public ItemsController(IitemRepository itemRepository)
+        public ItemsController(IitemRepository itemRepository, IAzureStorageRepository azureStorageRepository)
         {
             this.itemRepository = itemRepository;
+            this.azureStorageRepository = azureStorageRepository;
         }
 
         [HttpGet]
@@ -38,16 +43,11 @@ namespace AuctionHouse.Controllers
 
         [HttpGet("not-accepted")]
         [Authorize(Policy = "Admin")]
-        public IActionResult GetNotAcceptedItems()
+        public IActionResult GetNotAcceptedItems() // Need to be fixed
         {
             try
             {
-                IEnumerable<Item> items = itemRepository.GetNotAcceptedItems();
-                if (items.Count() == 0)
-                {
-                    return BadRequest("There is no not-accepted items.");
-                }
-                return Ok(items);
+                return Ok();
             }
             catch (Exception exception)
             {
@@ -55,9 +55,26 @@ namespace AuctionHouse.Controllers
             }
         }
 
-        [HttpPut("accept")]
+        [HttpGet("not-accepted/{id}")]
         [Authorize(Policy = "Admin")]
-        public IActionResult AcceptItem([FromBody] Guid id) 
+        public async Task<IActionResult> GetNotAcceptedItem(Guid id)
+        {
+            try
+            {
+                Item item = itemRepository.GetItem(id);
+                var image = await azureStorageRepository.GetImage(item);
+                return Ok(image);
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
+        }
+
+
+        [HttpPut("accept/{id}")]
+        [Authorize(Policy = "Admin")]
+        public IActionResult AcceptItem(Guid id) 
         {
             try
             {
@@ -69,7 +86,22 @@ namespace AuctionHouse.Controllers
                 return BadRequest(exception.Message);
             }
         }
-        
+
+        [HttpPut("reject/{id}")]
+        [Authorize(Policy = "Admin")]
+        public IActionResult RejectItem(Guid id)
+        {
+            try
+            {
+                itemRepository.RejectItem(id);
+                return Ok();
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
+        }
+
         [HttpGet("search")]
         [AllowAnonymous]
         public IActionResult SearchItems(string search)
@@ -109,8 +141,9 @@ namespace AuctionHouse.Controllers
         }
 
         [HttpPost]
+        [RequestFormLimits(MultipartBodyLengthLimit = 1_000_000)] // Set request limit of 1MB
         [Authorize(Policy = "User")]
-        public IActionResult PostItem(ItemDTO itemDTO)
+        public IActionResult PostItem([FromForm]ItemDTO itemDTO)
         {
             try
             {

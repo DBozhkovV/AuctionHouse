@@ -1,17 +1,20 @@
 ﻿using AuctionHouse.Data;
 using AuctionHouse.DTOs;
 using AuctionHouse.Models;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Blob;
+using AuctionHouse.Services.AzureStorageService;
+using Microsoft.AspNetCore.Mvc;
 
 namespace AuctionHouse.Services.ItemService
 {
     public class ItemRepository : IitemRepository
     {
         private readonly DataContext dataContext;
-        public ItemRepository(DataContext dataContext)
+        private readonly IAzureStorageRepository azureStorageRepository;
+
+        public ItemRepository(DataContext dataContext, IAzureStorageRepository azureStorageRepository)
         {
             this.dataContext = dataContext;
+            this.azureStorageRepository = azureStorageRepository;
         }
 
         public Item GetItem(Guid id)
@@ -71,14 +74,17 @@ namespace AuctionHouse.Services.ItemService
             return item;
         }
 
-        public IEnumerable<Item> GetAvailableItems()
+        public IEnumerable<Item> GetAvailableItems() // return all available items
         {
             return dataContext.Items.Where(item => item.IsAvailable == true && item.IsAccepted == true).ToList();
         }
 
-        public IEnumerable<Item> GetNotAcceptedItems()
+        public ItemResponse GetNotAcceptedItem(Guid itemId) 
         {
-            return dataContext.Items.Where(item => item.IsAccepted == false).ToList();
+            Item item = FindItemByGuid(itemId);
+            var itemResponse = new ItemResponse();
+            
+            return itemResponse;
         }
 
         public async Task PostItemAsync(ItemDTO itemDTO, Guid userId)
@@ -87,6 +93,7 @@ namespace AuctionHouse.Services.ItemService
             {
                 throw new ArgumentNullException(nameof(itemDTO));
             }
+            
             try
             {
                 Item item = new Item()
@@ -99,25 +106,30 @@ namespace AuctionHouse.Services.ItemService
                     DateAdded = itemDTO.DateAdded,
                     StartingBidDate = itemDTO.StartingBidDate,
                     EndBidDate = itemDTO.EndBidDate,
-                    AuthorUserId = userId
+                    AuthorUserId = userId,
+                    ImagesNames = new List<string>()
                 };
+                
+                item.MainImageName = itemDTO.MainImage.FileName;
+                azureStorageRepository.SaveImageAsync(itemDTO.MainImage, item.MainImageName);
 
-                var stream = itemDTO.Image.OpenReadStream();
-                byte[] imageBytes = new byte[itemDTO.Image.Length];
-                await stream.ReadAsync(imageBytes, 0, (int)itemDTO.Image.Length);
-
-                await SaveImageAsync(imageBytes, "firstTry");
-
+                int count = 1;
+                itemDTO.Images.ForEach(image =>
+                {
+                    azureStorageRepository.SaveImageAsync(image, image.FileName);
+                    item.ImagesNames.Add(image.FileName);
+                    count++;
+                });
                 dataContext.Items.Add(item);
                 dataContext.SaveChanges();
             }
-            catch (Exception)
+            catch (Exception message)
             {
-                throw new Exception("Invalid user.");
+                throw new Exception(message.ToString());
             }
         }
-
-        public User FindUserByGuid(Guid userId)
+        
+        public User FindUserByGuid(Guid userId) // Guid is the id
         {
             User user = dataContext.Users.Where(user => user.Id == userId).Single();
             if (user is null)
@@ -127,7 +139,7 @@ namespace AuctionHouse.Services.ItemService
             return user;
         }
 
-        public Item FindItemByGuid(Guid itemId)
+        public Item FindItemByGuid(Guid itemId) // Guid is the id
         {
             Item item = dataContext.Items.Where(item => item.Id == itemId).Single();
             if (item is null)
@@ -137,37 +149,28 @@ namespace AuctionHouse.Services.ItemService
             return item;
         }
 
-        public IEnumerable<Item> SearchItems(string search)
+        public IEnumerable<Item> SearchItems(string search) // return items by containing keyword in there names
         {
             IEnumerable<Item> items = dataContext.Items.Where(item => item.Name.Contains(search)).ToList();
             if (items is null)
             {
                 throw new Exception("There is no item with this name.");
             }
-
             return items;
         }
 
-        public void AcceptItem(Guid itemId) 
+        public void AcceptItem(Guid itemId) // When accept item, this item become available
         {
             Item item = FindItemByGuid(itemId);
             item.IsAccepted = true;
             dataContext.SaveChanges();
         }
 
-        public async Task SaveImageAsync(byte[] image, string blobName) 
+        public void RejectItem(Guid itemId) // When reject item, this item is deleted from database
         {
-            string connectionString = "DefaultEndpointsProtocol=https;AccountName=auctionhouseimagestorage;AccountKey=KUV+hqmdh/9IrkvE9aAhfGlsxiti13xvyMTuw1piNQPSHt7DnvIfNNDj7XwHhlLop15LSWaxGt4v+AStpF3Cpw==;EndpointSuffix=core.windows.net";
-            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(connectionString);
-
-            CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
-
-            CloudBlobContainer container = blobClient.GetContainerReference("itemimage");
-
-            CloudBlockBlob blockBlob = container.GetBlockBlobReference(blobName);
-            var stream = new MemoryStream(image);
-            await blockBlob.UploadFromStreamAsync(stream);
+            Item item = FindItemByGuid(itemId);
+            dataContext.Items.Remove(item);
+            dataContext.SaveChanges();
         }
-
     }
 }
