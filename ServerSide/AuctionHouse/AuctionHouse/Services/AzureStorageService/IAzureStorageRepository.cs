@@ -1,6 +1,5 @@
 ﻿using AuctionHouse.DTOs;
 using AuctionHouse.Models;
-using Microsoft.AspNetCore.Mvc;
 
 namespace AuctionHouse.Services.AzureStorageService
 {
@@ -8,8 +7,10 @@ namespace AuctionHouse.Services.AzureStorageService
     {
         Task SaveImageAsync(IFormFile formFile, string blobName);
 
-        Task<ItemResponse> GetImage(Item item);
+        Task<ItemResponse> ReturnItemResponse(Item item);
 
-        Task<List<Stream>> GetImages(string containerName, List<string> fileNames);
+        IEnumerable<Task<ItemResponse>> ReturnListOfItemResponses(List<Item> items);
+
+        string GetImageType(string fileName);
     }
 }

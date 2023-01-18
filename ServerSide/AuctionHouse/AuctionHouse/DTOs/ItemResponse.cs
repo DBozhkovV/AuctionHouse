@@ -22,9 +22,9 @@ namespace AuctionHouse.DTOs
         
         public DateTime EndBidDate { get; set; }
         
-        public byte[] MainImage { get; set; }
+        public ImageDTO MainImage { get; set; }
         
-        public List<byte[]> Images { get; set; }
+        public List<ImageDTO> Images { get; set; }
 
         public ItemResponse() 
         {

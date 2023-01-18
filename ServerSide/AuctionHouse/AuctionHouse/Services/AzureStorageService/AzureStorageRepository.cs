@@ -30,21 +30,24 @@ namespace AuctionHouse.Services.AzureStorageService
                 stream.Close();
             }
         }
-        public async Task<ItemResponse> GetImage(Item item)
+        public async Task<ItemResponse> ReturnItemResponse(Item item)
         {
             var blobClient = storageAccount.CreateCloudBlobClient();
-            var result = new ItemResponse();
-            result.Id = item.Id;
-            result.Name = item.Name;
-            result.Description = item.Description;
-            result.BuyPrice = item.BuyPrice;
-            result.StartingPrice = item.StartingPrice;
-            result.Bid = item.Bid;
-            result.DateAdded = item.DateAdded;
-            result.StartingBidDate = item.StartingBidDate;
-            result.EndBidDate = item.EndBidDate;
+            var result = new ItemResponse
+            {
+                Id = item.Id,
+                Name = item.Name,
+                Description = item.Description,
+                BuyPrice = item.BuyPrice,
+                StartingPrice = item.StartingPrice,
+                Bid = item.Bid,
+                DateAdded = item.DateAdded,
+                StartingBidDate = item.StartingBidDate,
+                EndBidDate = item.EndBidDate,
+                MainImage = new ImageDTO(),
+                Images = new List<ImageDTO>()
+            };
             
-            result.Images = new List<byte[]>();
             // Get a reference to the container
             var container = blobClient.GetContainerReference("itemimage");
 
@@ -52,40 +55,49 @@ namespace AuctionHouse.Services.AzureStorageService
             var blob = container.GetBlockBlobReference(item.MainImageName);
             var memoryStream = new MemoryStream();
             await blob.DownloadToStreamAsync(memoryStream);
-            result.MainImage = memoryStream.ToArray();
-
+            result.MainImage.Image = memoryStream.ToArray();
+            result.MainImage.ImageType = GetImageType(item.MainImageName);
+            
             // download the list of images
             foreach (var imageName in item.ImagesNames)
             {
                 var imageBlob = container.GetBlockBlobReference(imageName);
                 var imageStream = new MemoryStream();
                 await imageBlob.DownloadToStreamAsync(imageStream);
-                result.Images.Add(imageStream.ToArray());
+                ImageDTO image = new ImageDTO
+                {
+                    Image = imageStream.ToArray(),
+                    ImageType = GetImageType(imageName)
+                };
+                result.Images.Add(image);
             }
 
             return result;
         }
 
-        public async Task<List<Stream>> GetImages(string containerName, List<string> fileNames)
+        public IEnumerable<Task<ItemResponse>> ReturnListOfItemResponses(List<Item> items)
         {
-            var blobClient = storageAccount.CreateCloudBlobClient();
-
-            // Get a reference to the container
-            var container = blobClient.GetContainerReference(containerName);
-
-            var result = new List<Stream>();
-            foreach (var fileName in fileNames)
+            List<Task<ItemResponse>> itemResponses = new List<Task<ItemResponse>>();
+            items.ForEach(item =>
             {
-                // Get a reference to the blob
-                var blob = container.GetBlockBlobReference(fileName);
-
-                var memoryStream = new MemoryStream();
-                await blob.DownloadToStreamAsync(memoryStream);
-                memoryStream.Position = 0;
-                result.Add(memoryStream);
-            }
-            return result;
+                itemResponses.Add(ReturnItemResponse(item));
+            });
+            return itemResponses;
         }
 
+        public string GetImageType(string fileName)
+        {
+            if (fileName.Contains(".jpg")) {
+                return "image/jpg";
+            }
+            else if (fileName.Contains(".png"))
+            {
+                return "image/png";
+            }
+            else 
+            {
+                return "image/jpeg";
+            }
+        }
     }
 }
