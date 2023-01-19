@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { Button } from "react-bootstrap";
 import "../css/Item.css";
+import { VscArrowRight } from "react-icons/vsc";
 
 const NotAcceptedItem = () => {
     const params = useParams();
@@ -23,21 +24,15 @@ const NotAcceptedItem = () => {
 
     if(!item) return null;
 
-    const AcceptItem = () => {
-        axios.put(`https://localhost:7153/items/accept/${params.id}`, { withCredentials: true })
-            .then(response => {
-                console.log(response);
-            })
+    const AcceptItem = (id) => {
+        axios.put(`https://localhost:7153/items/accept/${id}`, {}, { withCredentials: true })
             .catch(error => {
                 console.log(error);
             })
     }
 
-    const RejectItem = () => {
-        axios.put(`https://localhost:7153/items/reject/${params.id}`, { withCredentials: true })
-            .then(response => {
-                console.log(response);
-            })
+    const RejectItem = (id) => {
+        axios.put(`https://localhost:7153/items/reject/${id}`, {}, { withCredentials: true })
             .catch(error => {
                 console.log(error);
             })
@@ -47,7 +42,14 @@ const NotAcceptedItem = () => {
         <div>
             <header className="item-head">{item.name}</header>
             <div className="item-frame">
-                <div>Image</div>
+                <div className="image-frame">
+                    <img className="not-accepted-img" src={`data:${item.mainImage.imageType};base64,${item.mainImage.image}`}/>
+                    <div className="button-img-frame">
+                        <Button className="button-next-img" variant="outline-primary">
+                            <VscArrowRight className="arrow-next"/>
+                        </Button>
+                    </div>
+                </div>
                 <div>
                     <div>{item.description}</div>
                     <div>Buy Price: {item.buyPrice}</div>
@@ -58,8 +60,8 @@ const NotAcceptedItem = () => {
                 </div>
             </div>
             <div className="not-accepted-buttons">
-                    <Button className="button" onClick={AcceptItem}>Accept</Button>
-                    <Button className="button" onClick={RejectItem}>Reject</Button>
+                <Button variant="outline-success" onClick={() => AcceptItem(item.id)}>Accept</Button>
+                <Button variant="outline-danger" onClick={() => RejectItem(item.id)}>Reject</Button>
             </div>
         </div>
     );

@@ -12,9 +12,8 @@ const Logout = (props) => {
         window.location.reload();
     }
 
-    const handleLogout = async (e) => {
-        e.preventDefault();
-        await axios.post(`https://localhost:7153/logout`,  { withCredentials: true })
+    const handleLogout = async () => {
+        axios.post(`https://localhost:7153/logout`, {}, { withCredentials: true })
         .catch(error => {
             console.log(error);
         })
