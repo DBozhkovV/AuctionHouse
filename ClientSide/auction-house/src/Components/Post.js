@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
+import Form from 'react-bootstrap/Form';
+import "../css/Post.css";
 
 const Post = () => {
     const [name, setName] = useState(null);
@@ -7,23 +9,29 @@ const Post = () => {
     const [buyPrice, setBuyPrice] = useState(null);
     const [startingPrice, setStartingPrice] = useState(null);
     const [endDate, setEndDate] = useState(null);
+    const [startDate, setStartDate] = useState(null);
     const [mainImage, setMainImage] = useState(null);
-    const [images, setImages] = useState(null);
+    const [images, setImages] = useState([]);
+    const [numberOfImages, setNumberOfImages] = useState([]);
+    const [firstImageAdded, setFirstImageAdded] = useState(false);
 
     const handleSubmit = (e) => {
         e.preventDefault(); // da procheta kak raboti
-        // const formData = new FormData();
-        // formData.append("file", file);
-
-        axios.post(`https://localhost:7153/items`, {
-            name: name,
-            description: description,
-            buyPrice: buyPrice,
-            startingPrice: startingPrice,
-            endDate: endDate,
-            MainImage: mainImage,
-            Images: images
-        }, { 
+        const formData = new FormData();
+        formData.append("Name", name);
+        formData.append("Description", description);
+        formData.append("BuyPrice", buyPrice);
+        formData.append("StartingPrice", startingPrice);
+        //formData.append("StartingBidDate", startDate);
+        //formData.append("EndBidDate", endDate);
+        formData.append("MainImage", mainImage);
+        
+        for (let i = 0; i < images.length; i++) {
+            formData.append("Images", images[i]);
+        }
+        
+        axios.post(`https://localhost:7153/items`, formData, 
+        { 
             withCredentials: true,
             headers: { "Content-Type": "multipart/form-data" }
         })
@@ -37,16 +45,24 @@ const Post = () => {
     }
 
     const handleChangeForImages = (event) => {
-        setImages(event.target.files[0]);
+        if(firstImageAdded === false) {
+            setImages([event.target.files[0]]);
+            setFirstImageAdded(true);
+        } else {
+            setImages([...images, event.target.files[0]]);
+        }
+        setNumberOfImages([...numberOfImages, event.target.files[0]]);
     }
 
     return (
         <div>
             <div className="form-frame">
+                <h1 className="post-header">Post Item</h1>
                 <form>
+                <hr/>
                     <div className="row my-3">
-                        <div className="col-md-6">
-                            <div className="form-outline">
+                        <div className="col-md-12">
+                            <div className="form-outline w-100">
                                 <input 
                                     type="text" 
                                     className="form-control" 
@@ -57,8 +73,8 @@ const Post = () => {
                                 <label className="form-label">Name</label>
                             </div>
                         </div>
-                        <div className="col-md-6">
-                            <div className="form-outline">
+                        <div className="col-md-12">
+                            <div className="form-outline w-100">
                                 <input
                                     type="text"
                                     className="form-control"
@@ -71,8 +87,8 @@ const Post = () => {
                         </div>
                     </div>
                     <div className="row my-3">
-                        <div className="col-md-12">
-                            <div className="form-outline w-100">
+                        <div className="col-md-6">
+                            <div className="form-outline">
                                 <input 
                                     type="number"
                                     min="0" 
@@ -84,10 +100,8 @@ const Post = () => {
                                 <label className="form-label">buyPrice</label>
                             </div>
                         </div>
-                    </div>
-                    <div className="row my-3">
                         <div className="col-md-6">
-                            <div className="form-outline w-10">
+                            <div className="form-outline">
                                 <input 
                                     type="number"
                                     min="0" 
@@ -97,6 +111,19 @@ const Post = () => {
                                     onChange={(e) => { setStartingPrice(e.target.value) }}
                                 />
                                 <label className="form-label">startingPrice</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="row my-3">
+                    <div className="col-md-6">
+                            <div className="form-outline w-100">
+                                <input 
+                                    type="datetime-local"
+                                    className="form-control" 
+                                    id="endDate" 
+                                    onChange={(e) => { setStartDate(e.target.value) }}
+                                />
+                                <label className="form-label">StartDate</label>
                             </div>
                         </div>
                         <div className="col-md-6">
@@ -112,23 +139,24 @@ const Post = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="d-flex justify-content-center">
-                        <button type="submit" className="btn btn-primary" onClick={handleSubmit}>Post</button>
-                    </div>
                 </form>
                 <div>
-                    Main Image
-                    <form>
-                        <input type="file" onChange={handleChangeForMainImage} />
-                        <button type="submit">Upload</button>
-                    </form>
+                    <Form.Group controlId="formFile" className="mb-3">
+                        <Form.Label>Upload main image</Form.Label>
+                        <Form.Control type="file" onChange={handleChangeForMainImage} />
+                    </Form.Group>
                 </div>
                 <div>
-                    Images
-                    <form>
-                        <input type="file" onChange={handleChangeForImages} />
-                        <button type="submit">Upload</button>
-                    </form>
+                    <Form.Group controlId="formFile" className="mb-3">
+                        <Form.Label>Upload item images</Form.Label>
+                        <Form.Control type="file" onChange={(e) => handleChangeForImages(e)} />
+                        {numberOfImages.map((e, index) => (
+                            <Form.Control key={index} type="file" onChange={(e) => handleChangeForImages(e)} />
+                        ))}
+                    </Form.Group>
+                </div>
+                <div className="d-flex justify-content-center">
+                    <button type="submit" className="btn btn-primary" onClick={handleSubmit}>Post</button>
                 </div>
             </div>
         </div>

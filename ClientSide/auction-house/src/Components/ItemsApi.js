@@ -33,9 +33,9 @@ const ItemsApi = () => {
 
     return (
         <div>
-            <header className="items-header">
+            <h3 className="items-header">
                 Items
-            </header>
+            </h3>
             <Row xs={1} md={2} className="g-4">
                 <div className="items-frame">
                     {items.map(item => (

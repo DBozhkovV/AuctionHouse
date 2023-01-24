@@ -1,0 +1,31 @@
+.profile-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5rem;
+}
+
+.profile-box {
+    display: flex;
+    gap: 1rem;
+    flex-direction: row;
+    border: 1px solid #3490dafe;
+    height: 25rem;
+    width: 40rem;
+    justify-content: center;
+    align-content: center;
+    flex-wrap: wrap;
+}
+
+.profile-names {
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-view {
+    display: flex;
+    background-color: orange;
+    width: 13rem;
+    height: 24rem;
+    margin-left: -1rem;
+}
