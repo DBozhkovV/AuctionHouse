@@ -13,11 +13,11 @@ namespace AuctionHouse.Controllers
     [ApiController]
     public class ItemsController : ControllerBase
     {
-        private readonly IItemService itemRepository;
+        private readonly IItemService _itemService;
 
-        public ItemsController(IItemService itemRepository)
+        public ItemsController(IItemService _itemService)
         {
-            this.itemRepository = itemRepository;
+            this._itemService = _itemService;
         }
 
         [HttpGet]
@@ -26,7 +26,7 @@ namespace AuctionHouse.Controllers
         {
             try
             {
-                IEnumerable<Task<ItemResponse>> items = itemRepository.GetAvailableItems();
+                IEnumerable<Task<ItemResponse>> items = _itemService.GetAvailableItems();
                 if (items.Count() == 0) 
                 {
                     return BadRequest("There is no available items.");
@@ -45,7 +45,7 @@ namespace AuctionHouse.Controllers
         {
             try
             {
-                IEnumerable<Task<ItemResponse>> items = itemRepository.GetNotAcceptedItems();
+                IEnumerable<Task<ItemResponse>> items = _itemService.GetNotAcceptedItems();
                 if (items.Count() == 0)
                 {
                     return BadRequest("There is no notaccpeted items.");
@@ -64,8 +64,7 @@ namespace AuctionHouse.Controllers
         {
             try
             {
-                Item item = itemRepository.GetItem(id);
-                ItemResponse itemResponse = await itemRepository.GetNotAcceptedItem(id);
+                ItemResponse itemResponse = await _itemService.GetNotAcceptedItem(id);
                 return Ok(itemResponse);
             }
             catch (Exception exception)
@@ -74,14 +73,13 @@ namespace AuctionHouse.Controllers
             }
         }
 
-
         [HttpPut("accept/{id}")]
         [Authorize(Policy = "Admin")]
         public IActionResult AcceptItem(Guid id) 
         {
             try
             {
-                itemRepository.AcceptItem(id);
+                _itemService.AcceptItem(id);
                 return Ok();
             }
             catch (Exception exception)
@@ -96,7 +94,7 @@ namespace AuctionHouse.Controllers
         {
             try
             {
-                itemRepository.RejectItem(id);
+                _itemService.RejectItem(id);
                 return Ok();
             }
             catch (Exception exception)
@@ -111,7 +109,7 @@ namespace AuctionHouse.Controllers
         {
             try
             {
-                IEnumerable<Item> items = itemRepository.SearchItems(search);
+                IEnumerable<Task<ItemResponse>> items = _itemService.SearchItems(search);
                 if (items.Count() == 0)
                 {
                     return BadRequest("There is no Items.");
@@ -126,16 +124,16 @@ namespace AuctionHouse.Controllers
 
         [HttpGet("{id}")]
         [AllowAnonymous]
-        public IActionResult GetItem(Guid id)
+        public async Task<IActionResult> GetItem(Guid id)
         {
             try
             {
-                Item item = itemRepository.GetItem(id);
-                if (item is null)
+                ItemResponse itemResponse = await _itemService.GetItem(id);
+                if (itemResponse is null)
                 {
                     return BadRequest("There is no item with given id.");
                 }
-                return Ok(item);
+                return Ok(itemResponse);
             }
             catch (Exception exception)
             {
@@ -146,7 +144,7 @@ namespace AuctionHouse.Controllers
         [HttpPost]
         [RequestFormLimits(MultipartBodyLengthLimit = 1_000_000)] // Set request limit of 1MB
         [Authorize(Policy = "User")]
-        public IActionResult PostItem([FromForm]ItemDTO itemDTO)
+        public IActionResult PostItem([FromForm] ItemDTO itemDTO)
         {
             try
             {
@@ -155,7 +153,7 @@ namespace AuctionHouse.Controllers
                     return BadRequest("Don't have exist session.");
                 }
                 Guid userId = Guid.Parse(HttpContext.Session.GetString("userId"));
-                itemRepository.PostItem(itemDTO, userId);
+                _itemService.PostItem(itemDTO, userId);
             }
             catch (Exception exception) 
             {
@@ -184,8 +182,8 @@ namespace AuctionHouse.Controllers
                     return BadRequest("Don't have exist session.");
                 }
                 Guid userId = Guid.Parse(HttpContext.Session.GetString("userId"));
-                User user = itemRepository.FindUserByGuid(userId);
-                Item item = itemRepository.BuyNow(id, user);
+                User user = _itemService.FindUserByGuid(userId);
+                Item item = _itemService.BuyNow(id, user);
                 return Ok(item);
             }
             catch (Exception exception) 

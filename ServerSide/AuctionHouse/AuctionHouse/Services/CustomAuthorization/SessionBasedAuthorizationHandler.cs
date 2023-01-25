@@ -1,11 +1,11 @@
-﻿using AuctionHouse.Models;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 
 namespace AuctionHouse.Services.CustomAuthorization
 {
     public class SessionBasedAuthorizationHandler : AuthorizationHandler<SessionBasedAuthorizationRequirement>
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
+        
         public SessionBasedAuthorizationHandler(IHttpContextAccessor httpContextAccessor)
         {
             _httpContextAccessor = httpContextAccessor;

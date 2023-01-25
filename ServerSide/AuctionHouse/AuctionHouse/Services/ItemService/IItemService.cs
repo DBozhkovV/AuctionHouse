@@ -5,7 +5,7 @@ namespace AuctionHouse.Services.ItemService
 {
     public interface IItemService
     {
-        Item GetItem(Guid id);
+        Task<ItemResponse> GetItem(Guid id);
         
         void Bid(Guid itemId, float Bid, Guid userId);
 
@@ -24,8 +24,8 @@ namespace AuctionHouse.Services.ItemService
         User FindUserByGuid(Guid userId);
         
         Item FindItemByGuid(Guid itemId);
-        
-        IEnumerable<Item> SearchItems(string search);
+
+        IEnumerable<Task<ItemResponse>> SearchItems(string search);
 
         void AcceptItem(Guid itemId);
 

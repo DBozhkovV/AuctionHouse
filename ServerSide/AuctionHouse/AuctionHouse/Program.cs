@@ -9,7 +9,8 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
-using AuctionHouse.DAO.ItemRepositoryies;
+using AuctionHouse.DAO.ItemDAO;
+using AuctionHouse.DAOs.UserDAO;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +26,7 @@ builder.Services.AddDbContext<DataContext>(options => options.UseNpgsql(builder.
 builder.Services.AddScoped<IItemRepository, ItemRepository>();
 builder.Services.AddScoped<IItemService, ItemService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IAzureStorageRepository, AzureStorageRepository>();
 

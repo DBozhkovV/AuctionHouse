@@ -1,4 +1,4 @@
-﻿using AuctionHouse.DAO.ItemRepositoryies;
+﻿using AuctionHouse.DAO.ItemDAO;
 using AuctionHouse.DTOs;
 using AuctionHouse.Models;
 using AuctionHouse.Services.AzureStorageService;
@@ -16,9 +16,11 @@ namespace AuctionHouse.Services.ItemService
             this.azureStorageRepository = azureStorageRepository;
         }
 
-        public Item GetItem(Guid id)
+        public Task<ItemResponse> GetItem(Guid id)
         {
-            return _itemRepository.GetItemById(id);
+            Item item = FindItemByGuid(id);
+            Task<ItemResponse> result = azureStorageRepository.ReturnItemResponse(item);
+            return result;
         }
 
         public void Bid(Guid itemId, float Bid, Guid userId)
@@ -124,7 +126,8 @@ namespace AuctionHouse.Services.ItemService
                 azureStorageRepository.SaveImageAsync(itemDTO.MainImage, item.MainImageName);
 
                 int count = 1;
-                itemDTO.Images.ForEach(image =>
+                
+                itemDTO.Images.ToList().ForEach(image =>
                 {
                     azureStorageRepository.SaveImageAsync(image, image.FileName);
                     item.ImagesNames.Add(image.FileName);
@@ -149,14 +152,15 @@ namespace AuctionHouse.Services.ItemService
             return _itemRepository.GetItemById(itemId);
         }
 
-        public IEnumerable<Item> SearchItems(string search) // return items by containing keyword in there names
+        public IEnumerable<Task<ItemResponse>> SearchItems(string search) // return items by containing keyword in there names
         {
-            IEnumerable<Item> items = _itemRepository.GetSearchedItem(search);
+            List<Item> items = _itemRepository.GetSearchedItem(search).ToList();
+            IEnumerable<Task<ItemResponse>> itemResponses = azureStorageRepository.ReturnListOfItemResponses(items);
             if (items is null)
             {
                 throw new Exception("There is no item with this name.");
             }
-            return items;
+            return itemResponses;
         }
 
         public void AcceptItem(Guid itemId) // When accept item, this item become available

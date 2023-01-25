@@ -12,9 +12,9 @@ namespace AuctionHouse.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private IUserRepository userRepository;
+        private IUserService userRepository;
         
-        public AuthController(IUserRepository userRepository)
+        public AuthController(IUserService userRepository)
         {
             this.userRepository = userRepository;
         }
@@ -102,19 +102,15 @@ namespace AuctionHouse.Controllers
         }
 
         [HttpPost("logout")]
-        [Authorize(Policy = "User")]
+        [AllowAnonymous]
         public IActionResult Logout()
         {
             if (HttpContext.Session.GetString("userId") is null)
             {
                 return BadRequest("Don't have exist session.");
             }
-            //HttpContext.Session.Clear(); // da proverq kak bachka
-            HttpContext.Session.Remove("userId");
-            HttpContext.Session.Remove("Role");
-            HttpContext.Session.Clear();
             Response.Cookies.Delete("ASP");
-            //HttpContext.Abort();
+            HttpContext.Session.Clear();
             return NoContent();
         }
 

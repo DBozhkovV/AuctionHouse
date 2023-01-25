@@ -10,6 +10,6 @@
         public DateTime StartingBidDate { get; set; }
         public DateTime EndBidDate { get; set; }
         public IFormFile MainImage { get; set; }
-        public List<IFormFile> Images { get; set; }
+        public IFormFile[] Images { get; set; }
     }
 }
