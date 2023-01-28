@@ -7,7 +7,7 @@ const Profile = () => {
 
     useEffect(() => {
         const getProfile = async () => {
-            axios.get(`https://localhost:7153/profile`, { withCredentials: true })
+            axios.get(`${process.env.REACT_APP_API}/profile`, { withCredentials: true })
                 .then(response => {
                     setProfile(response.data);
                 })

@@ -11,7 +11,7 @@ const NotAcceptedItem = () => {
 
     useEffect(() => {
         const getItem = async () => {
-            axios.get(`https://localhost:7153/items/not-accepted/${params.id}`, { withCredentials: true })
+            axios.get(`${process.env.REACT_APP_API}/items/not-accepted/${params.id}`, { withCredentials: true })
                 .then(response => {
                     setItem(response.data);
                 })
@@ -25,14 +25,14 @@ const NotAcceptedItem = () => {
     if(!item) return null;
 
     const AcceptItem = (id) => {
-        axios.put(`https://localhost:7153/items/accept/${id}`, {}, { withCredentials: true })
+        axios.put(`${process.env.REACT_APP_API}/items/accept/${id}`, {}, { withCredentials: true })
             .catch(error => {
                 console.log(error);
             })
     }
 
     const RejectItem = (id) => {
-        axios.put(`https://localhost:7153/items/reject/${id}`, {}, { withCredentials: true })
+        axios.put(`${process.env.REACT_APP_API}/items/reject/${id}`, {}, { withCredentials: true })
             .catch(error => {
                 console.log(error);
             })

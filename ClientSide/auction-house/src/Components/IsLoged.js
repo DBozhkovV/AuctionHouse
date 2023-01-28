@@ -4,7 +4,7 @@ import axios from "axios";
 const IsLoged = () => {
     const [isLogged, setIsLogged] = useState(false);
 
-    axios.get(`https://localhost:7153/isLogged`, { withCredentials: true })
+    axios.get(`${process.env.REACT_APP_API}/isLogged`, { withCredentials: true })
         .then(() => {
             setIsLogged(true);
         })

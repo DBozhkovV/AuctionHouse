@@ -13,7 +13,7 @@ const ItemsApi = () => {
 
     useEffect(() => {
         const getItems = async () => {
-            axios.get(`https://localhost:7153/items`)
+            axios.get(`${process.env.REACT_APP_API}/items`)
                 .then(response => {
                     setItems(response.data);
                 })

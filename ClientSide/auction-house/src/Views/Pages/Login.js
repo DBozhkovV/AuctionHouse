@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import "../../css/Login.css";
 
 const Login = () => {
     const [username, setUsername] = useState(null);
@@ -12,10 +13,10 @@ const Login = () => {
         navigate(`/`);
         window.location.reload();
     }
-
+    
     const handleSubmit = async (e) => {
         e.preventDefault();
-        await axios.post(`https://localhost:7153/login`, {
+        await axios.post(`${process.env.REACT_APP_API}/login`, {
             username: username,
             password: password
         }, {
@@ -32,11 +33,12 @@ const Login = () => {
     return (
         // Create login form with bootstrap
         <div>
-            <header>
+            <h3 className="login-header">
                 Login
-            </header>
+            </h3>
             <div className="form-frame">
                 <form>
+                    <hr />
                     <div className="form-group">
                         <label htmlFor="username">Username</label>
                         <input 
@@ -47,6 +49,7 @@ const Login = () => {
                             onChange={(e) => { setUsername(e.target.value) }}
                         />
                     </div>
+                    <br/>
                     <div className="form-group">
                         <label htmlFor="password">Password</label>
                         <input

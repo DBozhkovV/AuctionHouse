@@ -82,7 +82,7 @@ const NavbarComponent = () => {
                         aria-label="Search"
                         onChange={(e) => { setSearch(e.target.value) }}
                     />
-                    <Button variant="outline-success" onClick={handleSubmit}>Search</Button>
+                    <Button type="button" variant="outline-success" onClick={handleSubmit}>Search</Button>
                 </Form>
                 </Navbar.Collapse>
                 <Navbar.Collapse className="justify-content-end">

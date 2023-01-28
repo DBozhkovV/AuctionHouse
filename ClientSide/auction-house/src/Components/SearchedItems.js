@@ -18,7 +18,7 @@ const SearchedItems = () => {
     
     useEffect(() => {
         const getItems = async () => {
-            axios.get(`https://localhost:7153/items/search`, { params }, { withCredentials: true })
+            axios.get(`${process.env.REACT_APP_API}/items/search`, { params }, { withCredentials: true })
                 .then(response => {
                     setItems(response.data);
                 })

@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState }from "react";
 import axios from "axios";
 import Form from 'react-bootstrap/Form';
 import "../css/Post.css";
+import Alert from 'react-bootstrap/Alert';
 
 const Post = () => {
     const [name, setName] = useState(null);
@@ -14,29 +15,40 @@ const Post = () => {
     const [images, setImages] = useState([]);
     const [numberOfImages, setNumberOfImages] = useState([]);
     const [firstImageAdded, setFirstImageAdded] = useState(false);
+    const [showSuccess, setShowSuccess] = useState(false);
+    const [showException, setShowException] = useState(false);
 
     const handleSubmit = (e) => {
         e.preventDefault(); // da procheta kak raboti
         const formData = new FormData();
+        const startDateUTC = new Date(startDate);
+        const endDateUTC = new Date(endDate);
+        const dateAdded = new Date();
         formData.append("Name", name);
         formData.append("Description", description);
         formData.append("BuyPrice", buyPrice);
         formData.append("StartingPrice", startingPrice);
-        //formData.append("StartingBidDate", startDate);
-        //formData.append("EndBidDate", endDate);
+        formData.append("DateAdded", dateAdded.toUTCString());
+        formData.append("StartingBidDate", startDateUTC.toUTCString());
+        formData.append("EndBidDate", endDateUTC.toUTCString());
         formData.append("MainImage", mainImage);
         
         for (let i = 0; i < images.length; i++) {
             formData.append("Images", images[i]);
         }
         
-        axios.post(`https://localhost:7153/items`, formData, 
+        axios.post(`${process.env.REACT_APP_API}/items`, formData, 
         { 
             withCredentials: true,
             headers: { "Content-Type": "multipart/form-data" }
         })
-        .catch(error => {
-            console.log(error)
+        .then(() => {
+            setShowSuccess(true);
+            showSuccessAlert();
+        })
+        .catch(() => {
+            setShowException(true);
+            
         })
     }
     
@@ -54,8 +66,30 @@ const Post = () => {
         setNumberOfImages([...numberOfImages, event.target.files[0]]);
     }
 
+    const showExceptionAlert = () => {
+        if (showException) {
+            setTimeout(() => {
+                setShowException(false);
+            }, 3000);
+        }
+    }
+
+    const showSuccessAlert = () => {
+        if (showSuccess) {
+            setTimeout(() => {
+                setShowSuccess(false);
+            }, 3000);
+        }
+    }
+
     return (
         <div>
+            {showSuccess && (
+                <Alert variant="success">Post request successful!</Alert>
+            )}
+            {showException && (
+                <Alert variant="danger">Post request exception!</Alert>
+            )}
             <div className="form-frame">
                 <h1 className="post-header">Post Item</h1>
                 <form>

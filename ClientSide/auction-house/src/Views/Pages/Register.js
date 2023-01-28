@@ -15,7 +15,7 @@ const RegistrationForm = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.post(`http://localhost:5153/register`, {firstName, lastName, username, email, password, confirmPassword, phoneNumber,})
+        axios.post(`${process.env.REACT_APP_API}/register`, {firstName, lastName, username, email, password, confirmPassword, phoneNumber,})
         .catch(error => {
             console.log(error)
         })

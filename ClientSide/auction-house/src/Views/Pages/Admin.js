@@ -4,8 +4,6 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import axios from "axios";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
 
 const Admin = () => {
     const [items, setItems] = useState(null);
@@ -13,7 +11,7 @@ const Admin = () => {
 
     useEffect(() => {
         const getItems = async () => {
-            axios.get(`https://localhost:7153/items/not-accepted`, { withCredentials: true })
+            axios.get(`${process.env.REACT_APP_API}/items/not-accepted`, { withCredentials: true })
                 .then(response => {
                     setItems(response.data);
                 })

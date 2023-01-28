@@ -15,7 +15,7 @@ const Item = () => {
 
     useEffect(() => {
         const getItem = async () => {
-            axios.get(`https://localhost:7153/items/${params.id}`)
+            axios.get(`${process.env.REACT_APP_API}/items/${params.id}`)
                 .then(response => {
                     setItem(response.data);
                 })
@@ -33,7 +33,7 @@ const Item = () => {
     }
 
     const RejectItem = (id) => {
-        axios.put(`https://localhost:7153/items/reject/${id}`, {}, { withCredentials: true })
+        axios.put(`${process.env.REACT_APP_API}/items/reject/${id}`, {}, { withCredentials: true })
             .catch(error => {
                 console.log(error);
             })

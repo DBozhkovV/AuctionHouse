@@ -4,7 +4,7 @@ import axios from "axios";
 const IsAdmin = () => {
     const [isAdmin, setIsAdmin] = useState(false);
 
-    axios.get(`https://localhost:7153/isAdmin`, { withCredentials: true })
+    axios.get(`${process.env.REACT_APP_API}/isAdmin`, { withCredentials: true })
         .then(() => {
             setIsAdmin(true);
         })
