@@ -13,6 +13,8 @@ namespace AuctionHouse.Services.ItemService
 
         IEnumerable<Task<ItemResponse>> GetAvailableItems();
 
+        IEnumerable<Task<ItemResponse>> GetItemsByCategory(Category category);
+
         IEnumerable<Task<ItemResponse>> GetNotAvailableItems();
 
         IEnumerable<Task<ItemResponse>> GetNotAcceptedItems();

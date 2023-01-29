@@ -12,6 +12,8 @@ namespace AuctionHouse.DAO.ItemDAO
 
         IEnumerable<Item> GetAvailableItems();
 
+        IEnumerable<Item> GetAvailableItemsByCategory(Category category);
+
         Item GetItemById(Guid id);
 
         Item GetNotAcceptedItemById(Guid id);

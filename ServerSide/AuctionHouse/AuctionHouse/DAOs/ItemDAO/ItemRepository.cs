@@ -46,6 +46,13 @@ namespace AuctionHouse.DAO.ItemDAO
                 .ToList();
         }
 
+        public IEnumerable<Item> GetAvailableItemsByCategory(Category category) 
+        {
+            return _dataContext.Items
+                .Where(item => item.IsAvailable == true && item.IsAccepted == true && item.Category == category)
+                .ToList();
+        }
+
         public Item GetItemById(Guid id)
         {
             return _dataContext.Items.Single(item => item.Id.Equals(id));
@@ -58,6 +65,7 @@ namespace AuctionHouse.DAO.ItemDAO
 
         public IEnumerable<Item> GetNotAcceptedItems()
         {
+            /*
             List<Item> items = new List<Item>();
             _dataContext.Items.ToList().ForEach(item => {
                 if (item.IsAccepted == false) {
@@ -65,12 +73,11 @@ namespace AuctionHouse.DAO.ItemDAO
                 }
             });
             return items;
-
-            /*
+            */
+            
             return _dataContext.Items
                 .Where(item => item.IsAvailable == true && item.IsAccepted == false)
                 .ToList();
-            */
         }
 
         public IEnumerable<Item> GetNotAvailableItems()

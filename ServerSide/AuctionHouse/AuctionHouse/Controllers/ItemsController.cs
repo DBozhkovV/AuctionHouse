@@ -121,6 +121,24 @@ namespace AuctionHouse.Controllers
                 return BadRequest(exception.Message);
             }
         }
+        [HttpGet("category")]
+        [AllowAnonymous]
+        public IActionResult GetItemsByCategory(Category category)
+        {
+            try
+            {
+                IEnumerable<Task<ItemResponse>> items = _itemService.GetItemsByCategory(category);
+                if (items.Count() == 0)
+                {
+                    return BadRequest("There is no Items.");
+                }
+                return Ok(items);
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
+        }
 
         [HttpGet("{id}")]
         [AllowAnonymous]

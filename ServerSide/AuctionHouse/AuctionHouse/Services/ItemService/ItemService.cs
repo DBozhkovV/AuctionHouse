@@ -78,6 +78,13 @@ namespace AuctionHouse.Services.ItemService
             return itemResponses;
         }
 
+        public IEnumerable<Task<ItemResponse>> GetItemsByCategory(Category category) 
+        {
+            List<Item> availableItems = _itemRepository.GetAvailableItemsByCategory(category).ToList();
+            IEnumerable<Task<ItemResponse>> itemResponses = azureStorageRepository.ReturnListOfItemResponses(availableItems);
+            return itemResponses;
+        }
+        
         public IEnumerable<Task<ItemResponse>> GetNotAvailableItems() // da dovursha
         {
             List<Item> availableItems = _itemRepository.GetNotAvailableItems().ToList();
@@ -115,6 +122,7 @@ namespace AuctionHouse.Services.ItemService
                     BuyPrice = itemDTO.BuyPrice,
                     StartingPrice = itemDTO.StartingPrice,
                     Bid = itemDTO.StartingPrice,
+                    Category = itemDTO.Category,
                     DateAdded = itemDTO.DateAdded,
                     StartingBidDate = itemDTO.StartingBidDate,
                     EndBidDate = itemDTO.EndBidDate,
