@@ -9,6 +9,8 @@ namespace AuctionHouse.DAOs.UserDAO
 
         User getUserByUsername(string username);
 
+        User getUserByEmail(string email);
+
         User getUserById(Guid id);
 
         void verifyUser(Guid token);

@@ -25,14 +25,20 @@ namespace AuctionHouse.Services.UserService
                 throw new Exception("Invalid confirmed password");
             }
 
-            User user = userRepository.getUserByUsername(registerDTO.Username);
-            if (user.Username == registerDTO.Username)
+            if (userRepository.getUserByUsername(registerDTO.Username) != null)
             {
-                throw new Exception("Username is already used.");
+                if (userRepository.getUserByUsername(registerDTO.Username).Username == registerDTO.Username)
+                {
+                    throw new Exception("Username is already used.");
+                }
             }
-            if (user.Email == registerDTO.Email) 
+            
+            if (userRepository.getUserByEmail(registerDTO.Email) != null) 
             {
-                throw new Exception("This email is already used.");
+                if (userRepository.getUserByEmail(registerDTO.Email).Email == registerDTO.Email)
+                {
+                    throw new Exception("This email is already used.");
+                }
             }
 
             User newUser = new User()
@@ -44,7 +50,6 @@ namespace AuctionHouse.Services.UserService
                 Password = BCrypt.Net.BCrypt.HashPassword(registerDTO.Password),
                 PhoneNumber = registerDTO.PhoneNumber
             };
-            
             userRepository.insertUser(newUser);
         }
 
@@ -56,19 +61,22 @@ namespace AuctionHouse.Services.UserService
             }
 
             User user = userRepository.getUserByUsername(loginDTO.Username);
-            if (user.Username == loginDTO.Username)
+            if (user != null)
             {
-                if (user.IsVerified == false)
+                if (user.Username == loginDTO.Username)
                 {
-                    throw new Exception("User is not verified.");
-                }
-                bool isValid = BCrypt.Net.BCrypt.Verify(loginDTO.Password, user.Password);
-                if (isValid)
-                {
-                    return user.Id;
+                    if (user.IsVerified == false)
+                    {
+                        throw new Exception("User is not verified.");
+                    }
+                    bool isValid = BCrypt.Net.BCrypt.Verify(loginDTO.Password, user.Password);
+                    if (isValid)
+                    {
+                        return user.Id;
+                    }
                 }
             }
-            return null;
+            throw new Exception("Wrong username or password.");
         }
 
         public UserDTO Profile(Guid userId) 

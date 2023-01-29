@@ -6,6 +6,7 @@ namespace AuctionHouse.Services.OrderService
     public class OrderRepository : IOrderRepository
     {
         private readonly DataContext dataContext;
+        
         public OrderRepository(DataContext dataContext)
         {
             this.dataContext = dataContext;

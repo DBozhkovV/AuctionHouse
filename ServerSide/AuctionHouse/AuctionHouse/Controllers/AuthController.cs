@@ -27,16 +27,16 @@ namespace AuctionHouse.Controllers
             // Name = Danail Bozhkov
             // Email = auctionhouse3333@gmail.com
 
-            var apiKey = "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";
+            var apiKey = "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";
             var client = new SendGridClient(apiKey);
-
-            var msg = new SendGridMessage();
-            msg.SetFrom(new EmailAddress("houseauction89@gmail.com", "AuctionHouse"));
-            msg.AddTo(new EmailAddress("dbozhkov09@gmail.com", "Danail Bozhkov"));
-            msg.SetSubject("Nqkwo random laino");
-            msg.AddContent(MimeType.Text, "Da ima neshto da se izprati");
-
+            var from = new EmailAddress("danipaynera00@gmail.com", "Danail Bozhkov");
+            var subject = "Sending with SendGrid is Fun";
+            var to = new EmailAddress("dbozhkov09@gmail.com", "Danail Bozhkov");
+            var plainTextContent = "and easy to do anywhere, even with C#";
+            var htmlContent = "<strong>and easy to do anywhere, even with C#</strong>";
+            var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
             var response = await client.SendEmailAsync(msg);
+            
             if (response.StatusCode == System.Net.HttpStatusCode.Accepted)
             {
                 return Ok();

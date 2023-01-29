@@ -23,21 +23,29 @@ namespace AuctionHouse.DAOs.UserDAO
         {
             return _dataContext.Users
                 .Where(user => user.Username.Equals(username))
-                .Single();
+                .SingleOrDefault();
         }
+
+        public User getUserByEmail(string email) 
+        {
+            return _dataContext.Users
+                .Where(user => user.Email.Equals(email))
+                .SingleOrDefault();
+        }
+
 
         public User getUserById(Guid id)
         {
             return _dataContext.Users
                 .Where(user => user.Id.Equals(id))
-                .Single();
+                .SingleOrDefault();
         }
 
         public void verifyUser(Guid token)
         {
             User user = _dataContext.Users
                 .Where(user => user.VerificationToken.Equals(token))
-                .Single();
+                .SingleOrDefault();
             user.IsVerified = true;
             user.VerifiedAt = DateTime.UtcNow;
             _dataContext.SaveChanges();
@@ -47,7 +55,7 @@ namespace AuctionHouse.DAOs.UserDAO
         {
             User user = _dataContext.Users
                 .Where(user => user.Email.Equals(email))
-                .Single();
+                .SingleOrDefault();
             user.PasswordResetToken = Guid.NewGuid();
             user.PasswordResetTokenExpires = DateTime.UtcNow.AddDays(1);
             _dataContext.SaveChanges();
@@ -57,7 +65,7 @@ namespace AuctionHouse.DAOs.UserDAO
         {
             return _dataContext.Users
                 .Where(user => user.PasswordResetToken.Equals(passwordResetToken))
-                .Single();
+                .SingleOrDefault();
         }
 
         public void resetPassword(ResetPasswordDTO resetPasswordDTO)

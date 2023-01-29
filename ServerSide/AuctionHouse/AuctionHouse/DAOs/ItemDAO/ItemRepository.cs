@@ -82,7 +82,7 @@ namespace AuctionHouse.DAO.ItemDAO
 
         public IEnumerable<Item> GetSearchedItem(string search)
         {
-            return _dataContext.Items.Where(item => item.Name.Contains(search)).ToList();
+            return _dataContext.Items.Where(item => item.Name.Contains(search) && item.IsAccepted == true).ToList();
         }
 
         public User GetUserByGuid(Guid id)
