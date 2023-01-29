@@ -159,9 +159,9 @@ namespace AuctionHouse.Controllers
             return Ok();
         }
 
-        [HttpGet("isLogged")]
+        [HttpGet("isUser")]
         [AllowAnonymous]
-        public IActionResult IsLogged()
+        public IActionResult IsUser()
         {
             if (HttpContext.Session.GetString("Role") is null)
             {

@@ -5,13 +5,13 @@ import Home from './Views/Pages/Home';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Login from './Views/Pages/Login';
 import RegistrationForm from './Views/Pages/Register';
-import ItemsApi from './Components/ItemsApi';
-import SearchedItems from './Components/SearchedItems';
+import ItemsApi from './Components/Items/AllAvailableItems';
+import SearchedItems from './Components/Items/SearchedItems';
 import Admin from './Views/Pages/Admin';
-import Item from './Components/Item';
-import Post from './Components/Post';
+import Item from './Components/Items/Item';
+import Post from './Views/Pages/Post';
 import Profile from './Views/Pages/Profile';
-import NotAcceptedItem from './Components/NotAcceptedItem';
+import NotAcceptedItem from './Components/Items/NotAcceptedItem';
 
 function App() {
   return (

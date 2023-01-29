@@ -1,6 +1,8 @@
 import axios from "axios";
 import React, { useState } from "react";
 import BrandLogo from "../../Assets/images/BigBrandLogo.png";
+import Fail from "../../Components/Alerts/Fail";
+import Success from "../../Components/Alerts/Success";
 
 // Da dobavq proverka dali password i confrimed password sa ednakvi
 const RegistrationForm = () => {
@@ -12,25 +14,55 @@ const RegistrationForm = () => {
     const [phoneNumber, setPhoneNumber] = useState(null);
     const [password, setPassword] = useState(null);
     const [confirmPassword, setConfirmPassword] = useState(null);
+    const [showFail, setShowFail] = useState(false);
+    const [showSuccess, setShowSuccess] = useState(false);
+    const [message, setMessage] = useState(null);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.post(`${process.env.REACT_APP_API}/register`, {firstName, lastName, username, email, password, confirmPassword, phoneNumber,})
-        .catch(error => {
-            console.log(error)
-        })
+        setShowSuccess(false);
+        setShowFail(false)
+        if (firstName === null || lastName === null || email === null || username === null || phoneNumber === null || password === null || confirmPassword === null) {
+            setShowFail(true);
+            setMessage("Please fill all fields.");
+        }else if (password !== confirmPassword) {
+            setShowFail(true);
+            setMessage("Password and confirmed password are not the same.");
+        }else {
+            axios.post(`${process.env.REACT_APP_API}/register`, 
+            {
+                firstName: firstName, 
+                lastName: lastName, 
+                username: username, 
+                email: email, 
+                password: password, 
+                confirmPassword: confirmPassword, 
+                phoneNumber: phoneNumber
+            })
+            .then(() => {
+                setShowSuccess(true);
+                document.getElementById("register-form").reset();
+            })
+            .catch(error => {
+                setShowFail(true);
+                setMessage(error.response.data.message);
+            })
+        }
     }
 
     return (
         <div>
-            <header className="register-header">
+            {showSuccess ? <Success /> : null}
+            {showFail ? <Fail error={message} /> : null}
+            <h3 className="register-header">
                 {/* eslint-disable-next-line  */} {/*Remove the warning of the next line because in img tag we should have alt */}
-                <img src={BrandLogo} />
+                {/* <img src={BrandLogo} /> */}
                 <br />
                 Welcome to Auction house!
-            </header>
+            </h3>
             <div className="form-frame">
-                <form>
+                <form id="register-form">
+                    <hr />
                     <div className="row my-3">
                         <div className="col-md-6">
                             <div className="form-outline">

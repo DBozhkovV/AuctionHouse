@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Container, Nav, Navbar, NavDropdown, Form, Button } from 'react-bootstrap';
-import Logout from '../Components/Logout';
-import IsLoged from '../Components/IsLoged';
-import IsAdmin from '../Components/IsAdmin';
+import Logout from '../Components/Authorization/Logout';
+import IsUser from '../Components/Authorization/IsUser';
+import IsAdmin from '../Components/Authorization/IsAdmin';
 import logo from '../Assets/images/user-profile-icon.svg';
 
 const NavbarComponent = () => {
@@ -16,7 +16,7 @@ const NavbarComponent = () => {
     const isAdmin = IsAdmin();
 
     const ShowAuthNavigation = () => { // async???
-        if (IsLoged()) {
+        if (IsUser()) {
             return  (
                 <>
                     <Nav.Link href="/post">Post</Nav.Link>

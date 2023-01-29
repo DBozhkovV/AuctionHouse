@@ -6,9 +6,12 @@ import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
+import Fail from "../Alerts/Fail";
 
 const ItemsApi = () => {
-    const [items, setItems] = useState(null);
+    const [items, setItems] = useState([]);
+    const [showFail, setShowFail] = useState(false);
+    const [message, setMessage] = useState("");
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -18,21 +21,24 @@ const ItemsApi = () => {
                     setItems(response.data);
                 })
                 .catch(error => {
-                    console.log(error)
+                    setShowFail(true);
+                    setMessage(error.response.data);
                 })
         }
         getItems();
     }, []);
 
-    if(!items) return null;
-
-    const routeChange = (id) =>{ 
+    if(!items) {
+        return null; 
+    }
+    
+    const routeChange = (id) => { 
         navigate(`/item/${id}`);
-        window.location.reload();
     }
 
     return (
         <div>
+            {showFail ? <Fail error={message}/> : null}
             <h3 className="items-header">
                 Items
             </h3>

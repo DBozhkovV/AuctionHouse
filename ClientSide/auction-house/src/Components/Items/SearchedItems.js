@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
@@ -9,7 +9,7 @@ import Row from 'react-bootstrap/Row';
 
 const SearchedItems = () => {
     const p = useParams();
-
+    const navigate = useNavigate();
     const [items, setItems] = useState(null);
     
     const params = { 
@@ -30,6 +30,11 @@ const SearchedItems = () => {
     }, []);
 
     if(!items) return null;
+
+    const routeChange = (id) =>{ 
+        navigate(`/item/${id}`);
+        window.location.reload();
+    }
 
     return (
         <div>
@@ -54,7 +59,7 @@ const SearchedItems = () => {
                                 <ListGroup.Item>startingPrice: {item.result.startingPrice} </ListGroup.Item>
                                 </ListGroup>
                                 <Card.Body>
-                                    <Button className="button">View</Button>
+                                    <Button className="button" onClick={() => routeChange(item.result.id)} >View</Button>
                                 </Card.Body>
                             </Card>
                         </Col>
