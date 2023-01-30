@@ -6,7 +6,7 @@ namespace AuctionHouse.DAO.ItemDAO
     {
         void AcceptItem(Guid id); // update the accepted item
 
-        void BuyItem(Guid itemId); // update bought item
+        void BuyItem(User user, Guid itemId, Order order); // update bought item, user balance and add Order
 
         void DeleteItemById(Guid id);
 

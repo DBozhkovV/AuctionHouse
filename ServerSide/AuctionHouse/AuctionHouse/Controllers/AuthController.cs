@@ -12,11 +12,11 @@ namespace AuctionHouse.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private IUserService userRepository;
+        private IUserService userService;
         
-        public AuthController(IUserService userRepository)
+        public AuthController(IUserService userService)
         {
-            this.userRepository = userRepository;
+            this.userService = userService;
         }
 
         [HttpPost]
@@ -64,7 +64,7 @@ namespace AuctionHouse.Controllers
         {
             try 
             {
-                userRepository.Register(registerDTO);
+                userService.Register(registerDTO);
             }
             catch (Exception exception) 
             {
@@ -79,13 +79,13 @@ namespace AuctionHouse.Controllers
         {
             try
             {
-                Guid? userId = userRepository.Login(loginDTO);
+                Guid? userId = userService.Login(loginDTO);
                 if (userId is null)
                 {
                     return BadRequest();
                 }
                 HttpContext.Session.SetString("userId", userId.ToString());
-                if (userRepository.IsRoled(userId.Value, Role.User))
+                if (userService.IsRoled(userId.Value, Role.User))
                 {
                     HttpContext.Session.SetString("Role", "User");
                 }
@@ -120,7 +120,7 @@ namespace AuctionHouse.Controllers
         {
             try
             {
-                userRepository.VerifyAccount(token);
+                userService.VerifyAccount(token);
             }
             catch (Exception exception)
             {
@@ -135,7 +135,7 @@ namespace AuctionHouse.Controllers
         {
             try
             {
-                userRepository.ForgotPassword(email);
+                userService.ForgotPassword(email);
             }
             catch (Exception exception)
             {
@@ -150,7 +150,7 @@ namespace AuctionHouse.Controllers
         {
             try
             {
-                userRepository.ResetPassword(resetPasswordDTO);
+                userService.ResetPassword(resetPasswordDTO);
             }
             catch (Exception exception)
             {
@@ -200,7 +200,7 @@ namespace AuctionHouse.Controllers
             try
             {
                 Guid userId = Guid.Parse(HttpContext.Session.GetString("userId"));
-                UserDTO userDTO = userRepository.Profile(userId);
+                UserDTO userDTO = userService.Profile(userId);
                 return Ok(userDTO);
             } catch (Exception exception) 
             {
@@ -219,7 +219,7 @@ namespace AuctionHouse.Controllers
                     return BadRequest("Don't have exist session.");
                 }
                 Guid userId = Guid.Parse(HttpContext.Session.GetString("userId"));
-                userRepository.DeleteUser(userId);
+                userService.DeleteUser(userId);
             }
             catch (Exception exception)
             {

@@ -25,17 +25,17 @@ namespace AuctionHouse.Services.UserService
                 throw new Exception("Invalid confirmed password");
             }
 
-            if (userRepository.getUserByUsername(registerDTO.Username) != null)
+            if (userRepository.GetUserByUsername(registerDTO.Username) != null)
             {
-                if (userRepository.getUserByUsername(registerDTO.Username).Username == registerDTO.Username)
+                if (userRepository.GetUserByUsername(registerDTO.Username).Username == registerDTO.Username)
                 {
                     throw new Exception("Username is already used.");
                 }
             }
             
-            if (userRepository.getUserByEmail(registerDTO.Email) != null) 
+            if (userRepository.GetUserByEmail(registerDTO.Email) != null) 
             {
-                if (userRepository.getUserByEmail(registerDTO.Email).Email == registerDTO.Email)
+                if (userRepository.GetUserByEmail(registerDTO.Email).Email == registerDTO.Email)
                 {
                     throw new Exception("This email is already used.");
                 }
@@ -50,7 +50,7 @@ namespace AuctionHouse.Services.UserService
                 Password = BCrypt.Net.BCrypt.HashPassword(registerDTO.Password),
                 PhoneNumber = registerDTO.PhoneNumber
             };
-            userRepository.insertUser(newUser);
+            userRepository.InsertUser(newUser);
         }
 
         public Guid? Login(LoginDTO loginDTO)
@@ -60,7 +60,7 @@ namespace AuctionHouse.Services.UserService
                 throw new ArgumentNullException(nameof(loginDTO));
             }
 
-            User user = userRepository.getUserByUsername(loginDTO.Username);
+            User user = userRepository.GetUserByUsername(loginDTO.Username);
             if (user != null)
             {
                 if (user.Username == loginDTO.Username)
@@ -81,7 +81,7 @@ namespace AuctionHouse.Services.UserService
 
         public UserDTO Profile(Guid userId) 
         {
-            User user = userRepository.getUserById(userId);
+            User user = userRepository.GetUserById(userId);
             UserDTO userDTO = new UserDTO()
             {
                 FirstName = user.FirstName,
@@ -96,28 +96,28 @@ namespace AuctionHouse.Services.UserService
         
         public void VerifyAccount(Guid token)
         {
-            userRepository.verifyUser(token);
+            userRepository.VerifyUser(token);
         }
 
         public void ForgotPassword(string email) 
         {
-            userRepository.forgotPassword(email);
+            userRepository.ForgotPassword(email);
         }
 
         public void ResetPassword(ResetPasswordDTO resetPasswordDTO) 
         {
-            User user = userRepository.getUserByPassowordResetToken(resetPasswordDTO.Token);
+            User user = userRepository.GetUserByPassowordResetToken(resetPasswordDTO.Token);
             if (user.PasswordResetTokenExpires < DateTime.UtcNow)
             {
                 throw new Exception("Password reset token has expired.");
             }
 
-            userRepository.resetPassword(resetPasswordDTO);
+            userRepository.ResetPassword(resetPasswordDTO);
         }
 
         public void DeleteUser(Guid userId)
         {
-            userRepository.deleteUserById(userId);
+            userRepository.DeleteUserById(userId);
         }
         
         public bool IsRoled(Guid userId, Role role) 

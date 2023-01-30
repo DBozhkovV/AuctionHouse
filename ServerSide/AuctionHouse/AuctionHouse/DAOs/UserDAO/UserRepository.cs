@@ -6,87 +6,87 @@ namespace AuctionHouse.DAOs.UserDAO
 {
     public class UserRepository : IUserRepository
     {
-        private readonly DataContext _dataContext;
+        private readonly DataContext dataContext;
 
-        public UserRepository(DataContext _dataContext)
+        public UserRepository(DataContext dataContext)
         {
-            this._dataContext = _dataContext;
+            this.dataContext = dataContext;
         }
 
-        public void insertUser(User user)
+        public void InsertUser(User user)
         {
-            _dataContext.Users.Add(user);
-            _dataContext.SaveChanges();
+            dataContext.Users.Add(user);
+            dataContext.SaveChanges();
         }
 
-        public User getUserByUsername(string username)
+        public User GetUserByUsername(string username)
         {
-            return _dataContext.Users
+            return dataContext.Users
                 .Where(user => user.Username.Equals(username))
                 .SingleOrDefault();
         }
 
-        public User getUserByEmail(string email) 
+        public User GetUserByEmail(string email) 
         {
-            return _dataContext.Users
+            return dataContext.Users
                 .Where(user => user.Email.Equals(email))
                 .SingleOrDefault();
         }
 
 
-        public User getUserById(Guid id)
+        public User GetUserById(Guid id)
         {
-            return _dataContext.Users
+            return dataContext.Users
                 .Where(user => user.Id.Equals(id))
                 .SingleOrDefault();
         }
 
-        public void verifyUser(Guid token)
+        public void VerifyUser(Guid token)
         {
-            User user = _dataContext.Users
+            User user = dataContext.Users
                 .Where(user => user.VerificationToken.Equals(token))
                 .SingleOrDefault();
             user.IsVerified = true;
             user.VerifiedAt = DateTime.UtcNow;
-            _dataContext.SaveChanges();
+            dataContext.SaveChanges();
         }
 
-        public void forgotPassword(string email)
+        public void ForgotPassword(string email)
         {
-            User user = _dataContext.Users
+            User user = dataContext.Users
                 .Where(user => user.Email.Equals(email))
                 .SingleOrDefault();
             user.PasswordResetToken = Guid.NewGuid();
             user.PasswordResetTokenExpires = DateTime.UtcNow.AddDays(1);
-            _dataContext.SaveChanges();
+            dataContext.SaveChanges();
         }
 
-        public User getUserByPassowordResetToken(Guid passwordResetToken)
+        public User GetUserByPassowordResetToken(Guid passwordResetToken)
         {
-            return _dataContext.Users
+            return dataContext.Users
                 .Where(user => user.PasswordResetToken.Equals(passwordResetToken))
                 .SingleOrDefault();
         }
 
-        public void resetPassword(ResetPasswordDTO resetPasswordDTO)
+        public void ResetPassword(ResetPasswordDTO resetPasswordDTO)
         {
-            User user = getUserByPassowordResetToken(resetPasswordDTO.Token);
+            User user = GetUserByPassowordResetToken(resetPasswordDTO.Token);
             user.Password = BCrypt.Net.BCrypt.HashPassword(resetPasswordDTO.Password);
             user.PasswordResetToken = null;
             user.PasswordResetTokenExpires = null;
-            _dataContext.SaveChanges();
+            dataContext.SaveChanges();
         }
 
-        public void deleteUserById(Guid id)
+        public void DeleteUserById(Guid id)
         {
-            User user = getUserById(id);
-            _dataContext.Users.Remove(user);
-            _dataContext.SaveChanges();
+            User user = GetUserById(id);
+            dataContext.Users.Remove(user);
+            dataContext.SaveChanges();
         }
 
         public bool IsRoled(Guid userId, Role role) 
         {
-            User user = getUserById(userId);
+            User user = GetUserById(userId);
             if (user.Role == role)
             {
                 return true;

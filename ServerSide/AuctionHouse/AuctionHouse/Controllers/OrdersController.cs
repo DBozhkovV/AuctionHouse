@@ -9,11 +9,11 @@ namespace AuctionHouse.Controllers
     [ApiController]
     public class OrdersController : ControllerBase
     {
-        private readonly IOrderRepository orderRepository;
+        private readonly IOrderService orderService;
 
-        public OrdersController(IOrderRepository orderRepository)
+        public OrdersController(IOrderService orderService)
         {
-            this.orderRepository = orderRepository;
+            this.orderService = orderService;
         }
 
         [HttpGet]
@@ -27,7 +27,7 @@ namespace AuctionHouse.Controllers
                     return BadRequest("Don't have exist session.");
                 }
                 Guid userId = Guid.Parse(HttpContext.Session.GetString("userId"));
-                IEnumerable<Order> orders = orderRepository.GetOrders(userId);
+                IEnumerable<Order> orders = orderService.GetOrdersByUser(userId);
                 if (orders.Count() == 0)
                 {
                     return BadRequest("There is no orders.");
@@ -51,7 +51,7 @@ namespace AuctionHouse.Controllers
                     return BadRequest("Don't have exist session.");
                 }
                 Guid userId = Guid.Parse(HttpContext.Session.GetString("userId"));
-                Order order = orderRepository.GetOrder(id, userId);
+                Order order = orderService.GetOrderById(userId);
                 return Ok(order);
             }
             catch (Exception exception)
@@ -71,7 +71,7 @@ namespace AuctionHouse.Controllers
                     return BadRequest("Don't have exist session.");
                 }
                 Guid userId = Guid.Parse(HttpContext.Session.GetString("userId"));
-                orderRepository.DeleteOrder(id, userId);
+                orderService.DeleteOrderById(id);
                 return Ok();
             }
             catch (Exception exception)

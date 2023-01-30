@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 using AuctionHouse.DAO.ItemDAO;
 using AuctionHouse.DAOs.UserDAO;
+using AuctionHouse.DAOs.OrderDAO;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +29,7 @@ builder.Services.AddScoped<IItemService, ItemService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IAzureStorageRepository, AzureStorageRepository>();
 
 builder.Services.AddControllers().AddJsonOptions(options =>
@@ -40,7 +42,7 @@ builder.Services.AddDistributedMemoryCache();
 
 builder.Services.AddSession(options =>
 {
-    options.Cookie.Name = "ASP";
+    options.Cookie.Name = "ASP.NET";
     options.IdleTimeout = TimeSpan.FromDays(7);
     options.Cookie.IsEssential = true;
     options.Cookie.HttpOnly = true;

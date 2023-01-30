@@ -5,23 +5,23 @@ namespace AuctionHouse.DAOs.UserDAO
 {
     public interface IUserRepository
     {
-        void insertUser(User user);
+        void InsertUser(User user);
 
-        User getUserByUsername(string username);
+        User GetUserByUsername(string username);
 
-        User getUserByEmail(string email);
+        User GetUserByEmail(string email);
 
-        User getUserById(Guid id);
+        User GetUserById(Guid id);
 
-        void verifyUser(Guid token);
+        void VerifyUser(Guid token);
 
-        void forgotPassword(string email);
+        void ForgotPassword(string email);
 
-        User getUserByPassowordResetToken(Guid passwordResetToken);
+        User GetUserByPassowordResetToken(Guid passwordResetToken);
 
-        void resetPassword(ResetPasswordDTO resetPasswordDTO);
+        void ResetPassword(ResetPasswordDTO resetPasswordDTO);
 
-        void deleteUserById(Guid id);
+        void DeleteUserById(Guid id);
 
         bool IsRoled(Guid userId, Role role);
     }

@@ -7,12 +7,12 @@ namespace AuctionHouse.Services.ItemService
 {
     public class ItemService : IItemService
     {
-        private readonly IItemRepository _itemRepository;
+        private readonly IItemRepository itemRepository;
         private readonly IAzureStorageRepository azureStorageRepository;
 
-        public ItemService(IItemRepository _itemRepository, IAzureStorageRepository azureStorageRepository)
+        public ItemService(IItemRepository itemRepository, IAzureStorageRepository azureStorageRepository)
         {
-            this._itemRepository = _itemRepository;
+            this.itemRepository = itemRepository;
             this.azureStorageRepository = azureStorageRepository;
         }
 
@@ -45,7 +45,7 @@ namespace AuctionHouse.Services.ItemService
 
         public Item BuyNow(Guid id, User user)
         {
-            Item item = _itemRepository.GetItemById(id);
+            Item item = itemRepository.GetItemById(id);
 
             if (item.IsAvailable == false)
             {
@@ -57,37 +57,34 @@ namespace AuctionHouse.Services.ItemService
                 throw new Exception("You don't have enough money.");
             }
 
-            _itemRepository.BuyItem(id);
-
-            user.Balance = user.Balance - item.BuyPrice; // da go promenq v user repoto
-
-            Order order = new Order() // da izmislq kude da go pravq tva
+            Order order = new Order()
             {
-                DateOrdered = DateTime.UtcNow,
                 Item = item,
                 User = user
             };
+
+            itemRepository.BuyItem(user, id, order); 
             
             return item;
         }
 
         public IEnumerable<Task<ItemResponse>> GetAvailableItems() // return all available items
         {
-            List<Item> availableItems = _itemRepository.GetAvailableItems().ToList() ;
+            List<Item> availableItems = itemRepository.GetAvailableItems().ToList() ;
             IEnumerable<Task<ItemResponse>> itemResponses = azureStorageRepository.ReturnListOfItemResponses(availableItems);
             return itemResponses;
         }
 
         public IEnumerable<Task<ItemResponse>> GetItemsByCategory(Category category) 
         {
-            List<Item> availableItems = _itemRepository.GetAvailableItemsByCategory(category).ToList();
+            List<Item> availableItems = itemRepository.GetAvailableItemsByCategory(category).ToList();
             IEnumerable<Task<ItemResponse>> itemResponses = azureStorageRepository.ReturnListOfItemResponses(availableItems);
             return itemResponses;
         }
         
         public IEnumerable<Task<ItemResponse>> GetNotAvailableItems() // da dovursha
         {
-            List<Item> availableItems = _itemRepository.GetNotAvailableItems().ToList();
+            List<Item> availableItems = itemRepository.GetNotAvailableItems().ToList();
             IEnumerable<Task<ItemResponse>> itemResponses = azureStorageRepository.ReturnListOfItemResponses(availableItems);
             return itemResponses;
         }
@@ -101,7 +98,7 @@ namespace AuctionHouse.Services.ItemService
         
         public IEnumerable<Task<ItemResponse>> GetNotAcceptedItems()
         {
-            List<Item> notAcceptedItems = _itemRepository.GetNotAcceptedItems().ToList();
+            List<Item> notAcceptedItems = itemRepository.GetNotAcceptedItems().ToList();
             IEnumerable<Task<ItemResponse>> itemResponses = azureStorageRepository.ReturnListOfItemResponses(notAcceptedItems);
             return itemResponses;
         }
@@ -141,8 +138,8 @@ namespace AuctionHouse.Services.ItemService
                     item.ImagesNames.Add(image.FileName);
                     count++;
                 });
-                
-                _itemRepository.InsertItem(item);
+
+                itemRepository.InsertItem(item);
             }
             catch (Exception message)
             {
@@ -152,17 +149,17 @@ namespace AuctionHouse.Services.ItemService
         
         public User FindUserByGuid(Guid userId) // Guid is the id
         {
-            return _itemRepository.GetUserByGuid(userId);
+            return itemRepository.GetUserByGuid(userId);
         }
 
         public Item FindItemByGuid(Guid itemId) // Guid is the id
         {
-            return _itemRepository.GetItemById(itemId);
+            return itemRepository.GetItemById(itemId);
         }
 
         public IEnumerable<Task<ItemResponse>> SearchItems(string search) // return items by containing keyword in there names
         {
-            List<Item> items = _itemRepository.GetSearchedItem(search).ToList();
+            List<Item> items = itemRepository.GetSearchedItem(search).ToList();
             IEnumerable<Task<ItemResponse>> itemResponses = azureStorageRepository.ReturnListOfItemResponses(items);
             if (items is null)
             {
@@ -173,12 +170,12 @@ namespace AuctionHouse.Services.ItemService
 
         public void AcceptItem(Guid itemId) // When accept item, this item become available
         {
-            _itemRepository.AcceptItem(itemId);
+            itemRepository.AcceptItem(itemId);
         }
 
         public void RejectItem(Guid itemId) // When reject item, this item is deleted from database
         {
-            _itemRepository.RejectItem(itemId);
+            itemRepository.RejectItem(itemId);
         }
     }
 }

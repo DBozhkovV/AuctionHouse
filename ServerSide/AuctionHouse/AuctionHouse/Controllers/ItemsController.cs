@@ -13,11 +13,11 @@ namespace AuctionHouse.Controllers
     [ApiController]
     public class ItemsController : ControllerBase
     {
-        private readonly IItemService _itemService;
+        private readonly IItemService itemService;
 
-        public ItemsController(IItemService _itemService)
+        public ItemsController(IItemService itemService)
         {
-            this._itemService = _itemService;
+            this.itemService = itemService;
         }
 
         [HttpGet]
@@ -26,7 +26,7 @@ namespace AuctionHouse.Controllers
         {
             try
             {
-                IEnumerable<Task<ItemResponse>> items = _itemService.GetAvailableItems();
+                IEnumerable<Task<ItemResponse>> items = itemService.GetAvailableItems();
                 if (items.Count() == 0) 
                 {
                     return BadRequest("There is no available items.");
@@ -45,7 +45,7 @@ namespace AuctionHouse.Controllers
         {
             try
             {
-                IEnumerable<Task<ItemResponse>> items = _itemService.GetNotAcceptedItems();
+                IEnumerable<Task<ItemResponse>> items = itemService.GetNotAcceptedItems();
                 if (items.Count() == 0)
                 {
                     return BadRequest("There is no notaccpeted items.");
@@ -64,7 +64,7 @@ namespace AuctionHouse.Controllers
         {
             try
             {
-                ItemResponse itemResponse = await _itemService.GetNotAcceptedItem(id);
+                ItemResponse itemResponse = await itemService.GetNotAcceptedItem(id);
                 return Ok(itemResponse);
             }
             catch (Exception exception)
@@ -79,7 +79,7 @@ namespace AuctionHouse.Controllers
         {
             try
             {
-                _itemService.AcceptItem(id);
+                itemService.AcceptItem(id);
                 return Ok();
             }
             catch (Exception exception)
@@ -94,7 +94,7 @@ namespace AuctionHouse.Controllers
         {
             try
             {
-                _itemService.RejectItem(id);
+                itemService.RejectItem(id);
                 return Ok();
             }
             catch (Exception exception)
@@ -109,7 +109,7 @@ namespace AuctionHouse.Controllers
         {
             try
             {
-                IEnumerable<Task<ItemResponse>> items = _itemService.SearchItems(search);
+                IEnumerable<Task<ItemResponse>> items = itemService.SearchItems(search);
                 if (items.Count() == 0)
                 {
                     return BadRequest("There is no Items.");
@@ -127,7 +127,7 @@ namespace AuctionHouse.Controllers
         {
             try
             {
-                IEnumerable<Task<ItemResponse>> items = _itemService.GetItemsByCategory(category);
+                IEnumerable<Task<ItemResponse>> items = itemService.GetItemsByCategory(category);
                 if (items.Count() == 0)
                 {
                     return BadRequest("There is no Items.");
@@ -146,7 +146,7 @@ namespace AuctionHouse.Controllers
         {
             try
             {
-                ItemResponse itemResponse = await _itemService.GetItem(id);
+                ItemResponse itemResponse = await itemService.GetItem(id);
                 if (itemResponse is null)
                 {
                     return BadRequest("There is no item with given id.");
@@ -171,7 +171,7 @@ namespace AuctionHouse.Controllers
                     return BadRequest("Don't have exist session.");
                 }
                 Guid userId = Guid.Parse(HttpContext.Session.GetString("userId"));
-                _itemService.PostItem(itemDTO, userId);
+                itemService.PostItem(itemDTO, userId);
             }
             catch (Exception exception) 
             {
@@ -200,8 +200,8 @@ namespace AuctionHouse.Controllers
                     return BadRequest("Don't have exist session.");
                 }
                 Guid userId = Guid.Parse(HttpContext.Session.GetString("userId"));
-                User user = _itemService.FindUserByGuid(userId);
-                Item item = _itemService.BuyNow(id, user);
+                User user = itemService.FindUserByGuid(userId);
+                Item item = itemService.BuyNow(id, user);
                 return Ok(item);
             }
             catch (Exception exception) 
