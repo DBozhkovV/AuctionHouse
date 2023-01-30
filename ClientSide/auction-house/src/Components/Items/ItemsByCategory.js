@@ -7,18 +7,18 @@ import { Button } from "react-bootstrap";
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 
-const SearchedItems = () => {
+const ItemsByCategory = () => {
     const p = useParams();
-    const navigate = useNavigate();
     const [items, setItems] = useState(null);
+    const navigate = useNavigate();
     
     const params = { 
-        search: p.search
+        category: p.category
     };
-    
+
     useEffect(() => {
         const getItems = async () => {
-            axios.get(`${process.env.REACT_APP_API}/items/search`, { params })
+            axios.get(`${process.env.REACT_APP_API}/items/category`, { params })
                 .then(response => {
                     setItems(response.data);
                 })
@@ -29,9 +29,9 @@ const SearchedItems = () => {
         getItems();
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-    if(!items) { 
-        return null 
-    };
+    if (!items) {
+        return null;
+    }
 
     const routeChange = (id) =>{ 
         navigate(`/item/${id}`);
@@ -40,7 +40,7 @@ const SearchedItems = () => {
     return (
         <div>
             <h3 className="items-header">
-                Result of search: {p.search}
+                Items by category: {p.category}
             </h3>
             <Row xs={1} md={2} className="g-4">
                 <div className="items-frame">
@@ -71,4 +71,4 @@ const SearchedItems = () => {
     )
 }
 
-export default SearchedItems;
+export default ItemsByCategory;

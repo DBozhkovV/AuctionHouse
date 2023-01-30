@@ -24,11 +24,9 @@ const NotAcceptedItem = () => {
         getItem();
     }, []);
 
-    if(!item) return null;
-
-    const routeChange = () => { 
-        navigate(`/admin`);
-    }
+    if(!item) { 
+        return null 
+    };
 
     const AcceptItem = (id) => {
         axios.put(`${process.env.REACT_APP_API}/items/accept/${id}`, {}, { withCredentials: true })
@@ -66,8 +64,8 @@ const NotAcceptedItem = () => {
                 </div>
             </div>
             <div className="not-accepted-buttons">
-                <Button variant="outline-success" onClick={() => {AcceptItem(item.id); routeChange();}}>Accept</Button>
-                <Button variant="outline-danger" onClick={() => {RejectItem(item.id); routeChange();}}>Reject</Button>
+                <Button variant="outline-success" onClick={() => {AcceptItem(item.id); navigate(-1);}}>Accept</Button>
+                <Button variant="outline-danger" onClick={() => {RejectItem(item.id); navigate(-1);}}>Reject</Button>
             </div>
         </div>
     );

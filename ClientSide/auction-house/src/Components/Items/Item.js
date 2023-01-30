@@ -28,10 +28,6 @@ const Item = () => {
 
     if(!item) return null;
 
-    const GoBack = () => {
-        navigate(`/items`);
-    }
-
     const RejectItem = (id) => {
         axios.put(`${process.env.REACT_APP_API}/items/reject/${id}`, {}, { withCredentials: true })
             .catch(error => {
@@ -53,6 +49,7 @@ const Item = () => {
                     <img 
                         className="not-accepted-img" 
                         src={`data:${item.mainImage.imageType};base64,${item.mainImage.image}`}
+                        alt=""
                     />
                     <div className="button-img-frame">
                         <Button className="button-next-img" variant="outline-primary">
@@ -73,7 +70,7 @@ const Item = () => {
                 </div>
             </div>
             <div className="not-accepted-buttons">
-                <Button variant="outline-primary" onClick={() => GoBack()}>Go back</Button>
+                <Button variant="outline-primary" onClick={() => navigate(-1)}>Go back</Button>
                 <Button variant="outline-danger" onClick={() => RejectItem(item.id)}>Reject</Button>
             </div>
         </div>

@@ -12,6 +12,7 @@ import Item from './Components/Items/Item';
 import Post from './Views/Pages/Post';
 import Profile from './Views/Pages/Profile';
 import NotAcceptedItem from './Components/Items/NotAcceptedItem';
+import ItemsByCategory from './Components/Items/ItemsByCategory';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           <Route path="/post" element={<Post />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/notaccepteditem/:id" element={<NotAcceptedItem />} />
+          <Route path="/category/:category" element={<ItemsByCategory />} />
         </Routes>
       </Layout>
     </BrowserRouter>

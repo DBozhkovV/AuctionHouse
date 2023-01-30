@@ -28,6 +28,7 @@ const NavbarComponent = () => {
                         width="30"
                         height="30"
                         className="d-inline-block align-top"
+                        alt=""
                     />
                     </Navbar.Brand>
                 </>
@@ -65,12 +66,14 @@ const NavbarComponent = () => {
                 <Nav.Link href="/">Home</Nav.Link>
                 <Nav.Link href="/items">Items</Nav.Link>
                 <NavDropdown title="Category" id="basic-nav-dropdown">
-                    <NavDropdown.Item href="#action/3.1">Pictures</NavDropdown.Item>
-                    <NavDropdown.Item href="#action/3.2">Jewellery   </NavDropdown.Item>
-                    <NavDropdown.Item href="#action/3.3">Books</NavDropdown.Item>
+                    <NavDropdown.Item href="/category/Jewellery">Jewellery</NavDropdown.Item>
+                    <NavDropdown.Item href="/category/Watch">Watch</NavDropdown.Item>
+                    <NavDropdown.Item href="/category/Car">Car</NavDropdown.Item>
+                    <NavDropdown.Item href="/category/Alcohol">Alcohol</NavDropdown.Item>
+                    <NavDropdown.Item href="/category/Painting">Painting</NavDropdown.Item>
                     <NavDropdown.Divider />
-                    <NavDropdown.Item href="#action/3.4">
-                        Something else
+                    <NavDropdown.Item href="/category/other">
+                        Other
                     </NavDropdown.Item>
                 </NavDropdown>
                 </Nav>
