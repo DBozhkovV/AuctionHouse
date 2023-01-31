@@ -42,6 +42,7 @@ const ItemsApi = () => {
             <h3 className="items-header">
                 Items
             </h3>
+            <hr />
             <Row xs={1} md={2} className="g-4">
                 <div className="items-frame">
                     {items.map(item => (
@@ -50,6 +51,8 @@ const ItemsApi = () => {
                                 <Card.Img 
                                     variant="top" 
                                     src={`data:${item.result.mainImage.imageType};base64,${item.result.mainImage.image}`} 
+                                    width="100"
+                                    height="180"
                                 />
                                 <Card.Body>
                                 <Card.Title>{item.result.name} </Card.Title>

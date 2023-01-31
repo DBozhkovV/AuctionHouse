@@ -14,9 +14,10 @@ const NavbarComponent = () => {
     }
 
     const isAdmin = IsAdmin();
+    const isUser = IsUser();
 
     const ShowAuthNavigation = () => { // async???
-        if (IsUser()) {
+        if (isUser) {
             return  (
                 <>
                     <Nav.Link href="/post">Post</Nav.Link>
