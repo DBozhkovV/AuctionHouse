@@ -14,5 +14,8 @@
         
         public float Balance { get; set; }
 
+        public IEnumerable<Task<ItemResponse>>? Items { get; set; } = null;
+
+        public IEnumerable<OrderDTO>? Orders { get; set; } = null;
     }
 }

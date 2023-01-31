@@ -1,16 +1,19 @@
 ﻿using AuctionHouse.DAOs.UserDAO;
 using AuctionHouse.DTOs;
 using AuctionHouse.Models;
+using AuctionHouse.Services.AzureStorageService;
 
 namespace AuctionHouse.Services.UserService
 {
     public class UserService : IUserService
     {
         private readonly IUserRepository userRepository;
+        private readonly IAzureStorageRepository azureStorageRepository;
 
-        public UserService(IUserRepository userRepository)
+        public UserService(IUserRepository userRepository, IAzureStorageRepository azureStorageRepository)
         {
             this.userRepository = userRepository;
+            this.azureStorageRepository = azureStorageRepository;
         }
 
         public void Register(RegisterDTO registerDTO)
@@ -82,6 +85,30 @@ namespace AuctionHouse.Services.UserService
         public UserDTO Profile(Guid userId) 
         {
             User user = userRepository.GetUserById(userId);
+            IEnumerable<Item> items = userRepository.GetItemsByUserId(userId);
+            IEnumerable<Order> orders = userRepository.GetOrdersByUserId(userId);
+
+            List<OrderDTO> orderDTOs = new List<OrderDTO>();
+            foreach (Order order in orders)
+            {
+                OrderDTO orderDTO = new OrderDTO()
+                {
+                    Id = order.Id,
+                    DateOrdered = order.DateOrdered,
+                    IsOrderActive = order.IsOrderActive,
+                    IsOrderCompleted = order.IsOrderCompleted,
+                    ItemResponse = azureStorageRepository.ReturnItemResponse(userRepository.GetItemById(order.ItemId)),
+                };
+                orderDTOs.Add(orderDTO);
+            }
+            
+            List<Task<ItemResponse>> itemDTOs = new List<Task<ItemResponse>>();
+            foreach (Item item in items) 
+            {
+                Task<ItemResponse> itemResponse = azureStorageRepository.ReturnItemResponse(item);
+                itemDTOs.Add(itemResponse);
+            }
+
             UserDTO userDTO = new UserDTO()
             {
                 FirstName = user.FirstName,
@@ -89,7 +116,9 @@ namespace AuctionHouse.Services.UserService
                 Username = user.Username,
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
-                Balance = user.Balance
+                Balance = user.Balance,
+                Items = itemDTOs,
+                Orders = orderDTOs
             };
             return userDTO;
         }

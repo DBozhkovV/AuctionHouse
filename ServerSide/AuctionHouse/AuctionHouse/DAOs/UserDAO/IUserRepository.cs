@@ -13,6 +13,12 @@ namespace AuctionHouse.DAOs.UserDAO
 
         User GetUserById(Guid id);
 
+        IEnumerable<Order> GetOrdersByUserId(Guid userId);
+
+        IEnumerable<Item> GetItemsByUserId(Guid userId);
+
+        Item GetItemById(Guid id);
+
         void VerifyUser(Guid token);
 
         void ForgotPassword(string email);

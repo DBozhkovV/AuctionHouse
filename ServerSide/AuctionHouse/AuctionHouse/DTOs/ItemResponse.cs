@@ -13,7 +13,9 @@ namespace AuctionHouse.DTOs
         public float BuyPrice { get; set; }
         
         public float StartingPrice { get; set; }
-        
+
+        public float BoughtFor { get; set; }
+
         public float Bid { get; set; } = 0;
         
         public DateTime DateAdded { get; set; }

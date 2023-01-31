@@ -41,6 +41,32 @@ namespace AuctionHouse.DAOs.UserDAO
                 .SingleOrDefault();
         }
 
+        public IEnumerable<Order> GetOrdersByUserId(Guid userId) 
+        {
+            return dataContext.Orders
+                .Where(order => order.UserId.Equals(userId))
+                .ToList();
+        }
+
+        public Item GetItemById(Guid id)
+        {
+            Item item = dataContext.Items
+                .Where(item => item.Id.Equals(id))
+                .SingleOrDefault();
+            if (item == null)
+            {
+                throw new Exception("Item not found");
+            }
+            return item;
+        }
+
+        public IEnumerable<Item> GetItemsByUserId(Guid userId) 
+        {
+            return dataContext.Items
+                .Where(item => item.AuthorUserId.Equals(userId))
+                .ToList();
+        }
+
         public void VerifyUser(Guid token)
         {
             User user = dataContext.Users
