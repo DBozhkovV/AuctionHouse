@@ -26,7 +26,9 @@ const Item = () => {
         getItem();
     }, []);
 
-    if(!item) return null;
+    if(!item) {
+        return null;
+    } 
 
     const RejectItem = (id) => {
         axios.put(`${process.env.REACT_APP_API}/items/reject/${id}`, {}, { withCredentials: true })
@@ -42,7 +44,6 @@ const Item = () => {
 
     return (
         <div>
-            {displayImage()}
             <h3 className="item-head">{item.name}</h3>
             <div className="item-frame">
                 <div className="image-frame">

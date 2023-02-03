@@ -2,9 +2,13 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../../css/Profile.css';
 import Button from 'react-bootstrap/Button';
+import DeleteOrder from '../../Components/Orders/DeleteOrder';
+import { useNavigate } from 'react-router-dom';
 
 const Profile = () => {
     const [profile, setProfile] = useState(null);
+    const [DeleteOrderShow, setDeleteOrderShow] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const getProfile = async () => {
@@ -23,6 +27,10 @@ const Profile = () => {
         return null;
     }
 
+    const routeOrderChange = (id) =>{ 
+        navigate(`/order/${id}`);
+    }
+
     return (
         <div>
             <h3 className='profile-header'>Profile</h3>
@@ -30,7 +38,7 @@ const Profile = () => {
             <div className="profile-container">
                 <div className='columns-frame'>
                     <h4 className='columns-header'>Posts</h4>
-                    <hr/>
+                    <hr />
                     {profile.items.map(item => {
                         return (
                             <div key={item.id} className='column-element-frame'>
@@ -47,7 +55,6 @@ const Profile = () => {
                                     <p>Date added: {new Date(Date.parse(item.result.dateAdded)).toLocaleDateString()}</p>
                                     <div className='column-element-buttons'>
                                         <Button variant="outline-primary">View</Button>
-                                        <Button variant="outline-danger">Delete</Button>
                                     </div>
                                 </div>
                             </div>
@@ -76,44 +83,15 @@ const Profile = () => {
                                     <p>Bought for: {order.itemResponse.result.boughtFor} $</p>
                                     <p>Date ordered: {new Date(Date.parse(order.dateOrdered)).toLocaleDateString()}</p>
                                     <div className='column-element-buttons'>
-                                        <Button variant="outline-primary">View</Button>
-                                        <Button variant="outline-danger">Delete</Button>
+                                        <Button variant="outline-primary" onClick={() => routeOrderChange(order.id)}>View</Button>
+                                        <Button variant="outline-danger" onClick={() => setDeleteOrderShow(true)}>Delete</Button>
+                                        <DeleteOrder show={DeleteOrderShow} onHide={() => setDeleteOrderShow(false)} itemID={order.id} />
                                     </div>
                                 </div>
                             </div>
                         );
                     })}
                 </div>
-                {/* <div className='profile-box'>
-                    <div className='profile-view'></div>
-                    <div className='profile-basic-info'>
-                        <h6>Personal Information</h6>
-                        <hr />
-                        <div className='profile-names'>
-                            <h6>Firstname: 
-                                <a> {profile.firstName} </a>
-                            </h6>
-                            <h6>Lastname:
-                                <a> {profile.lastName} </a>
-                            </h6>
-                        </div>
-                        <hr />
-                        <div className='profile-info'>
-                            <h6>Username: {profile.username}</h6>
-                            <h6>Email: {profile.email}</h6>
-                            <h6>Phone: {profile.phoneNumber}</h6>
-                        </div>
-                        <hr />
-                    </div>
-                    <div className='profile-special-info'>
-                        <h6>Special Information</h6>
-                        <hr />
-                        <h6>Balance: {profile.balance}</h6>
-                        <br />
-                        <hr />
-                        <h6>Orders: </h6>
-                    </div>
-                </div> */}
             </div>
         </div>
     )

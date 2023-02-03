@@ -24,7 +24,7 @@ const Post = () => {
     const [message, setMessage] = useState("");
     const [validated, setValidated] = useState(false);
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         setValidated(true);
         const formData = new FormData();
@@ -45,7 +45,7 @@ const Post = () => {
             formData.append("Images", images[i]);
         }
         
-        await axios.post(`${process.env.REACT_APP_API}/items`, formData, 
+        axios.post(`${process.env.REACT_APP_API}/items`, formData, 
         { 
             withCredentials: true,
             headers: { "Content-Type": "multipart/form-data" }
@@ -54,8 +54,9 @@ const Post = () => {
             setShowSuccess(true);
             setShowFail(false);
             document.getElementById("post-form").reset();
+            return;
         })
-        .catch(() => {
+        .catch(error => {
             setShowFail(true);
             setShowSuccess(false);
             //setMessage(error.response.data.title);
@@ -135,7 +136,7 @@ const Post = () => {
                                     <Form.Control 
                                         aria-label="Amount"
                                         type="number"
-                                        min="0"  
+                                        min="1"  
                                         required
                                         onChange={(e) => setBuyPrice(e.target.value)}
                                     />
@@ -154,7 +155,7 @@ const Post = () => {
                                     <Form.Control 
                                         aria-label="Amount"
                                         type="number"
-                                        min="0"  
+                                        min="1"  
                                         required
                                         onChange={(e) => setStartingPrice(e.target.value)}
                                     />

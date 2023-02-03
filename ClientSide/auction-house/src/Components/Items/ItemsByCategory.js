@@ -4,8 +4,7 @@ import axios from "axios";
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
 import { Button } from "react-bootstrap";
-import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
+import "../../css/Item.css";
 
 const ItemsByCategory = () => {
     const p = useParams();
@@ -42,31 +41,29 @@ const ItemsByCategory = () => {
             <h3 className="items-header">
                 Items by category: {p.category}
             </h3>
-            <Row xs={1} md={2} className="g-4">
-                <div className="items-frame">
-                    {items.map(item => (
-                        <Col key={item.result.id}>
-                            <Card style={{ width: '18rem' }}>
-                                <Card.Img 
-                                    variant="top" 
-                                    src={`data:${item.result.mainImage.imageType};base64,${item.result.mainImage.image}`} 
-                                />
-                                <Card.Body>
-                                <Card.Title>{item.result.name} </Card.Title>
-                                <Card.Text>{item.result.description} </Card.Text>
-                                </Card.Body>
-                                <ListGroup className="list-group-flush">
-                                <ListGroup.Item>buyPrice: {item.result.buyPrice} </ListGroup.Item>
-                                <ListGroup.Item>startingPrice: {item.result.startingPrice} </ListGroup.Item>
-                                </ListGroup>
-                                <Card.Body>
-                                    <Button className="button" onClick={() => routeChange(item.result.id)} >View</Button>
-                                </Card.Body>
-                            </Card>
-                        </Col>
-                    ))}
-                </div>
-            </Row>
+            <hr/>
+            <div className="items-frame">
+                {items.map(item => (
+                    <Card key={item.result.id} className="item-card">
+                        <Card.Img 
+                            variant="top" 
+                            src={`data:${item.result.mainImage.imageType};base64,${item.result.mainImage.image}`} 
+                            className="card-image"
+                        />
+                        <Card.Body>
+                        <Card.Title>{item.result.name} </Card.Title>
+                        <Card.Text>{item.result.description} </Card.Text>
+                        </Card.Body>
+                        <ListGroup className="list-group-flush">
+                            <ListGroup.Item>buyPrice: {item.result.buyPrice} </ListGroup.Item>
+                            <ListGroup.Item>startingPrice: {item.result.startingPrice} </ListGroup.Item>
+                        </ListGroup>
+                        <Card.Body>
+                            <Button className="button" onClick={() => routeChange(item.result.id)} >View</Button>
+                        </Card.Body>
+                    </Card>
+                ))}
+            </div>
         </div>
     )
 }

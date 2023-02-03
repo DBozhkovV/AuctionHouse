@@ -2,18 +2,16 @@ import React from "react";
 import Modal from "react-bootstrap/Modal";
 import { Button, ModalBody, ModalTitle} from 'react-bootstrap';
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
-const Logout = (props) => {
-    const navigate = useNavigate();
-
+const DeleteOrder = (props) => {
     const routeChange = () =>{ 
-        navigate(`/`);
         window.location.reload();
     }
+    
+    console.log(props);    
 
-    const handleLogout = async () => {
-        axios.post(`${process.env.REACT_APP_API}/logout`, {}, { withCredentials: true })
+    const handleDelete = async () => {
+        axios.delete(`${process.env.REACT_APP_API}/orders/${props.itemID}`, { withCredentials: true })
         .catch(error => {
             console.log(error);
         })
@@ -27,18 +25,18 @@ const Logout = (props) => {
         >
             <Modal.Header closeButton>
                 <ModalTitle>
-                    Logout
+                    Delete
                 </ModalTitle>
             </Modal.Header>
             <ModalBody>
-                <p>Are you sure you want to logout?</p>
+                <p>Are you sure you want to delete this order?</p>
             </ModalBody>
             <Modal.Footer>
-                <Button onClick={() => {handleLogout(); routeChange();}} variant="outline-success">Yes</Button>
+                <Button onClick={() => {handleDelete(); routeChange();}} variant="outline-success">Yes</Button>
                 <Button onClick={props.onHide} variant="outline-danger">No</Button>
             </Modal.Footer>
         </Modal>
     );
 }
 
-export default Logout;
+export default DeleteOrder;

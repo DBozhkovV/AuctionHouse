@@ -47,3 +47,13 @@
     display: flex;
     align-items: center;
 }
+
+.item-card {
+    width: 20rem;
+    height: 30rem;
+}
+
+.card-image {
+    width: 20rem;
+    height: 15rem;
+}

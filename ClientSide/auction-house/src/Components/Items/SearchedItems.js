@@ -6,6 +6,7 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import { Button } from "react-bootstrap";
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
+import "../../css/Item.css";
 
 const SearchedItems = () => {
     const p = useParams();
@@ -46,7 +47,7 @@ const SearchedItems = () => {
                 <div className="items-frame">
                     {items.map(item => (
                         <Col key={item.result.id}>
-                            <Card style={{ width: '18rem' }}>
+                            <Card>
                                 <Card.Img 
                                     variant="top" 
                                     src={`data:${item.result.mainImage.imageType};base64,${item.result.mainImage.image}`} 

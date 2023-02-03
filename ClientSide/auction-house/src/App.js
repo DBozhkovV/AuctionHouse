@@ -13,6 +13,7 @@ import Post from './Views/Pages/Post';
 import Profile from './Views/Pages/Profile';
 import NotAcceptedItem from './Components/Items/NotAcceptedItem';
 import ItemsByCategory from './Components/Items/ItemsByCategory';
+import Order from './Components/Orders/Order';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
           <Route path="/admin" element={<Admin />} />
           <Route path="/item/:id" element={<Item />} />
           <Route path="/post" element={<Post />} />
+          <Route path="/order/:id" element={<Order />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/notaccepteditem/:id" element={<NotAcceptedItem />} />
           <Route path="/category/:category" element={<ItemsByCategory />} />
