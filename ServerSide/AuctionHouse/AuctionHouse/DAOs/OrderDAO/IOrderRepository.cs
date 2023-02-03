@@ -6,7 +6,9 @@ namespace AuctionHouse.DAOs.OrderDAO
     {
 
         Order GetOrderById(Guid id);
-        
+
+        Item getItemById(Guid id);
+
         IEnumerable<Order> GetOrdersByUser(Guid userId);
         
         void DeleteOrderById(Guid id);

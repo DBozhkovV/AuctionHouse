@@ -14,23 +14,25 @@ namespace AuctionHouse.DAOs.OrderDAO
 
         public void DeleteOrderById(Guid id)
         {
-            Order orderToDelete = dataContext.Orders.Find(id);
+            Order orderToDelete = dataContext.Orders.Where(order => order.Id.Equals(id)).SingleOrDefault();
             if (orderToDelete == null)
             {
-                throw new Exception("Order not found");
+                throw new Exception("Order not found.");
             }
             dataContext.Orders.Remove(orderToDelete);
             dataContext.SaveChanges();
         }
 
+        public Item getItemById(Guid id)
+        {
+            return dataContext.Items
+                .Single(item => item.Id.Equals(id));
+        }
+
         public Order GetOrderById(Guid id)
         {
-            Order order = dataContext.Orders.Find(id);
-            if (order == null)
-            {
-                throw new Exception("Order not found");
-            }
-            return order;
+            return dataContext.Orders
+                .Single(order => order.Id.Equals(id));
         }
 
         public IEnumerable<Order> GetOrdersByUser(Guid userId)

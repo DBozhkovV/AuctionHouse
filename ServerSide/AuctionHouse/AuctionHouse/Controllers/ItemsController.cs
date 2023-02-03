@@ -160,7 +160,7 @@ namespace AuctionHouse.Controllers
         }
 
         [HttpPost]
-        [RequestFormLimits(MultipartBodyLengthLimit = 1_000_000)] // Set request limit of 1MB
+        [RequestFormLimits(MultipartBodyLengthLimit = 5_000_000)] // Set request limit of 5MB
         [Authorize(Policy = "User")]
         public IActionResult PostItem([FromForm] ItemDTO itemDTO)
         {

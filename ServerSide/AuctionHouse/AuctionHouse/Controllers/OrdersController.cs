@@ -1,4 +1,5 @@
-﻿using AuctionHouse.Models;
+﻿using AuctionHouse.DTOs;
+using AuctionHouse.Models;
 using AuctionHouse.Services.OrderService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -50,8 +51,7 @@ namespace AuctionHouse.Controllers
                 {
                     return BadRequest("Don't have exist session.");
                 }
-                Guid userId = Guid.Parse(HttpContext.Session.GetString("userId"));
-                Order order = orderService.GetOrderById(userId);
+                OrderDTO order = orderService.GetOrderById(id);
                 return Ok(order);
             }
             catch (Exception exception)
