@@ -10,7 +10,9 @@ namespace AuctionHouse.Services.UserService
         Guid? Login(LoginDTO loginDTO);
         
         UserDTO Profile(Guid userId);
-        
+
+        float GetBalanceByUserId(Guid userId);
+
         void VerifyAccount(Guid token);
         
         void ForgotPassword(string email);

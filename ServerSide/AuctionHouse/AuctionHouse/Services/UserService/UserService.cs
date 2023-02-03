@@ -122,7 +122,12 @@ namespace AuctionHouse.Services.UserService
             };
             return userDTO;
         }
-        
+
+        public float GetBalanceByUserId(Guid userId)
+        {
+            return userRepository.GetBalanceByUserId(userId);
+        }
+
         public void VerifyAccount(Guid token)
         {
             userRepository.VerifyUser(token);

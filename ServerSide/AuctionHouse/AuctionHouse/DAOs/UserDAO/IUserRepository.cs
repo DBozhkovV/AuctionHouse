@@ -19,6 +19,8 @@ namespace AuctionHouse.DAOs.UserDAO
 
         Item GetItemById(Guid id);
 
+        float GetBalanceByUserId(Guid userId);
+
         void VerifyUser(Guid token);
 
         void ForgotPassword(string email);

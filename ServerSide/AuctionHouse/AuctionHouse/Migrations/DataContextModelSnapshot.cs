@@ -35,6 +35,9 @@ namespace AuctionHouse.Migrations
                     b.Property<float>("Bid")
                         .HasColumnType("real");
 
+                    b.Property<Guid?>("BidderId")
+                        .HasColumnType("uuid");
+
                     b.Property<float>("BoughtFor")
                         .HasColumnType("real");
 
@@ -172,17 +175,17 @@ namespace AuctionHouse.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("21c7357c-8b0e-46de-b4e5-be01809da710"),
+                            Id = new Guid("8aea20bf-be69-4ec6-ad2e-d6fb4f202e02"),
                             Balance = 0f,
                             Email = "admin@gmail.com",
                             FirstName = "Admin",
                             IsVerified = true,
                             LastName = "Admin",
-                            Password = "$2a$11$L03l8jlgv9hxdooxqILWsOIKfHBYU6HrBmtFNn3JRZfH0YE/NWa/i",
+                            Password = "$2a$11$oHXrNJbRmOhlC5sRy/U/yuj5A72H/8NSPGb4LpQLVC7N4YOZ7C82i",
                             PhoneNumber = "admin",
                             Role = 1,
                             Username = "admin",
-                            VerificationToken = new Guid("9f4c6141-121d-4ff1-9131-7729be93f9ea")
+                            VerificationToken = new Guid("faaf78d4-93de-4898-a6f1-a11b4707f810")
                         });
                 });
 

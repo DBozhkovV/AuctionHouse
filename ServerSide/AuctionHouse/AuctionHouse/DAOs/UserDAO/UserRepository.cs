@@ -60,10 +60,17 @@ namespace AuctionHouse.DAOs.UserDAO
             return item;
         }
 
+        public float GetBalanceByUserId(Guid userId)
+        {
+            return dataContext.Users
+                .Single(user => user.Id.Equals(userId))
+                .Balance;
+        }
+
         public IEnumerable<Item> GetItemsByUserId(Guid userId) 
         {
             return dataContext.Items
-                .Where(item => item.AuthorUserId.Equals(userId))
+                .Where(item => item.AuthorUserId.Equals(userId) && item.IsAvailable == true)
                 .ToList();
         }
 

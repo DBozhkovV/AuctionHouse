@@ -20,8 +20,10 @@ namespace AuctionHouse.Models
         [Required]
         public float StartingPrice { get; set; }     
         
-        public float Bid { get; set; } = 0;  
-        
+        public float Bid { get; set; } = 0;
+
+        public Guid? BidderId { get; set; } = null;
+
         [Required]
         public DateTime DateAdded { get; set; }       
         

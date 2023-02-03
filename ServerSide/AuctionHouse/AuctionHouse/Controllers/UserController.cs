@@ -169,7 +169,7 @@ namespace AuctionHouse.Controllers
             }
             if (HttpContext.Session.GetString("Role") == "User")
             {
-                return Ok();
+                return Ok(userService.GetBalanceByUserId(Guid.Parse(HttpContext.Session.GetString("userId"))));
             }
             return BadRequest("You are not admin.");
         }

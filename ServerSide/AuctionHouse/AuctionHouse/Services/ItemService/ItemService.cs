@@ -114,6 +114,7 @@ namespace AuctionHouse.Services.ItemService
             {
                 Item item = new Item()
                 {
+                    Id = Guid.NewGuid(),
                     Name = itemDTO.Name,
                     Description = itemDTO.Description,
                     BuyPrice = itemDTO.BuyPrice,
@@ -127,15 +128,15 @@ namespace AuctionHouse.Services.ItemService
                     ImagesNames = new List<string>()
                 };
                 
-                item.MainImageName = itemDTO.MainImage.FileName;
+                item.MainImageName = item.Id.ToString() + "_" + "main";
                 azureStorageRepository.SaveImageAsync(itemDTO.MainImage, item.MainImageName);
 
                 int count = 1;
-                
                 itemDTO.Images.ToList().ForEach(image =>
                 {
-                    azureStorageRepository.SaveImageAsync(image, image.FileName);
-                    item.ImagesNames.Add(image.FileName);
+                    string imageName = item.Id.ToString() + "_" + count.ToString();
+                    azureStorageRepository.SaveImageAsync(image, imageName);
+                    item.ImagesNames.Add(imageName);
                     count++;
                 });
 
