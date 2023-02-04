@@ -31,6 +31,14 @@ const Profile = () => {
         navigate(`/order/${id}`);
     }
 
+    const getStatus = (item) => {
+        if(item.result.isAccepted === false) {
+            return 'Not accepted';
+        }else {
+            return 'Accepted';
+        }
+    }
+
     return (
         <div>
             <h3 className='profile-header'>Profile</h3>
@@ -49,10 +57,10 @@ const Profile = () => {
                                     alt=''
                                 />
                                 <div className='column-element-info'>
-                                    <h5>{item.result.name}</h5>
-                                    <p>{item.result.description}</p>
+                                    <h5>Name: {item.result.name}</h5>
+                                    <p>Description: {item.result.description}</p>
                                     <p>Bid now: {item.result.bid} $</p>
-                                    <p>Date added: {new Date(Date.parse(item.result.dateAdded)).toLocaleDateString()}</p>
+                                    <p>Status: {getStatus(item)}</p>
                                     <div className='column-element-buttons'>
                                         <Button variant="outline-primary">View</Button>
                                     </div>

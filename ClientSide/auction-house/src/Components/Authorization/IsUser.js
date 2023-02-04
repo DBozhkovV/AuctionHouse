@@ -2,16 +2,20 @@ import { useState } from "react";
 import axios from "axios";
 
 const IsUser = () => {
-    const [isUser, setIsUser] = useState(false);
+    const [balance, setBalance] = useState(null);
 
     axios.get(`${process.env.REACT_APP_API}/isUser`, { withCredentials: true })
-        .then(() => {
-            setIsUser(true);
+        .then(response => {
+            setBalance(response.data);
         })
         .catch(() => {
-            setIsUser(false);
+            console.log("Not logged in");
         });
-    return isUser;
+    
+    if (balance !== null) {
+        return balance;
+    }
+    return false;
 }
 
 export default IsUser;

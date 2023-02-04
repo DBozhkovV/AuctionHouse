@@ -32,6 +32,9 @@ const NavbarComponent = () => {
                         alt=""
                     />
                     </Navbar.Brand>
+                    <Navbar.Text>
+                        Balance: {isUser} $
+                    </Navbar.Text>
                 </>
             );
         }
