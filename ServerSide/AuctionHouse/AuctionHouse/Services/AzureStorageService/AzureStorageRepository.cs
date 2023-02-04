@@ -88,6 +88,17 @@ namespace AuctionHouse.Services.AzureStorageService
             return itemResponses;
         }
 
+        public void DeleteImage(string blobName) 
+        {
+            var blobClient = storageAccount.CreateCloudBlobClient();
+
+            // Get a reference to the container
+            var container = blobClient.GetContainerReference("itemimage");
+            
+            var blob = container.GetBlockBlobReference(blobName);
+            blob.DeleteAsync();
+        }
+
         public string GetImageType(string fileName)
         {
             if (fileName.Contains(".jpg")) {

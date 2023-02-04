@@ -11,6 +11,8 @@ namespace AuctionHouse.Services.AzureStorageService
 
         IEnumerable<Task<ItemResponse>> ReturnListOfItemResponses(List<Item> items);
 
+        void DeleteImage(string blobName);
+
         string GetImageType(string fileName);
     }
 }

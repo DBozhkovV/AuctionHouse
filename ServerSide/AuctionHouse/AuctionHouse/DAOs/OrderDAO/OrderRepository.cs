@@ -12,14 +12,15 @@ namespace AuctionHouse.DAOs.OrderDAO
             this.dataContext = dataContext;
         }
 
-        public void DeleteOrderById(Guid id)
+        public void DeleteOrder(Order order)
         {
-            Order orderToDelete = dataContext.Orders.Where(order => order.Id.Equals(id)).SingleOrDefault();
-            if (orderToDelete == null)
-            {
-                throw new Exception("Order not found.");
-            }
-            dataContext.Orders.Remove(orderToDelete);
+            dataContext.Orders.Remove(order);
+            dataContext.SaveChanges();
+        }
+
+        public void DeleteItem(Item item) 
+        {
+            dataContext.Items.Remove(item);
             dataContext.SaveChanges();
         }
 

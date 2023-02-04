@@ -18,7 +18,14 @@ namespace AuctionHouse.Services.OrderService
 
         public void DeleteOrderById(Guid id)
         {
-            orderRepository.DeleteOrderById(id);
+            Order orderToDelete = orderRepository.GetOrderById(id);
+            Item itemToDelete = orderRepository.getItemById(orderToDelete.ItemId);
+
+            azureStorageRepository.DeleteImage(itemToDelete.MainImageName);
+            itemToDelete.ImagesNames.ForEach(imageName => azureStorageRepository.DeleteImage(imageName));
+
+            orderRepository.DeleteOrder(orderToDelete);
+            orderRepository.DeleteItem(itemToDelete);
         }
 
         public OrderDTO GetOrderById(Guid id)
