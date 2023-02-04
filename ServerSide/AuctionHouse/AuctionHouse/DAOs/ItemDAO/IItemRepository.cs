@@ -10,12 +10,16 @@ namespace AuctionHouse.DAO.ItemDAO
 
         void DeleteItemById(Guid id);
 
+        public void AddBalance(User user, float money);
+
         IEnumerable<Item> GetAvailableItems();
 
         IEnumerable<Item> GetAvailableItemsByCategory(Category category);
 
         Item GetItemById(Guid id);
 
+        void ReturnMoneyToUser(Guid userId, float money); // return money to user if he is outbid
+        
         Item GetNotAcceptedItemById(Guid id);
 
         IEnumerable<Item> GetNotAcceptedItems();

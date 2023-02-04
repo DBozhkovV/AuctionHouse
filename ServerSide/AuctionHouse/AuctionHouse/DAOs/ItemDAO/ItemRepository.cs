@@ -30,6 +30,8 @@ namespace AuctionHouse.DAO.ItemDAO
             item.BoughtFor = item.BuyPrice;
             item.EndBidDate = DateTime.UtcNow;
             user.Balance -= item.BuyPrice;
+            item.BidderId = null;
+            item.Bid = item.StartingPrice;
             dataContext.Orders.Add(order);
             dataContext.SaveChanges();
         }
@@ -41,6 +43,19 @@ namespace AuctionHouse.DAO.ItemDAO
             dataContext.SaveChanges();
         }
 
+        public void AddBalance(User user, float money) 
+        {
+            user.Balance += money;
+            dataContext.SaveChanges();
+        }
+
+        public void ReturnMoneyToUser(Guid userId, float money)
+        {
+            User user = GetUserByGuid(userId);
+            user.Balance += money;
+            dataContext.SaveChanges();
+        }
+        
         public IEnumerable<Item> GetAvailableItems()
         {
             return dataContext.Items

@@ -41,6 +41,8 @@ namespace AuctionHouse.Services.AzureStorageService
                 BuyPrice = item.BuyPrice,
                 StartingPrice = item.StartingPrice,
                 BoughtFor = item.BoughtFor,
+                IsAccepted = item.IsAccepted,
+                IsAvailable = item.IsAvailable,
                 Bid = item.Bid,
                 DateAdded = item.DateAdded,
                 StartingBidDate = item.StartingBidDate,

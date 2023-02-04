@@ -191,7 +191,7 @@ namespace AuctionHouse.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Policy = "User")]
-        public ActionResult<Item> BuyNowAsync(Guid id) // Da dobavq await nqkude tuk
+        public ActionResult<Item> BuyNow(Guid id)
         {
             try
             {
@@ -202,7 +202,7 @@ namespace AuctionHouse.Controllers
                 Guid userId = Guid.Parse(HttpContext.Session.GetString("userId"));
                 User user = itemService.FindUserByGuid(userId);
                 Item item = itemService.BuyNow(id, user);
-                return Ok(item);
+                return Ok();
             }
             catch (Exception exception) 
             {

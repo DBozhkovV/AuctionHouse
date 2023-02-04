@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
-namespace AuctionHouse.DTOs
+﻿namespace AuctionHouse.DTOs
 {
     public class ItemResponse
     {
@@ -15,6 +13,10 @@ namespace AuctionHouse.DTOs
         public float StartingPrice { get; set; }
 
         public float BoughtFor { get; set; }
+
+        public bool IsAccepted { get; set; }
+
+        public bool IsAvailable { get; set; }
 
         public float Bid { get; set; } = 0;
         

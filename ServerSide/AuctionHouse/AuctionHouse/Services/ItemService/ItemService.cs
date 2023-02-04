@@ -63,8 +63,15 @@ namespace AuctionHouse.Services.ItemService
                 User = user
             };
 
-            itemRepository.BuyItem(user, id, order); 
-            
+            if (item.BidderId != null)
+            {
+                Guid guid = (Guid)item.BidderId; // because I can't pass nullable to ReturnMoneyToUser function
+                itemRepository.ReturnMoneyToUser(guid, item.Bid);
+            }
+
+            itemRepository.BuyItem(user, id, order);
+            User userToAddBalance = itemRepository.GetUserByGuid(item.AuthorUserId);
+            itemRepository.AddBalance(userToAddBalance, item.BuyPrice);
             return item;
         }
 
@@ -82,7 +89,7 @@ namespace AuctionHouse.Services.ItemService
             return itemResponses;
         }
         
-        public IEnumerable<Task<ItemResponse>> GetNotAvailableItems() // da dovursha
+        public IEnumerable<Task<ItemResponse>> GetNotAvailableItems()
         {
             List<Item> availableItems = itemRepository.GetNotAvailableItems().ToList();
             IEnumerable<Task<ItemResponse>> itemResponses = azureStorageRepository.ReturnListOfItemResponses(availableItems);
