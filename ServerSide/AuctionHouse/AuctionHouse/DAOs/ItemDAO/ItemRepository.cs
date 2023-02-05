@@ -126,5 +126,14 @@ namespace AuctionHouse.DAO.ItemDAO
             dataContext.Items.Remove(item);
             dataContext.SaveChanges();
         }
+
+        public IEnumerable<Item> GetFiveNewestItems()
+        {
+            return dataContext.Items
+                .Where(item => item.IsAvailable == true && item.IsAccepted == true)
+                .OrderByDescending(item => item.DateAdded) // From newest to oldest
+                .Take(5)
+                .ToList();
+        }
     }
 }

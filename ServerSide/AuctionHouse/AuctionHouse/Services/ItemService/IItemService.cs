@@ -19,6 +19,8 @@ namespace AuctionHouse.Services.ItemService
 
         IEnumerable<Task<ItemResponse>> GetNotAcceptedItems();
 
+        IEnumerable<Task<ItemResponse>> GetFiveNewestItems();
+
         Task<ItemResponse> GetNotAcceptedItem(Guid itemId);
 
         void PostItem(ItemDTO itemDTO, Guid userId);

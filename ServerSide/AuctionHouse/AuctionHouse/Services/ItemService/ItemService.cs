@@ -110,6 +110,13 @@ namespace AuctionHouse.Services.ItemService
             return itemResponses;
         }
 
+        public IEnumerable<Task<ItemResponse>> GetFiveNewestItems() 
+        {
+            List<Item> lastFiveItems = itemRepository.GetFiveNewestItems().ToList();
+            IEnumerable<Task<ItemResponse>> itemResponses = azureStorageRepository.ReturnListOfItemResponses(lastFiveItems);
+            return itemResponses;
+        }
+
         public void PostItem(ItemDTO itemDTO, Guid userId)
         {
             if (itemDTO is null)

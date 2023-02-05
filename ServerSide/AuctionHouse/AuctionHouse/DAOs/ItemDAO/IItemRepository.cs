@@ -33,5 +33,7 @@ namespace AuctionHouse.DAO.ItemDAO
         void InsertItem(Item item);
 
         void RejectItem(Guid id); // If item is reject then it is deleted from database
+        
+        IEnumerable<Item> GetFiveNewestItems();
     }
 }

@@ -2,10 +2,8 @@
 using AuctionHouse.Models;
 using AuctionHouse.Services.AzureStorageService;
 using AuctionHouse.Services.ItemService;
-using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.WindowsAzure.Storage;
 
 namespace AuctionHouse.Controllers
 {
@@ -27,7 +25,7 @@ namespace AuctionHouse.Controllers
             try
             {
                 IEnumerable<Task<ItemResponse>> items = itemService.GetAvailableItems();
-                if (items.Count() == 0) 
+                if (!items.Any()) 
                 {
                     return BadRequest("There is no available items.");
                 }
@@ -46,7 +44,7 @@ namespace AuctionHouse.Controllers
             try
             {
                 IEnumerable<Task<ItemResponse>> items = itemService.GetNotAcceptedItems();
-                if (items.Count() == 0)
+                if (!items.Any())
                 {
                     return BadRequest("There is no notaccpeted items.");
                 }
@@ -110,7 +108,7 @@ namespace AuctionHouse.Controllers
             try
             {
                 IEnumerable<Task<ItemResponse>> items = itemService.SearchItems(search);
-                if (items.Count() == 0)
+                if (!items.Any())
                 {
                     return BadRequest("There is no Items.");
                 }
@@ -128,7 +126,7 @@ namespace AuctionHouse.Controllers
             try
             {
                 IEnumerable<Task<ItemResponse>> items = itemService.GetItemsByCategory(category);
-                if (items.Count() == 0)
+                if (!items.Any())
                 {
                     return BadRequest("There is no Items.");
                 }
@@ -159,6 +157,26 @@ namespace AuctionHouse.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("newest")]
+        [AllowAnonymous]
+        public IActionResult GetNewestItems()
+        {
+            try
+            {
+                IEnumerable<Task<ItemResponse>> items = itemService.GetFiveNewestItems();
+                if (!items.Any())
+                {
+                    return BadRequest("There is no Items.");
+                }
+                return Ok(items);
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
+        }
+
         [HttpPost]
         [RequestFormLimits(MultipartBodyLengthLimit = 5_000_000)] // Set request limit of 5MB
         [Authorize(Policy = "User")]
@@ -180,7 +198,7 @@ namespace AuctionHouse.Controllers
             return Ok();
         }
 
-        [HttpPut("{id}/bid")]
+        [HttpPut("bid/{id}")]
         [Authorize(Policy = "User")]
         public IActionResult Bid(Guid id, [FromBody] float Bid) // da pitam milenkata
         {
@@ -189,7 +207,7 @@ namespace AuctionHouse.Controllers
             return Ok();
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("buy/{id}")]
         [Authorize(Policy = "User")]
         public ActionResult<Item> BuyNow(Guid id)
         {
