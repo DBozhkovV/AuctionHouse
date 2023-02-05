@@ -4,6 +4,7 @@ import '../../css/Profile.css';
 import Button from 'react-bootstrap/Button';
 import DeleteOrder from '../../Components/Orders/DeleteOrder';
 import { useNavigate } from 'react-router-dom';
+import profileLogo from '../../Assets/images/user-profile-icon.svg';
 
 const Profile = () => {
     const [profile, setProfile] = useState(null);
@@ -72,6 +73,30 @@ const Profile = () => {
                 <div className='profile-frame'>
                     <h4 className='columns-header'>Personal Information</h4>
                     <hr />
+                    <div className='profile-column'>
+                        <img 
+                            src={profileLogo} 
+                            width="70"
+                            height="70"
+                            className='profile-logo'
+                        />
+                        <br/>
+                        <br/>
+                        <div className='profile-info'>
+                            <h5>Username: {profile.username}</h5>
+                            <hr/>
+                            <h5>Email: {profile.email}</h5>
+                            <hr/>
+                            <h5>First name: {profile.firstName}</h5>
+                            <hr/>
+                            <h5>Last name: {profile.lastName}</h5>
+                            <hr/>
+                            <h5>Phone number: {profile.phoneNumber}</h5>
+                            <hr/>
+                            <h5>Balance: {profile.balance} $</h5>
+                            <hr/>
+                        </div>
+                    </div>
                 </div>
                 <div className='columns-frame'>
                     <h4 className='columns-header'>Orders</h4>

@@ -1,0 +1,10 @@
+.home-header {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.newest-item-header {
+    display: flex;
+    justify-content: center;
+}

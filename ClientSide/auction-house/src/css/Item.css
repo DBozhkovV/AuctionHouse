@@ -57,3 +57,18 @@
     width: 20rem;
     height: 15rem;
 }
+
+.card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.not-accepted-actions {
+    display: flex;
+    gap: 2rem;
+}
+
+.bid-form {
+    display: flex;
+}

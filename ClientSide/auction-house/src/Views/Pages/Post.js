@@ -60,7 +60,7 @@ const Post = () => {
             setShowFail(true);
             setShowSuccess(false);
             //setMessage(error.response.data.title);
-        })
+        })  
     }
     
     const handleChangeForMainImage = (event) => {

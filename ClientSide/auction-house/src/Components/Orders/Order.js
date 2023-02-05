@@ -35,7 +35,7 @@ const Order = () => {
             <hr/>
             <div className="order-info-header">
                 <h6>
-                    Date ordered: {new Date(Date.parse(order.dateOrdered)).toLocaleDateString()}
+                    Date ordered: {new Date(Date.parse(order.dateOrdered)).toLocaleString()}
                 </h6>
                 <h6>
                     Bought for: {order.itemResponse.result.boughtFor} $
@@ -60,8 +60,8 @@ const Order = () => {
                     <div>Buy Price: {order.itemResponse.result.buyPrice} $</div>
                     <div>Starting Price: {order.itemResponse.result.startingPrice} $</div>
                     <hr/>
-                    <div>End Bid Date: {new Date(Date.parse(order.itemResponse.result.endBidDate)).toLocaleDateString()}</div>
-                    <div>Date Added: {new Date(Date.parse(order.itemResponse.result.dateAdded)).toLocaleDateString()}</div>
+                    <div>End Bid Date: {new Date(Date.parse(order.itemResponse.result.endBidDate)).toLocaleString()}</div>
+                    <div>Date Added: {new Date(Date.parse(order.itemResponse.result.dateAdded)).toLocaleString()}</div>
                     <hr/>
                     <div>Bid: {order.itemResponse.result.bid} $</div>
                 </div>

@@ -31,24 +31,29 @@ const Admin = () => {
 
     return (
         <div>
-            <header className="items-header">
+            <h3 className="items-header">
                 Items
-            </header>
+            </h3>
+            <hr />
             <div className="items-frame">
                 {items.map(item => (
                     <Card key={item.result.id} style={{ width: '18rem' }}>
-                        <Card.Img variant="top" src={`data:${item.result.mainImage.imageType};base64,${item.result.mainImage.image}`} />
+                        <Card.Img 
+                            variant="top" 
+                            src={`data:${item.result.mainImage.imageType};base64,${item.result.mainImage.image}`} 
+                            className="card-image"
+                        />
                         <Card.Body>
                             <Card.Title>{item.result.name}</Card.Title>
                             <Card.Text>{item.result.description} </Card.Text>
                         </Card.Body>
                         <ListGroup className="list-group-flush">
-                        <ListGroup.Item>buyPrice: {item.result.buyPrice} </ListGroup.Item>
-                        <ListGroup.Item>startingPrice: {item.result.startingPrice} </ListGroup.Item>
-                        {/* <ListGroup.Item>endBidDate: {item.endBidDate} </ListGroup.Item> */}
+                        <ListGroup.Item>Buy now: {item.result.buyPrice} $</ListGroup.Item>
+                        <ListGroup.Item>End bid date: {new Date(item.result.endBidDate).toLocaleString()}</ListGroup.Item>
                         </ListGroup>
-                        <Card.Body>
+                        <Card.Body className="card-footer">
                             <Button className="button" onClick={() => routeChange(item.result.id)}>View</Button>
+                            <Card.Text>Bid now: {item.result.bid} $</Card.Text>
                         </Card.Body>
                     </Card>
                 ))}
