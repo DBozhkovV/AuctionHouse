@@ -4,6 +4,7 @@ import Logout from '../Components/Authorization/Logout';
 import IsUser from '../Components/Authorization/IsUser';
 import IsAdmin from '../Components/Authorization/IsAdmin';
 import logo from '../Assets/images/user-profile-icon.svg';
+import "../css/Navbar.css"
 
 const NavbarComponent = () => {
     const [search, setSearch] = useState(null);
@@ -61,11 +62,11 @@ const NavbarComponent = () => {
     };
 
     return(
-        <Navbar bg="light" expand="lg">
+        <Navbar className="nav-color" variant="dark">
             <Container>
             <Navbar.Brand href="/"> Auction House </Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
-            <Navbar.Collapse id="basic-navbar-nav">
+            <Navbar.Collapse id="responsive-navbar-nav">
                 <Nav variant="pills" className="me-auto" >
                 <Nav.Link href="/">Home</Nav.Link>
                 <Nav.Link href="/items">Items</Nav.Link>
@@ -81,7 +82,7 @@ const NavbarComponent = () => {
                     </NavDropdown.Item>
                 </NavDropdown>
                 </Nav>
-                <Form className="d-flex">
+                <Form className="d-flex search-box">
                     <Form.Control
                         type="search"
                         placeholder="Search"
@@ -89,12 +90,12 @@ const NavbarComponent = () => {
                         aria-label="Search"
                         onChange={(e) => { setSearch(e.target.value) }}
                     />
-                    <Button type="button" variant="outline-success" onClick={handleSubmit}>Search</Button>
+                    <Button type="button" variant="outline-info" onClick={handleSubmit}>Search</Button>
                 </Form>
-                </Navbar.Collapse>
-                <Navbar.Collapse className="justify-content-end">
+                <Nav className=" nav-forms">
                     {ShowAuthNavigation()}
                     {ShowAdminNavigation()}
+                </Nav>
                 </Navbar.Collapse>
             </Container>
         </Navbar>

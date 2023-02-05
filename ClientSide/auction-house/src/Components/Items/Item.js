@@ -11,7 +11,8 @@ import Form from 'react-bootstrap/Form';
 const Item = () => {
     const params = useParams();
     const [item, setItem] = useState(null);
-    const [imagesToDisplay, setImagesToDisplay] = useState([[]]);
+    const imagesToDisplay = [];
+    var imageIndex = 0;
     const [bid, setBid] = useState(0);
     const navigate = useNavigate();
 
@@ -32,6 +33,13 @@ const Item = () => {
         return null;
     } 
 
+    // const setImages = () => {
+        imagesToDisplay.push(item.mainImage);
+        for (let i = 0; i < item.images.length; i++) {
+            imagesToDisplay.push(item.images[i]);
+        }
+    // }
+    
     const BuyNow = () => {
         axios.put(`${process.env.REACT_APP_API}/items/buy/${item.id}`, {}, { withCredentials: true })
             .then(response => {
@@ -45,8 +53,14 @@ const Item = () => {
     }
 
     const displayImage = () => {
-        //setImagesToDisplay(item.mainImage);
-        //setImagesToDisplay([...item.mainImage, item.images]);
+        return (
+            <img 
+                className="not-accepted-img" 
+                src={`data:${imagesToDisplay[imageIndex].imageType};base64,${imagesToDisplay[imageIndex].image}`}
+                alt=""
+            />
+        )
+        
     }
 
     return (
@@ -54,13 +68,13 @@ const Item = () => {
             <h3 className="item-head">{item.name}</h3>
             <div className="item-frame">
                 <div className="image-frame">
-                    <img 
-                        className="not-accepted-img" 
-                        src={`data:${item.mainImage.imageType};base64,${item.mainImage.image}`}
-                        alt=""
-                    />
+                    {displayImage()}
                     <div className="button-img-frame">
-                        <Button className="button-next-img" variant="outline-primary">
+                        <Button 
+                            className="button-next-img" 
+                            variant="outline-primary"
+                            onClick={() =>  imageIndex++}
+                        >
                             <VscArrowRight className="arrow-next"/>
                         </Button>
                     </div>
