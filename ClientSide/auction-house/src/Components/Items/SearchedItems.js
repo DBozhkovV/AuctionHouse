@@ -4,14 +4,15 @@ import axios from "axios";
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
 import { Button } from "react-bootstrap";
-import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
 import "../../css/Item.css";
+import "../../css/Loading.css";
+import MoonLoader from "react-spinners/MoonLoader";
 
 const SearchedItems = () => {
     const p = useParams();
     const navigate = useNavigate();
-    const [items, setItems] = useState(null);
+    const [items, setItems] = useState([]);
+    const [loading, setLoading] = useState(true);
     
     const params = { 
         search: p.search
@@ -22,17 +23,15 @@ const SearchedItems = () => {
             axios.get(`${process.env.REACT_APP_API}/items/search`, { params })
                 .then(response => {
                     setItems(response.data);
+                    setLoading(false);
                 })
                 .catch(error => {
+                    setLoading(false);
                     console.log(error);
                 })
         }
         getItems();
-    }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-    if(!items) { 
-        return null 
-    };
+    }, []);
 
     const routeChange = (id) =>{ 
         navigate(`/item/${id}`);
@@ -43,31 +42,37 @@ const SearchedItems = () => {
             <h3 className="items-header">
                 Result of search: {p.search}
             </h3>
-            <Row xs={1} md={2} className="g-4">
-                <div className="items-frame">
-                    {items.map(item => (
-                        <Col key={item.result.id}>
-                            <Card>
-                                <Card.Img 
-                                    variant="top" 
-                                    src={`data:${item.result.mainImage.imageType};base64,${item.result.mainImage.image}`} 
-                                />
-                                <Card.Body>
-                                <Card.Title>{item.result.name} </Card.Title>
-                                <Card.Text>{item.result.description} </Card.Text>
-                                </Card.Body>
-                                <ListGroup className="list-group-flush">
-                                <ListGroup.Item>buyPrice: {item.result.buyPrice} </ListGroup.Item>
-                                <ListGroup.Item>startingPrice: {item.result.startingPrice} </ListGroup.Item>
-                                </ListGroup>
-                                <Card.Body>
-                                    <Button className="button" onClick={() => routeChange(item.result.id)} >View</Button>
-                                </Card.Body>
-                            </Card>
-                        </Col>
-                    ))}
-                </div>
-            </Row>
+            <hr />
+            <div className="loader">
+                {loading ? <MoonLoader
+                    color="#642d3c"
+                    loading={loading}
+                    size={100}
+                /> : null }
+            </div>
+            <div className="items-frame">
+                {items.map(item => (
+                    <Card key={item.result.id} className="item-card">
+                        <Card.Img 
+                            variant="top" 
+                            src={`data:${item.result.mainImage.imageType};base64,${item.result.mainImage.image}`} 
+                            className="card-image"
+                        />
+                        <Card.Body>
+                        <Card.Title>{item.result.name} </Card.Title>
+                        <Card.Text>{item.result.description} </Card.Text>
+                        </Card.Body>
+                        <ListGroup className="list-group-flush">
+                        <ListGroup.Item>Buy now: {item.result.buyPrice} $</ListGroup.Item>
+                        <ListGroup.Item>End bid date: {new Date(item.result.endBidDate).toLocaleString()}</ListGroup.Item>
+                        </ListGroup>
+                        <Card.Body className="card-footer">
+                            <Button className="button" onClick={() => routeChange(item.result.id)}>View</Button>
+                            <Card.Text>Bid now: {item.result.bid} $</Card.Text>
+                        </Card.Body>
+                    </Card>
+                ))}
+            </div>
         </div>
     )
 }

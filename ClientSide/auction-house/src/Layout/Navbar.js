@@ -10,7 +10,8 @@ const NavbarComponent = () => {
     const [search, setSearch] = useState(null);
     const [LogoutShow, setLogoutShow] = useState(false);
 
-    const handleSubmit = () => {
+    const handleSubmit = (e) => {
+        e.preventDefault();
         window.location.href = `/items/search/${search}`;
     }
 
@@ -22,7 +23,7 @@ const NavbarComponent = () => {
             return  (
                 <>
                     <Nav.Link href="/post">Post</Nav.Link>
-                    <Nav.Link onClick={() => setLogoutShow(true)}>Logout</Nav.Link>
+                    <Nav.Link className='nav-logout' onClick={() => setLogoutShow(true)}>Logout</Nav.Link>
                         <Logout show = {LogoutShow} onHide={() => setLogoutShow(false)}/> 
                     <Navbar.Brand href="/profile">
                     <img
@@ -90,7 +91,7 @@ const NavbarComponent = () => {
                         aria-label="Search"
                         onChange={(e) => { setSearch(e.target.value) }}
                     />
-                    <Button type="button" variant="outline-info" onClick={handleSubmit}>Search</Button>
+                    <Button type="submit" variant="outline-info" onClick={(e) => handleSubmit(e)}>Search</Button>
                 </Form>
                 <Nav className=" nav-forms">
                     {ShowAuthNavigation()}

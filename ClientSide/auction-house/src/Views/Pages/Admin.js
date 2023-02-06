@@ -4,9 +4,12 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import axios from "axios";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import '../../css/Loading.css';
+import MoonLoader from "react-spinners/MoonLoader";
 
 const Admin = () => {
-    const [items, setItems] = useState(null);
+    const [items, setItems] = useState([]);
+    const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -14,15 +17,15 @@ const Admin = () => {
             axios.get(`${process.env.REACT_APP_API}/items/not-accepted`, { withCredentials: true })
                 .then(response => {
                     setItems(response.data);
+                    setLoading(false);
                 })
                 .catch(error => {
+                    setLoading(false);    
                     console.log(error);
                 })
         }
         getItems();
     }, []);
-
-    if(!items) return null;
 
     const routeChange = (id) =>{ 
         navigate(`/notaccepteditem/${id}`);
@@ -35,6 +38,13 @@ const Admin = () => {
                 Items
             </h3>
             <hr />
+            <div className="loader">
+                {loading ? <MoonLoader
+                    color="#642d3c"
+                    loading={loading}
+                    size={100}
+                /> : null }
+            </div>
             <div className="items-frame">
                 {items.map(item => (
                     <Card key={item.result.id} style={{ width: '18rem' }}>

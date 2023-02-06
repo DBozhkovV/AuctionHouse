@@ -8,8 +8,6 @@ const DeleteOrder = (props) => {
         window.location.reload();
     }
     
-    console.log(props);    
-
     const handleDelete = async () => {
         axios.delete(`${process.env.REACT_APP_API}/orders/${props.itemID}`, { withCredentials: true })
         .catch(error => {

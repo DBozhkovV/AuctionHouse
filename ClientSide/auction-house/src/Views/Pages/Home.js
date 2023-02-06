@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import '../../css/Home.css';
 import '../../css/Item.css';
+import '../../css/Loading.css';
 import axios from 'axios';
 import Card from 'react-bootstrap/Card';
 import { useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import ListGroup from 'react-bootstrap/ListGroup';
+import MoonLoader from "react-spinners/MoonLoader";
 
 const Home = () => {
     const [items, setItems] = useState([]);
+    const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -16,17 +19,15 @@ const Home = () => {
             axios.get(`${process.env.REACT_APP_API}/items/newest`)
                 .then(response => {
                     setItems(response.data);
+                    setLoading(false);
                 })
                 .catch(error => {
+                    setLoading(false);
                     console.log(error);
                 })
         }
         getItems();
     }, []);
-
-    if(!items) {
-        return null; 
-    }
 
     const routeChange = (id) => { 
         navigate(`/item/${id}`);
@@ -38,8 +39,15 @@ const Home = () => {
             <hr />
             <div>
                 <h3 className='newest-item-header'>
-                    Newest items
+                    Newest items:
                 </h3>
+                <div className="loader">
+                    {loading ? <MoonLoader
+                        color="#642d3c"
+                        loading={loading}
+                        size={100}
+                    /> : null }
+                </div>
                 <div className="items-frame">
                     {items.map(item => (
                         <Card key={item.result.id} className="item-card">

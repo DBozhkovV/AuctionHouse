@@ -5,11 +5,15 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import Fail from "../Alerts/Fail";
+import MoonLoader from "react-spinners/MoonLoader";
+import "../../css/Loading.css";
 
 const ItemsApi = () => {
     const [items, setItems] = useState([]);
     const [showFail, setShowFail] = useState(false);
     const [message, setMessage] = useState("");
+    const [loading, setLoading] = useState(true);
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -17,18 +21,16 @@ const ItemsApi = () => {
             axios.get(`${process.env.REACT_APP_API}/items`)
                 .then(response => {
                     setItems(response.data);
+                    setLoading(false);
                 })
                 .catch(error => {
                     setShowFail(true);
                     setMessage(error.response.data);
+                    setLoading(false);
                 })
         }
         getItems();
     }, []);
-
-    if(!items) {
-        return null; 
-    }
     
     const routeChange = (id) => { 
         navigate(`/item/${id}`);
@@ -41,6 +43,13 @@ const ItemsApi = () => {
                 Items
             </h3>
             <hr />
+            <div className="loader">
+                {loading ? <MoonLoader
+                    color="#642d3c"
+                    loading={loading}
+                    size={100}
+                    /> : null }
+            </div>
             <div className="items-frame">
                 {items.map(item => (
                     <Card key={item.result.id} className="item-card">

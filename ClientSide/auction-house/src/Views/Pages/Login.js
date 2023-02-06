@@ -41,12 +41,12 @@ const Login = () => {
 
     return (
         // Create login form with bootstrap
-        <div>
+        <div className="login-view">
             {showFail ? <Fail error={message} /> : null}
             <h3 className="login-header">
                 Login
             </h3>
-            <div className="form-frame">
+            <div>
                 <form>
                     <hr />
                     <div className="form-group">
