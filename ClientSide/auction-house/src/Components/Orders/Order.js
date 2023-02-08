@@ -2,14 +2,17 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import "../../css/Order.css";
+import "../../css/Item.css";
 import { VscArrowRight } from "react-icons/vsc";
+import { VscArrowLeft } from "react-icons/vsc"; 
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 const Order = () => {
     const params = useParams();
     const [order, setOrder] = useState(null);
-
+    const imagesToDisplay = [];
+    const [imageIndex, setImageIndex] = useState(0);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -25,8 +28,19 @@ const Order = () => {
         getItem();
     }, []);
 
+    useEffect(() => {
+        if (order) {
+            return;
+        }
+    }, [imageIndex]);
+
     if(!order) {
         return null;
+    }
+
+    imagesToDisplay.push(order.itemResponse.result.mainImage);
+    for (let i = 0; i < order.itemResponse.result.images.length; i++) {
+        imagesToDisplay.push(order.itemResponse.result.images[i]);
     }
 
     return (
@@ -42,17 +56,46 @@ const Order = () => {
                 </h6>
             </div>
             <div className="order-frame">
-                <div className="image-frame">
+            <div className="image-frame">
+                    {imageIndex !== 0 && 
+                        <div className="button-previous-img-frame">
+                            <Button 
+                                className="button-img" 
+                                variant="outline-primary"
+                                onClick={() =>  {
+                                    if (imageIndex === 0) {
+                                        return;
+                                    }else {
+                                        setImageIndex(imageIndex - 1);
+                                    }
+                                }}
+                            >
+                                <VscArrowLeft className="arrow-next"/>
+                            </Button>
+                        </div>
+                    }
                     <img 
-                        className="order-img" 
-                        src={`data:${order.itemResponse.result.mainImage.imageType};base64,${order.itemResponse.result.mainImage.image}`}
+                        className="item-img" 
+                        src={`data:${imagesToDisplay[imageIndex].imageType};base64,${imagesToDisplay[imageIndex].image}`}
                         alt=""
                     />
-                    <div className="button-img-frame">
-                        <Button className="button-next-img" variant="outline-primary">
-                            <VscArrowRight className="arrow-next"/>
-                        </Button>
-                    </div>
+                    {imageIndex !== imagesToDisplay.length - 1 && ( 
+                        <div className="button-next-img-frame">
+                            <Button 
+                                className="button-img" 
+                                variant="outline-primary"
+                                onClick={() =>  {
+                                    if (imageIndex === imagesToDisplay.length - 1) {
+                                        return;
+                                    }else {
+                                        setImageIndex(imageIndex + 1);
+                                    }
+                                }}
+                            >
+                                <VscArrowRight className="arrow-next"/>
+                            </Button>
+                        </div>
+                    )}
                 </div>
                 <div>
                     <div>{order.itemResponse.result.description}</div>

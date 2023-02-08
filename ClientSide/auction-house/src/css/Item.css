@@ -12,28 +12,40 @@
     margin-top: 3rem;
 }
 
-.not-accepted-buttons {
+.item-buttons {
     display: flex;
     gap: 0.1rem;
     margin: 2rem;
-    margin-top: 10rem;
+    margin-top: 7vh;
     align-content: stretch;
     align-items: center;
     justify-content: space-evenly;
     flex-direction: row;
 }
 
-.not-accepted-img {
-    width: 20rem;
-    height: 20rem;
+.item-img {
+    width: 30vw;
+    height: 50vh;
 }
 
-.button-next-img {
+.button-img {
     width: 3rem;
     height: 2rem;
 }
 
-.button-img-frame {
+.button-next-img-frame {
+    display: flex;
+    align-items: center;
+    margin-left: 3rem;
+}
+
+.button-previous-img-frame {
+    display: flex;
+    align-items: center;
+    margin-right: 3rem;
+}
+
+.button-next-img-frame {
     display: flex;
     align-items: center;
     margin-left: 3rem;
