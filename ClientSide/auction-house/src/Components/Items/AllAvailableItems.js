@@ -43,6 +43,7 @@ const ItemsApi = () => {
                 Items
             </h3>
             <hr />
+            <div>Sort by:</div>
             <div className="loader">
                 {loading ? <MoonLoader
                     color="#642d3c"

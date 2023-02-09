@@ -57,9 +57,30 @@ const Item = () => {
             })
     }
 
+    const Bid = () => {
+        axios.put(`${process.env.REACT_APP_API}/items/bid`, 
+            { 
+                itemId: item.id,
+                money: bid 
+            }, 
+            {
+                withCredentials: true
+            })
+            .then(response => {
+                console.log(response);
+                // navigate(`/items/${item.id}`);
+                // window.location.reload();
+            })
+            .catch(error => {
+                console.log(error);
+            })
+    }
+
     return (
         <div>
-            <h3 className="item-head">{item.name}</h3>
+            <h3 className="item-head">
+                {item.name}
+            </h3>
             <hr />
             <div className="item-frame">
                 <div className="image-frame">
@@ -117,7 +138,7 @@ const Item = () => {
                     <div className="not-accepted-actions">
                         <Button variant="outline-primary" onClick={() => BuyNow()}>Buy now</Button>
                         <Form.Group className="bid-form">
-                            <Button variant="outline-primary">Bid</Button>
+                            <Button variant="outline-primary" onClick={() => Bid()}>Bid</Button>
                             <InputGroup size="sm">
                                 <InputGroup.Text>$</InputGroup.Text>
                                 <Form.Control   
