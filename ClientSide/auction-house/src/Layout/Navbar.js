@@ -23,8 +23,9 @@ const NavbarComponent = () => {
             return  (
                 <>
                     <Nav.Link href="/post">Post</Nav.Link>
-                    <Nav.Link className='nav-logout' onClick={() => setLogoutShow(true)}>Logout</Nav.Link>
-                        <Logout show = {LogoutShow} onHide={() => setLogoutShow(false)}/> 
+                    <Nav.Link onClick={() => setLogoutShow(true)}>Logout</Nav.Link>
+                        <Logout show = {LogoutShow} onHide={() => setLogoutShow(false)} /> 
+                    <Nav.Link className='nav-bids' href="/bids">Your bids</Nav.Link>
                     <Navbar.Brand href="/profile">
                     <img
                         src={logo}
@@ -93,7 +94,7 @@ const NavbarComponent = () => {
                     />
                     <Button type="submit" variant="outline-info" onClick={(e) => handleSubmit(e)}>Search</Button>
                 </Form>
-                <Nav className=" nav-forms">
+                <Nav className="nav-forms">
                     {ShowAuthNavigation()}
                     {ShowAdminNavigation()}
                 </Nav>

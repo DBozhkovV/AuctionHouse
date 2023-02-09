@@ -5,7 +5,7 @@ import Home from './Views/Pages/Home';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Login from './Views/Pages/Login';
 import RegistrationForm from './Views/Pages/Register';
-import ItemsApi from './Components/Items/AllAvailableItems';
+import AllAvailableItems from './Components/Items/AllAvailableItems';
 import SearchedItems from './Components/Items/SearchedItems';
 import Admin from './Views/Pages/Admin';
 import Item from './Components/Items/Item';
@@ -14,6 +14,7 @@ import Profile from './Views/Pages/Profile';
 import NotAcceptedItem from './Components/Items/NotAcceptedItem';
 import ItemsByCategory from './Components/Items/ItemsByCategory';
 import Order from './Components/Orders/Order';
+import BidPage from './Components/Bids/BidPage';
 
 function App() {
   return (
@@ -23,7 +24,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<RegistrationForm />} />
-          <Route path="/items" element={<ItemsApi />} />
+          <Route path="/items" element={<AllAvailableItems />} />
           <Route path="/items/search/:search" element={<SearchedItems />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/item/:id" element={<Item />} />
@@ -32,6 +33,7 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/notaccepteditem/:id" element={<NotAcceptedItem />} />
           <Route path="/category/:category" element={<ItemsByCategory />} />
+          <Route path="/bids" element={<BidPage />} />
         </Routes>
       </Layout>
     </BrowserRouter>
