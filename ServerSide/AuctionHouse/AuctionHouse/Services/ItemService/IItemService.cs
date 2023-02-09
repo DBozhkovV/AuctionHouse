@@ -6,8 +6,8 @@ namespace AuctionHouse.Services.ItemService
     public interface IItemService
     {
         Task<ItemResponse> GetItem(Guid id);
-        
-        void Bid(Guid itemId, float Bid, Guid userId);
+
+        void Bid(Guid itemId, Guid userId, float money);
 
         Item BuyNow(Guid id, User user);
 

@@ -1,10 +1,10 @@
 ﻿using AuctionHouse.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using AuctionHouse.Services.UserService;
-using SendGrid;
-using SendGrid.Helpers.Mail;
 using Microsoft.AspNetCore.Authorization;
 using AuctionHouse.Models;
+using System.Net.Mail;
+using System.Net;
 
 namespace AuctionHouse.Controllers
 {
@@ -24,39 +24,44 @@ namespace AuctionHouse.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> SendPlainTextEmail(EmailDTO emailDTO)
         {
-            // Name = Danail Bozhkov
-            // Email = auctionhouse3333@gmail.com
+            var fromAddress = new MailAddress("houseauction89@gmail.com", "AuctionHouse");
+            var toAddress = new MailAddress(emailDTO.Email, emailDTO.Name);
 
-            var apiKey = "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";
-            var client = new SendGridClient(apiKey);
-            var from = new EmailAddress("danipaynera00@gmail.com", "Danail Bozhkov");
-            var subject = "Sending with SendGrid is Fun";
-            var to = new EmailAddress("dbozhkov09@gmail.com", "Danail Bozhkov");
-            var plainTextContent = "and easy to do anywhere, even with C#";
-            var htmlContent = "<strong>and easy to do anywhere, even with C#</strong>";
-            var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
-            var response = await client.SendEmailAsync(msg);
-            
-            if (response.StatusCode == System.Net.HttpStatusCode.Accepted)
+            var smtp = new SmtpClient
             {
-                return Ok();
-            }
-            else
-            {
-                return BadRequest();
-            }
+                Host = "smtp.sendgrid.net",
+                Port = 587,
+                EnableSsl = true,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential(fromAddress.Address, "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")
+            };
 
+            using var message = new MailMessage(fromAddress, toAddress)
+            {
+                Subject = "Hello",
+                Body = "Hello world!"
+            };
+            smtp.Send(message);
+            return Ok();
+        }
+
+
+            // Name = AuctionHouse
+            // Email = houseauction89@gmail.com
             /*
-            var from = new EmailAddress("danipaynera00@gmail.com", "Boji");
-            var subject = "Sending with SendGrid is Fun";
-            var to = new EmailAddress("dbozhkov09@gmail.com", "Danail Bozhkov");
-            var plainTextContent = "and easy to do anywhere, even with C#";
-            var htmlContent = "<strong>and easy to do anywhere, even with C#</strong>";
-            var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
+            var apiKey = "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";
+            var client = new SendGridClient(apiKey);
+            var msg = new SendGridMessage()
+            {
+                From = new EmailAddress("houseauction89@gmail.com", "AuctionHouse"),
+                Subject = "Sending with Twilio SendGrid is Fun",
+                PlainTextContent = "and easy to do anywhere, especially with C#"
+            };
+            msg.AddTo(new EmailAddress("danipaynera00@gmail.com", "Dakata RM"));
             var response = await client.SendEmailAsync(msg);
             return Ok(response);
             */
-        }
 
         [HttpPost("register")]
         [AllowAnonymous]

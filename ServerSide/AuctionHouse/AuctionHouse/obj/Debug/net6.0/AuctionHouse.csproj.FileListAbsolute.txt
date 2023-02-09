@@ -54,3 +54,6 @@ C:\Users\Bozhkov\Desktop\AuctionHouse\AuctionHouse\bin\Debug\net6.0\Azure.Storag
 C:\Users\Bozhkov\Desktop\AuctionHouse\AuctionHouse\bin\Debug\net6.0\Microsoft.Bcl.AsyncInterfaces.dll
 C:\Users\Bozhkov\Desktop\AuctionHouse\AuctionHouse\bin\Debug\net6.0\System.IO.Hashing.dll
 C:\Users\Bozhkov\Desktop\AuctionHouse\AuctionHouse\bin\Debug\net6.0\System.Memory.Data.dll
+C:\Users\Bozhkov\Desktop\AuctionHouse\AuctionHouse\bin\Debug\net6.0\MailKit.dll
+C:\Users\Bozhkov\Desktop\AuctionHouse\AuctionHouse\bin\Debug\net6.0\MimeKit.dll
+C:\Users\Bozhkov\Desktop\AuctionHouse\AuctionHouse\bin\Debug\net6.0\BouncyCastle.Crypto.dll

@@ -198,12 +198,24 @@ namespace AuctionHouse.Controllers
             return Ok();
         }
 
-        [HttpPut("bid/{id}")]
+        [HttpPut("bid")]
         [Authorize(Policy = "User")]
-        public IActionResult Bid(Guid id, [FromBody] float Bid) // da pitam milenkata
+        public IActionResult Bid(BidDTO bidDTO)
         {
-            
-            // proverka za sessiqta
+
+            try 
+            {
+                if (HttpContext.Session.GetString("userId") is null)
+                {
+                    return BadRequest("Don't have exist session.");
+                }
+                Guid userId = Guid.Parse(HttpContext.Session.GetString("userId"));
+                itemService.Bid(bidDTO.ItemId, userId, bidDTO.Money);
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
             return Ok();
         }
 

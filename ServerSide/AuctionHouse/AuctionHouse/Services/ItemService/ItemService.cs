@@ -23,12 +23,12 @@ namespace AuctionHouse.Services.ItemService
             return result;
         }
 
-        public void Bid(Guid itemId, float Bid, Guid userId)
+        public void Bid(Guid itemId, Guid userId, float money)
         {
             Item item = FindItemByGuid(itemId);
             User user = FindUserByGuid(userId);
 
-            if (Bid > user.Balance)
+            if (money > user.Balance)
             {
                 throw new Exception("You don't have enough balance.");
             }
@@ -38,9 +38,20 @@ namespace AuctionHouse.Services.ItemService
                 throw new Exception("You don't have enough balance.");
             }
 
-            item.Bid = Bid;
-            // Da dovursha
+            if (money < item.Bid)
+            {
+                throw new Exception("Your bid is too low.");
+            }
 
+            if (item.BidderId == null)
+            {
+                itemRepository.Bid(item, user, money);
+            } 
+            else 
+            {
+                itemRepository.ReturnMoneyToUser((Guid)item.BidderId, item.Bid); // return money to previous bidder
+                itemRepository.Bid(item, user, money); 
+            }
         }
 
         public Item BuyNow(Guid id, User user)

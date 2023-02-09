@@ -75,6 +75,14 @@ namespace AuctionHouse.DAO.ItemDAO
             return dataContext.Items.Single(item => item.Id.Equals(id));
         }
 
+        public void Bid(Item item, User user, float money)  // proverka dali usera ima tolkova pari
+        {
+            user.Balance -= money;
+            item.BidderId = user.Id;
+            item.Bid = money;
+            dataContext.SaveChanges();
+        }
+            
         public Item GetNotAcceptedItemById(Guid id)
         {
             return dataContext.Items.Single(item => item.Id.Equals(id));
@@ -106,7 +114,9 @@ namespace AuctionHouse.DAO.ItemDAO
 
         public IEnumerable<Item> GetSearchedItem(string search)
         {
-            return dataContext.Items.Where(item => item.Name.Contains(search) && item.IsAccepted == true).ToList();
+            return dataContext.Items
+                .Where(item => item.Name.Contains(search) && item.IsAccepted == true && item.IsAvailable == true)
+                .ToList();
         }
 
         public User GetUserByGuid(Guid id)

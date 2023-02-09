@@ -18,6 +18,8 @@ namespace AuctionHouse.DAO.ItemDAO
 
         Item GetItemById(Guid id);
 
+        void Bid(Item item, User user, float money);
+
         void ReturnMoneyToUser(Guid userId, float money); // return money to user if he is outbid
         
         Item GetNotAcceptedItemById(Guid id);
