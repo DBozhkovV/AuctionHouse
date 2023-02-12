@@ -2,6 +2,9 @@
 using AuctionHouse.DTOs;
 using AuctionHouse.Models;
 using AuctionHouse.Services.AzureStorageService;
+using Hangfire;
+using SendGrid;
+using SendGrid.Helpers.Mail;
 
 namespace AuctionHouse.Services.UserService
 {
@@ -58,6 +61,7 @@ namespace AuctionHouse.Services.UserService
 
         public Guid? Login(LoginDTO loginDTO)
         {
+            BackgroundJob.Enqueue(() => Console.WriteLine("Hello, world!"));
             if (loginDTO is null)
             {
                 throw new ArgumentNullException(nameof(loginDTO));
@@ -137,6 +141,20 @@ namespace AuctionHouse.Services.UserService
         {
             userRepository.ForgotPassword(email);
         }
+
+        public async Task SendEmail(string toEmail)
+        {
+            var apiKey = "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";
+            var client = new SendGridClient(apiKey);
+            var from = new EmailAddress("houseauction89@gmail.com", "AuctionHouse");
+            var subject = "Sending with SendGrid is Fun";
+            var to = new EmailAddress(toEmail);
+            var plainTextContent = "and easy to do anywhere, even with C#";
+            var htmlContent = "<strong>and easy to do anywhere, even with C#</strong>";
+            var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
+            await client.SendEmailAsync(msg);
+        }
+
 
         public void ResetPassword(ResetPasswordDTO resetPasswordDTO) 
         {

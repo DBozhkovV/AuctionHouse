@@ -121,6 +121,13 @@ namespace AuctionHouse.Services.ItemService
             return itemResponses;
         }
 
+        public IEnumerable<Task<ItemResponse>> GetBidsByUserId(Guid userId)
+        {
+            List<Item> items = itemRepository.GetBidsByUserId(userId).ToList();
+            IEnumerable<Task<ItemResponse>> itemResponses = azureStorageRepository.ReturnListOfItemResponses(items);
+            return itemResponses;
+        }
+
         public IEnumerable<Task<ItemResponse>> GetFiveNewestItems() 
         {
             List<Item> lastFiveItems = itemRepository.GetFiveNewestItems().ToList();

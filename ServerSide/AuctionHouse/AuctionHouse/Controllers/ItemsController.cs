@@ -37,6 +37,26 @@ namespace AuctionHouse.Controllers
             }
         }
 
+        [HttpGet("bids")]
+        [Authorize(Policy = "User")]
+        public IActionResult GetBidsByUser()
+        {
+            try
+            {
+                Guid userId = Guid.Parse(HttpContext.Session.GetString("userId"));
+                IEnumerable<Task<ItemResponse>> items = itemService.GetBidsByUserId(userId);
+                if (!items.Any())
+                {
+                    return BadRequest("There is no bids.");
+                }
+                return Ok(items);
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
+        }
+
         [HttpGet("not-accepted")]
         [Authorize(Policy = "Admin")]
         public IActionResult GetNotAcceptedItems()

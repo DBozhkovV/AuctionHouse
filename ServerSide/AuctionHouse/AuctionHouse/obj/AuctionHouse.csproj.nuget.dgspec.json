@@ -48,9 +48,13 @@
               "target": "Package",
               "version": "[4.0.3, )"
             },
-            "MailKit": {
+            "Hangfire": {
               "target": "Package",
-              "version": "[3.5.0, )"
+              "version": "[1.7.33, )"
+            },
+            "Hangfire.PostgreSql": {
+              "target": "Package",
+              "version": "[1.9.10, )"
             },
             "Microsoft.AspNet.WebApi.Cors": {
               "target": "Package",

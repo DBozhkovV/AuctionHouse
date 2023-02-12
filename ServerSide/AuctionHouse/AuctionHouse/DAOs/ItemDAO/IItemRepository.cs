@@ -26,6 +26,8 @@ namespace AuctionHouse.DAO.ItemDAO
 
         IEnumerable<Item> GetNotAcceptedItems();
 
+        IEnumerable<Item> GetBidsByUserId(Guid userId);
+
         IEnumerable<Item> GetNotAvailableItems();
 
         IEnumerable<Item> GetSearchedItem(string search); // search is the keyword with which costumer search items

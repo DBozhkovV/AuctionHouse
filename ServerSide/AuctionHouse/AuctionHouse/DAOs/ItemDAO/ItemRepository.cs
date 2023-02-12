@@ -88,6 +88,13 @@ namespace AuctionHouse.DAO.ItemDAO
             return dataContext.Items.Single(item => item.Id.Equals(id));
         }
 
+        public IEnumerable<Item> GetBidsByUserId(Guid userId) 
+        {
+            return dataContext.Items
+                .Where(item => item.BidderId == userId)
+                .ToList();
+        }
+
         public IEnumerable<Item> GetNotAcceptedItems()
         {
             /*

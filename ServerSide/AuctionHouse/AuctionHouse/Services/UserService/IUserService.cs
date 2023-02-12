@@ -16,7 +16,9 @@ namespace AuctionHouse.Services.UserService
         void VerifyAccount(Guid token);
         
         void ForgotPassword(string email);
-        
+
+        Task SendEmail(string toEmail);
+
         void ResetPassword(ResetPasswordDTO resetPasswordDTO);
         
         void DeleteUser(Guid userId);

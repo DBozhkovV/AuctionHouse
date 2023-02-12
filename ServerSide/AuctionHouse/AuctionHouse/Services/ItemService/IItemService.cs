@@ -19,6 +19,8 @@ namespace AuctionHouse.Services.ItemService
 
         IEnumerable<Task<ItemResponse>> GetNotAcceptedItems();
 
+        IEnumerable<Task<ItemResponse>> GetBidsByUserId(Guid userId);
+
         IEnumerable<Task<ItemResponse>> GetFiveNewestItems();
 
         Task<ItemResponse> GetNotAcceptedItem(Guid itemId);

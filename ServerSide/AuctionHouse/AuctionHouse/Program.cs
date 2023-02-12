@@ -12,6 +12,9 @@ using System.Text.Json.Serialization;
 using AuctionHouse.DAO.ItemDAO;
 using AuctionHouse.DAOs.UserDAO;
 using AuctionHouse.DAOs.OrderDAO;
+using Hangfire;
+using Hangfire.PostgreSql;
+using AuctionHouse.Services.ServiceManagement;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +26,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<DataContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresDatabase")));
+builder.Services.AddHangfire(config => config.UsePostgreSqlStorage(builder.Configuration.GetConnectionString("PostgresDatabase")));
+
+builder.Services.AddHangfireServer();
 
 builder.Services.AddScoped<IItemRepository, ItemRepository>();
 builder.Services.AddScoped<IItemService, ItemService>();
@@ -43,7 +49,7 @@ builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
     options.Cookie.Name = "ASP.NET";
-    options.IdleTimeout = TimeSpan.FromDays(7);
+    options.IdleTimeout = TimeSpan.FromDays(7); // da go pomislq 
     options.Cookie.IsEssential = true;
     options.Cookie.HttpOnly = true;
 });
@@ -92,6 +98,10 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
+app.UseHangfireDashboard();
+
 app.MapControllers();
+
+RecurringJob.AddOrUpdate(() => new ServiceManagement().CheckForExpiredAuctions(), Cron.Minutely);
 
 app.Run();
