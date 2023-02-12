@@ -70,6 +70,19 @@ namespace AuctionHouse.DAO.ItemDAO
                 .ToList();
         }
 
+        public void ExpireItem(Item item, Order order) 
+        {
+            item.IsAvailable = false;
+            item.BoughtFor = item.Bid;
+            User author = GetUserByGuid(item.AuthorUserId);
+            author.Balance += item.Bid;
+            //User boughter = GetUserByGuid((Guid)item.BidderId);
+            //boughter.Balance -= item.Bid;
+            dataContext.Orders.Add(order);
+            item.BidderId = null;
+            dataContext.SaveChanges();
+        }
+
         public Item GetItemById(Guid id)
         {
             return dataContext.Items.Single(item => item.Id.Equals(id));

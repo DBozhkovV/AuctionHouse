@@ -37,6 +37,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IAzureStorageRepository, AzureStorageRepository>();
+builder.Services.AddScoped<IServiceManagement, ServiceManagement>();
 
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
@@ -102,6 +103,6 @@ app.UseHangfireDashboard();
 
 app.MapControllers();
 
-RecurringJob.AddOrUpdate(() => new ServiceManagement().CheckForExpiredAuctions(), Cron.Minutely);
+RecurringJob.AddOrUpdate<IServiceManagement>(serviceManagement => serviceManagement.CheckForExpiredAuctions(), Cron.Daily);
 
 app.Run();

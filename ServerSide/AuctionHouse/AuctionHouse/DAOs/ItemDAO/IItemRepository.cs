@@ -16,6 +16,8 @@ namespace AuctionHouse.DAO.ItemDAO
 
         IEnumerable<Item> GetAvailableItemsByCategory(Category category);
 
+        void ExpireItem(Item item, Order order); // update the expired item
+
         Item GetItemById(Guid id);
 
         void Bid(Item item, User user, float money);

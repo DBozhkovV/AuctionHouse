@@ -61,7 +61,6 @@ namespace AuctionHouse.Services.UserService
 
         public Guid? Login(LoginDTO loginDTO)
         {
-            BackgroundJob.Enqueue(() => Console.WriteLine("Hello, world!"));
             if (loginDTO is null)
             {
                 throw new ArgumentNullException(nameof(loginDTO));
