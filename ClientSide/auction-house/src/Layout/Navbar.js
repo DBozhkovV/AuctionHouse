@@ -15,10 +15,10 @@ const NavbarComponent = () => {
         window.location.href = `/items/search/${search}`;
     }
 
-    const isAdmin = IsAdmin();
     const isUser = IsUser();
+    const isAdmin = IsAdmin();
 
-    const ShowAuthNavigation = () => { // async???
+    const ShowAuthNavigation = () => {
         if (isUser) {
             return  (
                 <>

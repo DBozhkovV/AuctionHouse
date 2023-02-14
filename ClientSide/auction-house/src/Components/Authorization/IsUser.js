@@ -15,6 +15,7 @@ const IsUser = () => {
     if (balance !== null) {
         return balance;
     }
+    
     return false;
 }
 
