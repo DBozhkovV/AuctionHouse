@@ -1,70 +1,37 @@
-import React, { useState, useEffect } from "react";
 import axios from "axios";
+import React, { useState, useEffect } from "react";
+import MoonLoader from "react-spinners/MoonLoader";
+import "../../../css/Loading.css";
+import { useNavigate } from "react-router-dom";
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
 import { Button } from "react-bootstrap";
-import { useNavigate, useParams } from "react-router-dom";
-import Fail from "../Alerts/Fail";
-import MoonLoader from "react-spinners/MoonLoader";
-import "../../css/Loading.css";
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import Pagination from 'react-bootstrap/Pagination';
 
-const AllAvailableItems = () => {
-    const params = useParams();
+const SortByHighToLow = () => {
     const [items, setItems] = useState([]);
-    const [showFail, setShowFail] = useState(false);
-    const [message, setMessage] = useState("");
     const [loading, setLoading] = useState(true);
-    const [pages, setPages] = useState(null);
-    const currentPage = parseInt(params.page);
     const navigate = useNavigate();
 
     useEffect(() => {
-        const getPages = async () => {
-            await axios.get(`${process.env.REACT_APP_API}/items/availableItemsPages`)
-                .then(response => {
-                    setPages(response.data);
-                })
-                .catch(error => {
-                    console.error(error);
-                })
-        }
-        getPages();
-    }, []);
-
-    useEffect(() => {
         const getItems = async () => {
-            await axios.get(`${process.env.REACT_APP_API}/items/available?page=${currentPage}`)
+            await axios.get(`${process.env.REACT_APP_API}/items/sortByHighToLow`)
                 .then(response => {
                     setItems(response.data);
                     setLoading(false);
                 })
                 .catch(error => {
-                    setShowFail(true);
-                    setMessage(error.response.data);
                     setLoading(false);
+                    console.error(error);
                 })
         }
         getItems();
-    }, [currentPage]);
+    }, []);
 
     const routeChange = (id) => { 
         navigate(`/item/${id}`);
-    }
-
-    const handleNextPage = () => { 
-        navigate(`/items/${currentPage + 1}`);
-    }
-
-    const handlePreviousPage = () => { 
-        navigate(`/items/${currentPage - 1}`);
-    }
-
-    const handlePageChange = (page) => {
-        navigate(`/items/${page}`);
     }
 
     const sortItems = (type) => {
@@ -82,17 +49,11 @@ const AllAvailableItems = () => {
                 break;
         }
     }
-    
-    const pageNumbers = [];
-    for (let i = 1; i <= pages; i++) {
-        pageNumbers.push(i);
-    }
 
     return (
         <div>
-            {showFail ? <Fail error={message}/> : null}
             <h3 className="items-header">
-                Items
+                Sorted by high to low
             </h3>
             <hr />
             <div className="sort-button">
@@ -109,19 +70,19 @@ const AllAvailableItems = () => {
                     color="#642d3c"
                     loading={loading}
                     size={100}
-                    /> : null }
+                /> : null }
             </div>
             <div className="items-frame">
                 {items.map(item => (
-                    <Card key={item.result.id} className="item-card">
+                    <Card key={item.result.id} style={{ width: '18rem' }}>
                         <Card.Img 
                             variant="top" 
                             src={`data:${item.result.mainImage.imageType};base64,${item.result.mainImage.image}`} 
                             className="card-image"
                         />
                         <Card.Body>
-                        <Card.Title>{item.result.name} </Card.Title>
-                        <Card.Text>{item.result.description} </Card.Text>
+                            <Card.Title>{item.result.name}</Card.Title>
+                            <Card.Text>{item.result.description} </Card.Text>
                         </Card.Body>
                         <ListGroup className="list-group-flush">
                         <ListGroup.Item>Buy now: {item.result.buyPrice} $</ListGroup.Item>
@@ -134,30 +95,8 @@ const AllAvailableItems = () => {
                     </Card>
                 ))}
             </div>
-            {loading ? null : 
-                <div className="page-navigator">
-                    <Pagination>
-                        <Pagination.Prev
-                            disabled={currentPage === 1}
-                            onClick={handlePreviousPage}
-                        />
-                        {pageNumbers.map((pageNumber) => (
-                            <Pagination.Item
-                                key={pageNumber}
-                                active={pageNumber === currentPage}
-                                onClick={() => handlePageChange(pageNumber)}
-                            >
-                            {pageNumber}
-                            </Pagination.Item>
-                        ))}
-                        <Pagination.Next
-                            disabled={currentPage === pages}
-                            onClick={handleNextPage}
-                        />
-                    </Pagination>
-                </div>}
         </div>
     );
 }
 
-export default AllAvailableItems;
+export default SortByHighToLow;

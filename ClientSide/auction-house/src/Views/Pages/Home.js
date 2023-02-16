@@ -16,7 +16,7 @@ const Home = () => {
 
     useEffect(() => {
         const getItems = () => {
-            axios.get(`${process.env.REACT_APP_API}/items/newest`)
+            axios.get(`${process.env.REACT_APP_API}/items/lastFiveNewest`)
                 .then(response => {
                     setItems(response.data);
                     setLoading(false);

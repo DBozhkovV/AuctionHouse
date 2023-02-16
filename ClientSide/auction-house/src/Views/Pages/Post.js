@@ -53,7 +53,6 @@ const Post = () => {
         .then(() => {
             setShowSuccess(true);
             setShowFail(false);
-            document.getElementById("post-form").reset();
             return;
         })
         .catch(error => {

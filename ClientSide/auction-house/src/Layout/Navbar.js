@@ -71,7 +71,7 @@ const NavbarComponent = () => {
             <Navbar.Collapse id="responsive-navbar-nav">
                 <Nav variant="pills" className="me-auto" >
                 <Nav.Link href="/">Home</Nav.Link>
-                <Nav.Link href="/items">Items</Nav.Link>
+                <Nav.Link href="/items/1">Items</Nav.Link>
                 <NavDropdown title="Category" id="basic-nav-dropdown">
                     <NavDropdown.Item href="/category/Jewellery">Jewellery</NavDropdown.Item>
                     <NavDropdown.Item href="/category/Watch">Watch</NavDropdown.Item>

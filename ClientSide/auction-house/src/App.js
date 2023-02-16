@@ -15,6 +15,9 @@ import NotAcceptedItem from './Components/Items/NotAcceptedItem';
 import ItemsByCategory from './Components/Items/ItemsByCategory';
 import Order from './Components/Orders/Order';
 import BidPage from './Components/Bids/BidPage';
+import SortByHighToLow from './Components/Items/SortingType/SortByHighToLow';
+import SortByLowToHigh from './Components/Items/SortingType/SortByLowToHigh';
+import SortByNewest from './Components/Items/SortingType/SortByNewest';
 
 function App() {
   return (
@@ -24,7 +27,10 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<RegistrationForm />} />
-          <Route path="/items" element={<AllAvailableItems />} />
+          <Route path="/items/:page" element={<AllAvailableItems />} />
+          <Route path="/items/sortByHighToLow" element={<SortByHighToLow />} />
+          <Route path="/items/sortByLowToHigh" element={<SortByLowToHigh />} />
+          <Route path="/items/newest" element={<SortByNewest />} />
           <Route path="/items/search/:search" element={<SearchedItems />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/item/:id" element={<Item />} />
