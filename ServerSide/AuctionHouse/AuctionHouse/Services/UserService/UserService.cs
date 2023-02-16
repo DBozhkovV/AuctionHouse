@@ -2,9 +2,8 @@
 using AuctionHouse.DTOs;
 using AuctionHouse.Models;
 using AuctionHouse.Services.AzureStorageService;
-using Hangfire;
-using SendGrid;
-using SendGrid.Helpers.Mail;
+using System.Net;
+using System.Net.Mail;
 
 namespace AuctionHouse.Services.UserService
 {
@@ -143,15 +142,43 @@ namespace AuctionHouse.Services.UserService
 
         public async Task SendEmail(string toEmail)
         {
-            var apiKey = "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";
-            var client = new SendGridClient(apiKey);
-            var from = new EmailAddress("houseauction89@gmail.com", "AuctionHouse");
-            var subject = "Sending with SendGrid is Fun";
-            var to = new EmailAddress(toEmail);
-            var plainTextContent = "and easy to do anywhere, even with C#";
-            var htmlContent = "<strong>and easy to do anywhere, even with C#</strong>";
-            var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
-            await client.SendEmailAsync(msg);
+            /*
+            using var smtpClient = new SmtpClient("smtp.sendgrid.net", 25)
+            {
+                Credentials = new NetworkCredential("ngdg", "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"),
+                EnableSsl = false,
+                UseDefaultCredentials = false
+            };
+
+            using var mailMessage = new MailMessage
+            {
+                From = new MailAddress("houseauction89@gmail.com", "Auction House"),
+                Subject = "hi",
+                Body = "<h1>Whatsup</h1>",
+                IsBodyHtml = true
+            };
+            mailMessage.To.Add(new MailAddress(toEmail));
+
+            await smtpClient.SendMailAsync(mailMessage);
+            */
+            var smtpServer = "smtp.sendgrid.net";
+            var smtpPort = 25;
+            var smtpUsername = "ngdg";
+            var smtpPassword = "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";
+
+            var client = new SmtpClient(smtpServer, smtpPort);
+            client.UseDefaultCredentials = false;
+
+            var from = new MailAddress("houseauction89@gmail.com", "AuctionHouse");
+            var to = new MailAddress("danipaynera00@gmail.com", "Dakata RM");
+            var subject = "Email Subject";
+            var body = "Email Content";
+
+            var message = new MailMessage(from, to);
+            message.Subject = subject;
+            message.Body = body;
+
+            client.SendAsync(message, new NetworkCredential(smtpUsername, smtpPassword));
         }
 
 

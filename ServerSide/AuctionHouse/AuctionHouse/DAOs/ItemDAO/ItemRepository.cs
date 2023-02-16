@@ -49,18 +49,32 @@ namespace AuctionHouse.DAO.ItemDAO
             dataContext.SaveChanges();
         }
 
+        public IEnumerable<Item> GetAllAvailableItems() 
+        {
+            return dataContext.Items
+                .Where(item => item.IsAvailable == true && item.IsAccepted == true)
+                .ToList();
+        }
+
         public void ReturnMoneyToUser(Guid userId, float money)
         {
             User user = GetUserByGuid(userId);
             user.Balance += money;
             dataContext.SaveChanges();
         }
-        
-        public IEnumerable<Item> GetAvailableItems()
+
+        public IEnumerable<Item> GetAvailableItems(int page) // 5 is the number of items per page
         {
             return dataContext.Items
                 .Where(item => item.IsAvailable == true && item.IsAccepted == true)
-                .ToList();
+                .ToList()
+                .Skip((page - 1) * 5)
+                .Take(5);
+        }
+
+        public int GetAvailableItemsCount() 
+        {
+            return dataContext.Items.ToList().Count(item => item.IsAvailable == true && item.IsAccepted == true);
         }
 
         public IEnumerable<Item> GetAvailableItemsByCategory(Category category) 
@@ -76,8 +90,6 @@ namespace AuctionHouse.DAO.ItemDAO
             item.BoughtFor = item.Bid;
             User author = GetUserByGuid(item.AuthorUserId);
             author.Balance += item.Bid;
-            //User boughter = GetUserByGuid((Guid)item.BidderId);
-            //boughter.Balance -= item.Bid;
             dataContext.Orders.Add(order);
             item.BidderId = null;
             dataContext.SaveChanges();
@@ -96,11 +108,6 @@ namespace AuctionHouse.DAO.ItemDAO
             dataContext.SaveChanges();
         }
             
-        public Item GetNotAcceptedItemById(Guid id)
-        {
-            return dataContext.Items.Single(item => item.Id.Equals(id));
-        }
-
         public IEnumerable<Item> GetBidsByUserId(Guid userId) 
         {
             return dataContext.Items
@@ -110,25 +117,8 @@ namespace AuctionHouse.DAO.ItemDAO
 
         public IEnumerable<Item> GetNotAcceptedItems()
         {
-            /*
-            List<Item> items = new List<Item>();
-            _dataContext.Items.ToList().ForEach(item => {
-                if (item.IsAccepted == false) {
-                    items.Add(item);
-                }
-            });
-            return items;
-            */
-            
             return dataContext.Items
                 .Where(item => item.IsAvailable == true && item.IsAccepted == false)
-                .ToList();
-        }
-
-        public IEnumerable<Item> GetNotAvailableItems()
-        {
-            return dataContext.Items
-                .Where(item => item.IsAvailable == false && item.IsAccepted == true)
                 .ToList();
         }
 

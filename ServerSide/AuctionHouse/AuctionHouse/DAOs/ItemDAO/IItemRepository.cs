@@ -12,7 +12,11 @@ namespace AuctionHouse.DAO.ItemDAO
 
         public void AddBalance(User user, float money);
 
-        IEnumerable<Item> GetAvailableItems();
+        IEnumerable<Item> GetAllAvailableItems();
+
+        IEnumerable<Item> GetAvailableItems(int page);
+
+        int GetAvailableItemsCount();
 
         IEnumerable<Item> GetAvailableItemsByCategory(Category category);
 
@@ -23,14 +27,10 @@ namespace AuctionHouse.DAO.ItemDAO
         void Bid(Item item, User user, float money);
 
         void ReturnMoneyToUser(Guid userId, float money); // return money to user if he is outbid
-        
-        Item GetNotAcceptedItemById(Guid id);
 
         IEnumerable<Item> GetNotAcceptedItems();
 
         IEnumerable<Item> GetBidsByUserId(Guid userId);
-
-        IEnumerable<Item> GetNotAvailableItems();
 
         IEnumerable<Item> GetSearchedItem(string search); // search is the keyword with which costumer search items
 

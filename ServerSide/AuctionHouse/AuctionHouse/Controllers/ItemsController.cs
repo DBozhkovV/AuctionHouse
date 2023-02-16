@@ -1,6 +1,5 @@
 ﻿using AuctionHouse.DTOs;
 using AuctionHouse.Models;
-using AuctionHouse.Services.AzureStorageService;
 using AuctionHouse.Services.ItemService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,13 +17,28 @@ namespace AuctionHouse.Controllers
             this.itemService = itemService;
         }
 
-        [HttpGet]
+        [HttpGet("availableItemsPages")]
         [AllowAnonymous]
-        public IActionResult GetAvailableItems()
+        public IActionResult GetAvailableItemsPages()
         {
             try
             {
-                IEnumerable<Task<ItemResponse>> items = itemService.GetAvailableItems();
+                int pagesCount = itemService.GetAvailableItemsPagesCount();
+                return Ok(pagesCount);
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
+        }
+
+        [HttpGet("available")]
+        [AllowAnonymous]
+        public IActionResult GetAvailableItems([FromQuery] int page)
+        {
+            try
+            {
+                IEnumerable<Task<ItemResponse>> items = itemService.GetAvailableItems(page);
                 if (!items.Any()) 
                 {
                     return BadRequest("There is no available items.");
@@ -32,6 +46,63 @@ namespace AuctionHouse.Controllers
                 return Ok(items);
             }
             catch (Exception exception) 
+            {
+                return BadRequest(exception.Message);
+            }
+        }
+
+        [HttpGet("sortByHighToLow")]
+        [AllowAnonymous]
+        public IActionResult GetSortedItemsByHighToLow()
+        {
+            try 
+            {
+                IEnumerable<Task<ItemResponse>> items = itemService.SortItemsByHighToLow();
+                if (!items.Any())
+                {
+                    return BadRequest("There is no items.");
+                }
+                return Ok(items);
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
+        }
+
+        [HttpGet("sortByLowToHigh")]
+        [AllowAnonymous]
+        public IActionResult GetSortedItemsByLowToHigh()
+        {
+            try
+            {
+                IEnumerable<Task<ItemResponse>> items = itemService.SortItemsByLowToHigh();
+                if (!items.Any())
+                {
+                    return BadRequest("There is no items.");
+                }
+                return Ok(items);
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
+        }
+
+        [HttpGet("sortByNewest")]
+        [AllowAnonymous]
+        public IActionResult GetSortedItemsByNewest()
+        {
+            try
+            {
+                IEnumerable<Task<ItemResponse>> items = itemService.SortItemsByNewest();
+                if (!items.Any())
+                {
+                    return BadRequest("There is no items.");
+                }
+                return Ok(items);
+            }
+            catch (Exception exception)
             {
                 return BadRequest(exception.Message);
             }
@@ -66,7 +137,7 @@ namespace AuctionHouse.Controllers
                 IEnumerable<Task<ItemResponse>> items = itemService.GetNotAcceptedItems();
                 if (!items.Any())
                 {
-                    return BadRequest("There is no notaccpeted items.");
+                    return BadRequest("There is no not-accepted items.");
                 }
                 return Ok(items);
             }
@@ -178,7 +249,7 @@ namespace AuctionHouse.Controllers
         }
 
         [HttpGet]
-        [Route("newest")]
+        [Route("lastFiveNewest")]
         [AllowAnonymous]
         public IActionResult GetNewestItems()
         {

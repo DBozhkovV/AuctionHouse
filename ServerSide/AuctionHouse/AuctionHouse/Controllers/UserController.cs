@@ -12,7 +12,7 @@ namespace AuctionHouse.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private IUserService userService;
+        private readonly IUserService userService;
         
         public UserController(IUserService userService)
         {
@@ -28,11 +28,11 @@ namespace AuctionHouse.Controllers
             // Email = houseauction89@gmail.com
             try
             {
-                userService.SendEmail("danipaynera00@gmail.com");
+                await userService.SendEmail("danipaynera00@gmail.com");
             }
-            catch 
+            catch (Exception exception)
             {
-                return BadRequest("Error");
+                return BadRequest(exception.ToString());
             }
             return Ok();
         }

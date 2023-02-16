@@ -14,7 +14,7 @@ namespace AuctionHouse.Services.ServiceManagement
 
         public void CheckForExpiredAuctions()
         {
-            List<Item> items = itemRepository.GetAvailableItems().ToList();
+            List<Item> items = itemRepository.GetAllAvailableItems().ToList();
             items.ForEach(item =>
             {
                 if (item.EndBidDate < DateTime.UtcNow)

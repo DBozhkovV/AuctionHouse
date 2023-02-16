@@ -46,11 +46,11 @@ namespace AuctionHouse.Services.ItemService
             if (item.BidderId == null)
             {
                 itemRepository.Bid(item, user, money);
-            } 
-            else 
+            }
+            else
             {
                 itemRepository.ReturnMoneyToUser((Guid)item.BidderId, item.Bid); // return money to previous bidder
-                itemRepository.Bid(item, user, money); 
+                itemRepository.Bid(item, user, money);
             }
         }
 
@@ -86,25 +86,24 @@ namespace AuctionHouse.Services.ItemService
             return item;
         }
 
-        public IEnumerable<Task<ItemResponse>> GetAvailableItems() // return all available items
+        public IEnumerable<Task<ItemResponse>> GetAvailableItems(int page) // return all available items
         {
-            List<Item> availableItems = itemRepository.GetAvailableItems().ToList() ;
+            List<Item> availableItems = itemRepository.GetAvailableItems(page).ToList();
             IEnumerable<Task<ItemResponse>> itemResponses = azureStorageRepository.ReturnListOfItemResponses(availableItems);
             return itemResponses;
         }
 
-        public IEnumerable<Task<ItemResponse>> GetItemsByCategory(Category category) 
+        public IEnumerable<Task<ItemResponse>> GetItemsByCategory(Category category)
         {
             List<Item> availableItems = itemRepository.GetAvailableItemsByCategory(category).ToList();
             IEnumerable<Task<ItemResponse>> itemResponses = azureStorageRepository.ReturnListOfItemResponses(availableItems);
             return itemResponses;
         }
-        
-        public IEnumerable<Task<ItemResponse>> GetNotAvailableItems()
+
+        public int GetAvailableItemsPagesCount()
         {
-            List<Item> availableItems = itemRepository.GetNotAvailableItems().ToList();
-            IEnumerable<Task<ItemResponse>> itemResponses = azureStorageRepository.ReturnListOfItemResponses(availableItems);
-            return itemResponses;
+            double pages = itemRepository.GetAvailableItemsCount() / 5.0;
+            return (int)Math.Ceiling(pages);
         }
 
         public Task<ItemResponse> GetNotAcceptedItem(Guid itemId)
@@ -118,6 +117,27 @@ namespace AuctionHouse.Services.ItemService
         {
             List<Item> notAcceptedItems = itemRepository.GetNotAcceptedItems().ToList();
             IEnumerable<Task<ItemResponse>> itemResponses = azureStorageRepository.ReturnListOfItemResponses(notAcceptedItems);
+            return itemResponses;
+        }
+
+        public IEnumerable<Task<ItemResponse>> SortItemsByHighToLow() // return all available items sorted by price from high to low(Descending)
+        {
+            List<Item> items = itemRepository.GetAllAvailableItems().OrderByDescending(item => item.BuyPrice).ToList();
+            IEnumerable<Task<ItemResponse>> itemResponses = azureStorageRepository.ReturnListOfItemResponses(items);
+            return itemResponses;
+        }
+
+        public IEnumerable<Task<ItemResponse>> SortItemsByLowToHigh() // return all available items sorted by low to high(Ascending)
+        {
+            List<Item> items = itemRepository.GetAllAvailableItems().OrderBy(item => item.BuyPrice).ToList();
+            IEnumerable<Task<ItemResponse>> itemResponses = azureStorageRepository.ReturnListOfItemResponses(items);
+            return itemResponses;
+        }
+
+        public IEnumerable<Task<ItemResponse>> SortItemsByNewest() // return all available items sorted by low to high(Ascending)
+        {
+            List<Item> items = itemRepository.GetAllAvailableItems().OrderByDescending(item => item.DateAdded).ToList();
+            IEnumerable<Task<ItemResponse>> itemResponses = azureStorageRepository.ReturnListOfItemResponses(items);
             return itemResponses;
         }
 

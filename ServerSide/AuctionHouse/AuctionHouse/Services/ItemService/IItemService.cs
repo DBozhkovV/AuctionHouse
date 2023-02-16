@@ -11,13 +11,19 @@ namespace AuctionHouse.Services.ItemService
 
         Item BuyNow(Guid id, User user);
 
-        IEnumerable<Task<ItemResponse>> GetAvailableItems();
+        IEnumerable<Task<ItemResponse>> GetAvailableItems(int page);
 
         IEnumerable<Task<ItemResponse>> GetItemsByCategory(Category category);
 
-        IEnumerable<Task<ItemResponse>> GetNotAvailableItems();
+        int GetAvailableItemsPagesCount();
 
         IEnumerable<Task<ItemResponse>> GetNotAcceptedItems();
+
+        IEnumerable<Task<ItemResponse>> SortItemsByHighToLow(); // sort items by price from high to low
+
+        IEnumerable<Task<ItemResponse>> SortItemsByLowToHigh(); // sort items by price from low to high
+
+        IEnumerable<Task<ItemResponse>> SortItemsByNewest(); // sort items by newest
 
         IEnumerable<Task<ItemResponse>> GetBidsByUserId(Guid userId);
 
