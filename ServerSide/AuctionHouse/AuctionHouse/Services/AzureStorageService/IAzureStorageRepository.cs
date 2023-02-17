@@ -7,12 +7,10 @@ namespace AuctionHouse.Services.AzureStorageService
     {
         Task SaveImageAsync(IFormFile formFile, string blobName);
 
-        Task<ItemResponse> ReturnItemResponse(Item item);
+        ItemResponse ReturnItemResponse(Item item);
 
-        IEnumerable<Task<ItemResponse>> ReturnListOfItemResponses(List<Item> items);
+        IEnumerable<ItemResponse> ReturnListOfItemResponses(List<Item> items);
 
         void DeleteImage(string blobName);
-
-        string GetImageType(string fileName);
     }
 }

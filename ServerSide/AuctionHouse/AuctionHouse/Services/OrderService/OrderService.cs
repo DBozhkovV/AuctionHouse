@@ -33,7 +33,7 @@ namespace AuctionHouse.Services.OrderService
             Order order = orderRepository.GetOrderById(id);
             Item item = orderRepository.getItemById(order.ItemId);
 
-            Task<ItemResponse> itemResponse = azureStorageRepository.ReturnItemResponse(item);
+            ItemResponse itemResponse = azureStorageRepository.ReturnItemResponse(item);
 
             OrderDTO orderDTO = new OrderDTO
             {

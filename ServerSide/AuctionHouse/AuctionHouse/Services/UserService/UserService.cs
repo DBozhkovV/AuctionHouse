@@ -104,10 +104,10 @@ namespace AuctionHouse.Services.UserService
                 orderDTOs.Add(orderDTO);
             }
             
-            List<Task<ItemResponse>> itemDTOs = new List<Task<ItemResponse>>();
+            List<ItemResponse> itemDTOs = new List<ItemResponse>();
             foreach (Item item in items) 
             {
-                Task<ItemResponse> itemResponse = azureStorageRepository.ReturnItemResponse(item);
+                ItemResponse itemResponse = azureStorageRepository.ReturnItemResponse(item);
                 itemDTOs.Add(itemResponse);
             }
 

@@ -26,9 +26,9 @@
         
         public DateTime EndBidDate { get; set; }
         
-        public ImageDTO MainImage { get; set; }
+        public string MainImage { get; set; }
         
-        public List<ImageDTO> Images { get; set; }
+        public List<string> Images { get; set; }
 
         public ItemResponse() 
         {

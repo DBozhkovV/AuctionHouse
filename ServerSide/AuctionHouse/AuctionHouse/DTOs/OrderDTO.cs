@@ -10,6 +10,6 @@
 
         public bool IsOrderCompleted { get; set; }
 
-        public Task<ItemResponse> ItemResponse { get; set; }
+        public ItemResponse ItemResponse { get; set; }
     }
 }

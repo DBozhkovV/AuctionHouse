@@ -16,10 +16,10 @@ namespace AuctionHouse.Services.ItemService
             this.azureStorageRepository = azureStorageRepository;
         }
 
-        public Task<ItemResponse> GetItem(Guid id)
+        public ItemResponse GetItem(Guid id)
         {
             Item item = FindItemByGuid(id);
-            Task<ItemResponse> result = azureStorageRepository.ReturnItemResponse(item);
+            ItemResponse result = azureStorageRepository.ReturnItemResponse(item);
             return result;
         }
 
@@ -86,17 +86,17 @@ namespace AuctionHouse.Services.ItemService
             return item;
         }
 
-        public IEnumerable<Task<ItemResponse>> GetAvailableItems(int page) // return all available items
+        public IEnumerable<ItemResponse> GetAvailableItems(int page) // return all available items
         {
             List<Item> availableItems = itemRepository.GetAvailableItems(page).ToList();
-            IEnumerable<Task<ItemResponse>> itemResponses = azureStorageRepository.ReturnListOfItemResponses(availableItems);
+            IEnumerable<ItemResponse> itemResponses = azureStorageRepository.ReturnListOfItemResponses(availableItems);
             return itemResponses;
         }
 
-        public IEnumerable<Task<ItemResponse>> GetItemsByCategory(Category category)
+        public IEnumerable<ItemResponse> GetItemsByCategory(Category category)
         {
             List<Item> availableItems = itemRepository.GetAvailableItemsByCategory(category).ToList();
-            IEnumerable<Task<ItemResponse>> itemResponses = azureStorageRepository.ReturnListOfItemResponses(availableItems);
+            IEnumerable<ItemResponse> itemResponses = azureStorageRepository.ReturnListOfItemResponses(availableItems);
             return itemResponses;
         }
 
@@ -106,52 +106,52 @@ namespace AuctionHouse.Services.ItemService
             return (int)Math.Ceiling(pages);
         }
 
-        public Task<ItemResponse> GetNotAcceptedItem(Guid itemId)
+        public ItemResponse GetNotAcceptedItem(Guid itemId)
         {
             Item item = FindItemByGuid(itemId);
-            Task<ItemResponse> result = azureStorageRepository.ReturnItemResponse(item);
+            ItemResponse result = azureStorageRepository.ReturnItemResponse(item);
             return result;
         }
         
-        public IEnumerable<Task<ItemResponse>> GetNotAcceptedItems()
+        public IEnumerable<ItemResponse> GetNotAcceptedItems()
         {
             List<Item> notAcceptedItems = itemRepository.GetNotAcceptedItems().ToList();
-            IEnumerable<Task<ItemResponse>> itemResponses = azureStorageRepository.ReturnListOfItemResponses(notAcceptedItems);
+            IEnumerable<ItemResponse> itemResponses = azureStorageRepository.ReturnListOfItemResponses(notAcceptedItems);
             return itemResponses;
         }
 
-        public IEnumerable<Task<ItemResponse>> SortItemsByHighToLow() // return all available items sorted by price from high to low(Descending)
+        public IEnumerable<ItemResponse> SortItemsByHighToLow() // return all available items sorted by price from high to low(Descending)
         {
             List<Item> items = itemRepository.GetAllAvailableItems().OrderByDescending(item => item.BuyPrice).ToList();
-            IEnumerable<Task<ItemResponse>> itemResponses = azureStorageRepository.ReturnListOfItemResponses(items);
+            IEnumerable<ItemResponse> itemResponses = azureStorageRepository.ReturnListOfItemResponses(items);
             return itemResponses;
         }
 
-        public IEnumerable<Task<ItemResponse>> SortItemsByLowToHigh() // return all available items sorted by low to high(Ascending)
+        public IEnumerable<ItemResponse> SortItemsByLowToHigh() // return all available items sorted by low to high(Ascending)
         {
             List<Item> items = itemRepository.GetAllAvailableItems().OrderBy(item => item.BuyPrice).ToList();
-            IEnumerable<Task<ItemResponse>> itemResponses = azureStorageRepository.ReturnListOfItemResponses(items);
+            IEnumerable<ItemResponse> itemResponses = azureStorageRepository.ReturnListOfItemResponses(items);
             return itemResponses;
         }
 
-        public IEnumerable<Task<ItemResponse>> SortItemsByNewest() // return all available items sorted by low to high(Ascending)
+        public IEnumerable<ItemResponse> SortItemsByNewest() // return all available items sorted by low to high(Ascending)
         {
             List<Item> items = itemRepository.GetAllAvailableItems().OrderByDescending(item => item.DateAdded).ToList();
-            IEnumerable<Task<ItemResponse>> itemResponses = azureStorageRepository.ReturnListOfItemResponses(items);
+            IEnumerable<ItemResponse> itemResponses = azureStorageRepository.ReturnListOfItemResponses(items);
             return itemResponses;
         }
 
-        public IEnumerable<Task<ItemResponse>> GetBidsByUserId(Guid userId)
+        public IEnumerable<ItemResponse> GetBidsByUserId(Guid userId)
         {
             List<Item> items = itemRepository.GetBidsByUserId(userId).ToList();
-            IEnumerable<Task<ItemResponse>> itemResponses = azureStorageRepository.ReturnListOfItemResponses(items);
+            IEnumerable<ItemResponse> itemResponses = azureStorageRepository.ReturnListOfItemResponses(items);
             return itemResponses;
         }
 
-        public IEnumerable<Task<ItemResponse>> GetFiveNewestItems() 
+        public IEnumerable<ItemResponse> GetFiveNewestItems() 
         {
             List<Item> lastFiveItems = itemRepository.GetFiveNewestItems().ToList();
-            IEnumerable<Task<ItemResponse>> itemResponses = azureStorageRepository.ReturnListOfItemResponses(lastFiveItems);
+            IEnumerable<ItemResponse> itemResponses = azureStorageRepository.ReturnListOfItemResponses(lastFiveItems);
             return itemResponses;
         }
 
@@ -210,10 +210,10 @@ namespace AuctionHouse.Services.ItemService
             return itemRepository.GetItemById(itemId);
         }
 
-        public IEnumerable<Task<ItemResponse>> SearchItems(string search) // return items by containing keyword in there names
+        public IEnumerable<ItemResponse> SearchItems(string search) // return items by containing keyword in there names
         {
             List<Item> items = itemRepository.GetSearchedItem(search).ToList();
-            IEnumerable<Task<ItemResponse>> itemResponses = azureStorageRepository.ReturnListOfItemResponses(items);
+            IEnumerable<ItemResponse> itemResponses = azureStorageRepository.ReturnListOfItemResponses(items);
             if (items is null)
             {
                 throw new Exception("There is no item with this name.");

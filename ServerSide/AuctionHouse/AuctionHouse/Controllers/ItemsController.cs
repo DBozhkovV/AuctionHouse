@@ -38,7 +38,7 @@ namespace AuctionHouse.Controllers
         {
             try
             {
-                IEnumerable<Task<ItemResponse>> items = itemService.GetAvailableItems(page);
+                IEnumerable<ItemResponse> items = itemService.GetAvailableItems(page);
                 if (!items.Any()) 
                 {
                     return BadRequest("There is no available items.");
@@ -57,7 +57,7 @@ namespace AuctionHouse.Controllers
         {
             try 
             {
-                IEnumerable<Task<ItemResponse>> items = itemService.SortItemsByHighToLow();
+                IEnumerable<ItemResponse> items = itemService.SortItemsByHighToLow();
                 if (!items.Any())
                 {
                     return BadRequest("There is no items.");
@@ -76,7 +76,7 @@ namespace AuctionHouse.Controllers
         {
             try
             {
-                IEnumerable<Task<ItemResponse>> items = itemService.SortItemsByLowToHigh();
+                IEnumerable<ItemResponse> items = itemService.SortItemsByLowToHigh();
                 if (!items.Any())
                 {
                     return BadRequest("There is no items.");
@@ -95,7 +95,7 @@ namespace AuctionHouse.Controllers
         {
             try
             {
-                IEnumerable<Task<ItemResponse>> items = itemService.SortItemsByNewest();
+                IEnumerable<ItemResponse> items = itemService.SortItemsByNewest();
                 if (!items.Any())
                 {
                     return BadRequest("There is no items.");
@@ -115,7 +115,7 @@ namespace AuctionHouse.Controllers
             try
             {
                 Guid userId = Guid.Parse(HttpContext.Session.GetString("userId"));
-                IEnumerable<Task<ItemResponse>> items = itemService.GetBidsByUserId(userId);
+                IEnumerable<ItemResponse> items = itemService.GetBidsByUserId(userId);
                 if (!items.Any())
                 {
                     return BadRequest("There is no bids.");
@@ -134,7 +134,7 @@ namespace AuctionHouse.Controllers
         {
             try
             {
-                IEnumerable<Task<ItemResponse>> items = itemService.GetNotAcceptedItems();
+                IEnumerable<ItemResponse> items = itemService.GetNotAcceptedItems();
                 if (!items.Any())
                 {
                     return BadRequest("There is no not-accepted items.");
@@ -149,11 +149,11 @@ namespace AuctionHouse.Controllers
 
         [HttpGet("not-accepted/{id}")]
         [Authorize(Policy = "Admin")]
-        public async Task<IActionResult> GetNotAcceptedItem(Guid id)
+        public IActionResult GetNotAcceptedItem(Guid id)
         {
             try
             {
-                ItemResponse itemResponse = await itemService.GetNotAcceptedItem(id);
+                ItemResponse itemResponse = itemService.GetNotAcceptedItem(id);
                 return Ok(itemResponse);
             }
             catch (Exception exception)
@@ -198,7 +198,7 @@ namespace AuctionHouse.Controllers
         {
             try
             {
-                IEnumerable<Task<ItemResponse>> items = itemService.SearchItems(search);
+                IEnumerable<ItemResponse> items = itemService.SearchItems(search);
                 if (!items.Any())
                 {
                     return BadRequest("There is no Items.");
@@ -216,7 +216,7 @@ namespace AuctionHouse.Controllers
         {
             try
             {
-                IEnumerable<Task<ItemResponse>> items = itemService.GetItemsByCategory(category);
+                IEnumerable<ItemResponse> items = itemService.GetItemsByCategory(category);
                 if (!items.Any())
                 {
                     return BadRequest("There is no Items.");
@@ -231,11 +231,11 @@ namespace AuctionHouse.Controllers
 
         [HttpGet("{id}")]
         [AllowAnonymous]
-        public async Task<IActionResult> GetItem(Guid id)
+        public IActionResult GetItem(Guid id)
         {
             try
             {
-                ItemResponse itemResponse = await itemService.GetItem(id);
+                ItemResponse itemResponse = itemService.GetItem(id);
                 if (itemResponse is null)
                 {
                     return BadRequest("There is no item with given id.");
@@ -255,7 +255,7 @@ namespace AuctionHouse.Controllers
         {
             try
             {
-                IEnumerable<Task<ItemResponse>> items = itemService.GetFiveNewestItems();
+                IEnumerable<ItemResponse> items = itemService.GetFiveNewestItems();
                 if (!items.Any())
                 {
                     return BadRequest("There is no Items.");
@@ -312,7 +312,7 @@ namespace AuctionHouse.Controllers
 
         [HttpPut("buy/{id}")]
         [Authorize(Policy = "User")]
-        public ActionResult<Item> BuyNow(Guid id)
+        public IActionResult BuyNow(Guid id)
         {
             try
             {
