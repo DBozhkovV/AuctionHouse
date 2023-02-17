@@ -38,21 +38,21 @@ const Order = () => {
         return null;
     }
 
-    imagesToDisplay.push(order.itemResponse.result.mainImage);
-    for (let i = 0; i < order.itemResponse.result.images.length; i++) {
-        imagesToDisplay.push(order.itemResponse.result.images[i]);
+    imagesToDisplay.push(order.itemResponse.mainImage);
+    for (let i = 0; i < order.itemResponse.images.length; i++) {
+        imagesToDisplay.push(order.itemResponse.images[i]);
     }
 
     return (
         <div>
-            <h3 className="order-header">Your order for item: {order.itemResponse.result.name}</h3>
+            <h3 className="order-header">Your order for item: {order.name}</h3>
             <hr/>
             <div className="order-info-header">
                 <h6>
                     Date ordered: {new Date(Date.parse(order.dateOrdered)).toLocaleString()}
                 </h6>
                 <h6>
-                    Bought for: {order.itemResponse.result.boughtFor} $
+                    Bought for: {order.itemResponse.boughtFor} $
                 </h6>
             </div>
             <div className="order-frame">
@@ -76,7 +76,7 @@ const Order = () => {
                     }
                     <img 
                         className="item-img" 
-                        src={`data:${imagesToDisplay[imageIndex].imageType};base64,${imagesToDisplay[imageIndex].image}`}
+                        src={imagesToDisplay[imageIndex]}
                         alt=""
                     />
                     {imageIndex !== imagesToDisplay.length - 1 && ( 
@@ -98,15 +98,15 @@ const Order = () => {
                     )}
                 </div>
                 <div>
-                    <div>{order.itemResponse.result.description}</div>
+                    <div>{order.itemResponse.description}</div>
                     <hr/>
-                    <div>Buy Price: {order.itemResponse.result.buyPrice} $</div>
-                    <div>Starting Price: {order.itemResponse.result.startingPrice} $</div>
+                    <div>Buy Price: {order.itemResponse.buyPrice} $</div>
+                    <div>Starting Price: {order.itemResponse.startingPrice} $</div>
                     <hr/>
-                    <div>End Bid Date: {new Date(Date.parse(order.itemResponse.result.endBidDate)).toLocaleString()}</div>
-                    <div>Date Added: {new Date(Date.parse(order.itemResponse.result.dateAdded)).toLocaleString()}</div>
+                    <div>End Bid Date: {new Date(Date.parse(order.itemResponse.endBidDate)).toLocaleString()}</div>
+                    <div>Date Added: {new Date(Date.parse(order.itemResponse.dateAdded)).toLocaleString()}</div>
                     <hr/>
-                    <div>Bid: {order.itemResponse.result.bid} $</div>
+                    <div>Bid: {order.bid} $</div>
                 </div>
             </div>
             <div className="order-goback-button">

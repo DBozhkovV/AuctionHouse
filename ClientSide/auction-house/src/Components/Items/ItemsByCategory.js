@@ -52,22 +52,22 @@ const ItemsByCategory = () => {
             </div>
             <div className="items-frame">
                 {items.map(item => (
-                    <Card key={item.result.id} className="item-card">
+                    <Card key={item.id} className="item-card">
                         <Card.Img 
                             variant="top" 
-                            src={`data:${item.result.mainImage.imageType};base64,${item.result.mainImage.image}`} 
+                            src={item.mainImage} 
                             className="card-image"
                         />
                         <Card.Body>
-                        <Card.Title>{item.result.name} </Card.Title>
-                        <Card.Text>{item.result.description} </Card.Text>
+                        <Card.Title>{item.name} </Card.Title>
+                        <Card.Text>{item.description} </Card.Text>
                         </Card.Body>
                         <ListGroup className="list-group-flush">
-                            <ListGroup.Item>buyPrice: {item.result.buyPrice} </ListGroup.Item>
-                            <ListGroup.Item>startingPrice: {item.result.startingPrice} </ListGroup.Item>
+                            <ListGroup.Item>buyPrice: {item.buyPrice} </ListGroup.Item>
+                            <ListGroup.Item>startingPrice: {item.startingPrice} </ListGroup.Item>
                         </ListGroup>
                         <Card.Body>
-                            <Button className="button" onClick={() => routeChange(item.result.id)} >View</Button>
+                            <Button className="button" onClick={() => routeChange(item.id)} >View</Button>
                         </Card.Body>
                     </Card>
                 ))}

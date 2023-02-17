@@ -33,8 +33,12 @@ const Profile = () => {
         navigate(`/order/${id}`);
     }
 
+    const routePostChange = (id) =>{
+        navigate(`/item/${id}`);
+    }
+
     const getStatus = (item) => {
-        if(item.result.isAccepted === false) {
+        if(item.isAccepted === false) {
             return 'Not accepted';
         }else {
             return 'Accepted';
@@ -58,19 +62,20 @@ const Profile = () => {
                         {profile.items.map(item => {
                             return (
                                 <div key={item.id} className='column-element-frame'>
-                                    <img src={`data:${item.result.mainImage.imageType};base64,${item.result.mainImage.image}`}
+                                    <img 
+                                        src={item.mainImage}
                                         width="100"
                                         height="100"
                                         className='column-element-image'
                                         alt=''
                                     />
                                     <div className='column-element-info'>
-                                        <h5>Name: {item.result.name}</h5>
-                                        <p>Description: {item.result.description}</p>
-                                        <p>Bid now: {item.result.bid} $</p>
+                                        <h5>Name: {item.name}</h5>
+                                        <p>Description: {item.description}</p>
+                                        <p>Bid now: {item.bid} $</p>
                                         <p>Status: {getStatus(item)}</p>
                                         <div className='column-element-buttons'>
-                                            <Button variant="outline-primary">View</Button>
+                                            <Button variant="outline-primary" onClick={() => routePostChange(item.id)}>View</Button>
                                         </div>
                                     </div>
                                 </div>
@@ -111,16 +116,17 @@ const Profile = () => {
                         {profile.orders.map(order => {
                             return (
                                 <div key={order.id} className='column-element-frame'>
-                                    <img src={`data:${order.itemResponse.result.mainImage.imageType};base64,${order.itemResponse.result.mainImage.image}`}
+                                    <img 
+                                        src={order.itemResponse.mainImage}
                                         width="100"
                                         height="100"
                                         className='column-element-image'
                                         alt=''
                                     />
                                     <div className='column-element-info'>
-                                        <h5>{order.itemResponse.result.name}</h5>
-                                        <p>{order.itemResponse.result.description}</p>
-                                        <p>Bought for: {order.itemResponse.result.boughtFor} $</p>
+                                        <h5>{order.itemResponse.name}</h5>
+                                        <p>{order.itemResponse.description}</p>
+                                        <p>Bought for: {order.itemResponse.boughtFor} $</p>
                                         <p>Date ordered: {new Date(Date.parse(order.dateOrdered)).toLocaleDateString()}</p>
                                         <div className='column-element-buttons'>
                                             <Button variant="outline-primary" onClick={() => routeOrderChange(order.id)}>View</Button>

@@ -52,23 +52,23 @@ const SearchedItems = () => {
             </div>
             <div className="items-frame">
                 {items.map(item => (
-                    <Card key={item.result.id} className="item-card">
+                    <Card key={item.id} className="item-card">
                         <Card.Img 
                             variant="top" 
-                            src={`data:${item.result.mainImage.imageType};base64,${item.result.mainImage.image}`} 
+                            src={item.mainImage} 
                             className="card-image"
                         />
                         <Card.Body>
-                        <Card.Title>{item.result.name} </Card.Title>
-                        <Card.Text>{item.result.description} </Card.Text>
+                        <Card.Title>{item.name} </Card.Title>
+                        <Card.Text>{item.description} </Card.Text>
                         </Card.Body>
                         <ListGroup className="list-group-flush">
-                        <ListGroup.Item>Buy now: {item.result.buyPrice} $</ListGroup.Item>
-                        <ListGroup.Item>End bid date: {new Date(item.result.endBidDate).toLocaleString()}</ListGroup.Item>
+                        <ListGroup.Item>Buy now: {item.buyPrice} $</ListGroup.Item>
+                        <ListGroup.Item>End bid date: {new Date(item.endBidDate).toLocaleString()}</ListGroup.Item>
                         </ListGroup>
                         <Card.Body className="card-footer">
-                            <Button className="button" onClick={() => routeChange(item.result.id)}>View</Button>
-                            <Card.Text>Bid now: {item.result.bid} $</Card.Text>
+                            <Button className="button" onClick={() => routeChange(item.id)}>View</Button>
+                            <Card.Text>Bid now: {item.bid} $</Card.Text>
                         </Card.Body>
                     </Card>
                 ))}

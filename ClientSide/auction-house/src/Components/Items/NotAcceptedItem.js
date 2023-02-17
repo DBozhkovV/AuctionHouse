@@ -80,7 +80,7 @@ const NotAcceptedItem = () => {
                     }
                     <img 
                         className="item-img" 
-                        src={`data:${imagesToDisplay[imageIndex].imageType};base64,${imagesToDisplay[imageIndex].image}`}
+                        src={imagesToDisplay[imageIndex]}
                         alt=""
                     />
                     {imageIndex !== imagesToDisplay.length - 1 && ( 
