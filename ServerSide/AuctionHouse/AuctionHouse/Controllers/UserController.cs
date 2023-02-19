@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using AuctionHouse.Services.UserService;
 using Microsoft.AspNetCore.Authorization;
 using AuctionHouse.Models;
-using SendGrid;
-using SendGrid.Helpers.Mail;
 
 namespace AuctionHouse.Controllers
 {
@@ -58,13 +56,10 @@ namespace AuctionHouse.Controllers
         {
             try
             {
-                Guid? userId = userService.Login(loginDTO);
-                if (userId is null)
-                {
-                    return BadRequest();
-                }
+                Guid userId = userService.Login(loginDTO);
                 HttpContext.Session.SetString("userId", userId.ToString());
-                if (userService.IsRoled(userId.Value, Role.User))
+                
+                if (userService.IsRoled(userId, Role.User))
                 {
                     HttpContext.Session.SetString("Role", "User");
                 }

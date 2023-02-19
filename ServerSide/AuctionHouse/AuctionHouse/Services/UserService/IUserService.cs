@@ -7,7 +7,7 @@ namespace AuctionHouse.Services.UserService
     {
         void Register(RegisterDTO registerDTO);
         
-        Guid? Login(LoginDTO loginDTO);
+        Guid Login(LoginDTO loginDTO);
         
         UserDTO Profile(Guid userId);
 

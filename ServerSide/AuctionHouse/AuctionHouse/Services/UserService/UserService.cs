@@ -58,7 +58,7 @@ namespace AuctionHouse.Services.UserService
             userRepository.InsertUser(newUser);
         }
 
-        public Guid? Login(LoginDTO loginDTO)
+        public Guid Login(LoginDTO loginDTO)
         {
             if (loginDTO is null)
             {
