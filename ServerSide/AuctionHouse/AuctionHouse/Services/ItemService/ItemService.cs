@@ -8,9 +8,9 @@ namespace AuctionHouse.Services.ItemService
     public class ItemService : IItemService
     {
         private readonly IItemRepository itemRepository;
-        private readonly IAzureStorageRepository azureStorageRepository;
+        private readonly IAzureStorageService azureStorageRepository;
 
-        public ItemService(IItemRepository itemRepository, IAzureStorageRepository azureStorageRepository)
+        public ItemService(IItemRepository itemRepository, IAzureStorageService azureStorageRepository)
         {
             this.itemRepository = itemRepository;
             this.azureStorageRepository = azureStorageRepository;
@@ -134,7 +134,7 @@ namespace AuctionHouse.Services.ItemService
             return itemResponses;
         }
 
-        public IEnumerable<ItemResponse> SortItemsByNewest() // return all available items sorted by low to high(Ascending)
+        public IEnumerable<ItemResponse> SortItemsByNewest() // return all available items sorted by newest
         {
             List<Item> items = itemRepository.GetAllAvailableItems().OrderByDescending(item => item.DateAdded).ToList();
             IEnumerable<ItemResponse> itemResponses = azureStorageRepository.ReturnListOfItemResponses(items);

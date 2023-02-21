@@ -10,9 +10,9 @@ namespace AuctionHouse.Services.UserService
     public class UserService : IUserService
     {
         private readonly IUserRepository userRepository;
-        private readonly IAzureStorageRepository azureStorageRepository;
+        private readonly IAzureStorageService azureStorageRepository;
 
-        public UserService(IUserRepository userRepository, IAzureStorageRepository azureStorageRepository)
+        public UserService(IUserRepository userRepository, IAzureStorageService azureStorageRepository)
         {
             this.userRepository = userRepository;
             this.azureStorageRepository = azureStorageRepository;

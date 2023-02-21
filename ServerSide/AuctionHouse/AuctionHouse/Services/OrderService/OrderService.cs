@@ -8,9 +8,9 @@ namespace AuctionHouse.Services.OrderService
     public class OrderService : IOrderService
     {
         private readonly IOrderRepository orderRepository;
-        private readonly IAzureStorageRepository azureStorageRepository;
+        private readonly IAzureStorageService azureStorageRepository;
 
-        public OrderService(IOrderRepository orderRepository, IAzureStorageRepository azureStorageRepository = null)
+        public OrderService(IOrderRepository orderRepository, IAzureStorageService azureStorageRepository = null)
         {
             this.orderRepository = orderRepository;
             this.azureStorageRepository = azureStorageRepository;

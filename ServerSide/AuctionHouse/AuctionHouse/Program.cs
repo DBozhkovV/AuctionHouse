@@ -36,7 +36,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IOrderService, OrderService>();
-builder.Services.AddScoped<IAzureStorageRepository, AzureStorageRepository>();
+builder.Services.AddScoped<IAzureStorageService, AzureStorageService>();
 builder.Services.AddScoped<IServiceManagement, ServiceManagement>();
 
 builder.Services.AddControllers().AddJsonOptions(options =>
