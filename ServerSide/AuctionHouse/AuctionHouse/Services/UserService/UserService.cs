@@ -2,8 +2,7 @@
 using AuctionHouse.DTOs;
 using AuctionHouse.Models;
 using AuctionHouse.Services.AzureStorageService;
-using System.Net;
-using System.Net.Mail;
+using AuctionHouse.Services.EmailService;
 
 namespace AuctionHouse.Services.UserService
 {
@@ -11,14 +10,16 @@ namespace AuctionHouse.Services.UserService
     {
         private readonly IUserRepository userRepository;
         private readonly IAzureStorageService azureStorageRepository;
+        private readonly IEmailService emailService;
 
-        public UserService(IUserRepository userRepository, IAzureStorageService azureStorageRepository)
+        public UserService(IUserRepository userRepository, IAzureStorageService azureStorageRepository, IEmailService emailService)
         {
             this.userRepository = userRepository;
             this.azureStorageRepository = azureStorageRepository;
+            this.emailService = emailService;
         }
 
-        public void Register(RegisterDTO registerDTO)
+        public async Task RegisterAsync(RegisterDTO registerDTO)
         {
             if (registerDTO is null)
             {
@@ -56,6 +57,7 @@ namespace AuctionHouse.Services.UserService
                 PhoneNumber = registerDTO.PhoneNumber
             };
             userRepository.InsertUser(newUser);
+            await emailService.SendEmailToVerifyAsync(newUser.Email, newUser.VerificationToken);
         }
 
         public Guid Login(LoginDTO loginDTO)
@@ -138,53 +140,16 @@ namespace AuctionHouse.Services.UserService
         public void ForgotPassword(string email) 
         {
             userRepository.ForgotPassword(email);
+            emailService.SendEmailToForgotPassword(email, (Guid)userRepository.GetUserByEmail(email).PasswordResetToken);
         }
-
-        public async Task SendEmail(string toEmail)
-        {
-            /*
-            using var smtpClient = new SmtpClient("smtp.sendgrid.net", 25)
-            {
-                Credentials = new NetworkCredential("ngdg", "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"),
-                EnableSsl = false,
-                UseDefaultCredentials = false
-            };
-
-            using var mailMessage = new MailMessage
-            {
-                From = new MailAddress("houseauction89@gmail.com", "Auction House"),
-                Subject = "hi",
-                Body = "<h1>Whatsup</h1>",
-                IsBodyHtml = true
-            };
-            mailMessage.To.Add(new MailAddress(toEmail));
-
-            await smtpClient.SendMailAsync(mailMessage);
-            */
-            var smtpServer = "smtp.sendgrid.net";
-            var smtpPort = 25;
-            var smtpUsername = "ngdg";
-            var smtpPassword = "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";
-
-            var client = new SmtpClient(smtpServer, smtpPort);
-            client.UseDefaultCredentials = false;
-
-            var from = new MailAddress("houseauction89@gmail.com", "AuctionHouse");
-            var to = new MailAddress("danipaynera00@gmail.com", "Dakata RM");
-            var subject = "Email Subject";
-            var body = "Email Content";
-
-            var message = new MailMessage(from, to);
-            message.Subject = subject;
-            message.Body = body;
-
-            client.SendAsync(message, new NetworkCredential(smtpUsername, smtpPassword));
-        }
-
 
         public void ResetPassword(ResetPasswordDTO resetPasswordDTO) 
         {
             User user = userRepository.GetUserByPassowordResetToken(resetPasswordDTO.Token);
+            if (user == null)
+            {
+                throw new Exception("Invalid password reset token.");
+            }
             if (user.PasswordResetTokenExpires < DateTime.UtcNow)
             {
                 throw new Exception("Password reset token has expired.");

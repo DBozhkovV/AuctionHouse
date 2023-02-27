@@ -15,6 +15,7 @@ using AuctionHouse.DAOs.OrderDAO;
 using Hangfire;
 using Hangfire.PostgreSql;
 using AuctionHouse.Services.ServiceManagement;
+using AuctionHouse.Services.EmailService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,6 +33,7 @@ builder.Services.AddHangfireServer();
 
 builder.Services.AddScoped<IItemRepository, ItemRepository>();
 builder.Services.AddScoped<IItemService, ItemService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
@@ -103,6 +105,6 @@ app.UseHangfireDashboard();
 
 app.MapControllers();
 
-RecurringJob.AddOrUpdate<IServiceManagement>(serviceManagement => serviceManagement.CheckForExpiredAuctions(), Cron.Daily);
+RecurringJob.AddOrUpdate<IServiceManagement>(serviceManagement => serviceManagement.CheckForExpiredAuctions(), Cron.Minutely);
 
 app.Run();

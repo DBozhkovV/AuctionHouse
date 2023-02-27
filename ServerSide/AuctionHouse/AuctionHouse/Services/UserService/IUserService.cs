@@ -5,8 +5,8 @@ namespace AuctionHouse.Services.UserService
 {
     public interface IUserService
     {
-        void Register(RegisterDTO registerDTO);
-        
+        Task RegisterAsync(RegisterDTO registerDTO);
+            
         Guid Login(LoginDTO loginDTO);
         
         UserDTO Profile(Guid userId);
@@ -16,8 +16,6 @@ namespace AuctionHouse.Services.UserService
         void VerifyAccount(Guid token);
         
         void ForgotPassword(string email);
-
-        Task SendEmail(string toEmail);
 
         void ResetPassword(ResetPasswordDTO resetPasswordDTO);
         

@@ -2,6 +2,7 @@
 using AuctionHouse.DTOs;
 using AuctionHouse.Models;
 using AuctionHouse.Services.AzureStorageService;
+using AuctionHouse.Services.EmailService;
 
 namespace AuctionHouse.Services.ItemService
 {
@@ -9,11 +10,13 @@ namespace AuctionHouse.Services.ItemService
     {
         private readonly IItemRepository itemRepository;
         private readonly IAzureStorageService azureStorageRepository;
+        private readonly IEmailService emailService;
 
-        public ItemService(IItemRepository itemRepository, IAzureStorageService azureStorageRepository)
+        public ItemService(IItemRepository itemRepository, IAzureStorageService azureStorageRepository, IEmailService emailService)
         {
             this.itemRepository = itemRepository;
             this.azureStorageRepository = azureStorageRepository;
+            this.emailService = emailService;
         }
 
         public ItemResponse GetItem(Guid id)
@@ -49,8 +52,10 @@ namespace AuctionHouse.Services.ItemService
             }
             else
             {
+                User OutbiddedUser = itemRepository.GetUserByGuid((Guid)item.BidderId);
                 itemRepository.ReturnMoneyToUser((Guid)item.BidderId, item.Bid); // return money to previous bidder
                 itemRepository.Bid(item, user, money);
+                emailService.SendEmailToNotifyOutbid(OutbiddedUser.Email, item.Name, money);
             }
         }
 
@@ -208,6 +213,13 @@ namespace AuctionHouse.Services.ItemService
         public Item FindItemByGuid(Guid itemId) // Guid is the id
         {
             return itemRepository.GetItemById(itemId);
+        }
+
+        public void DeleteItem(Item item) 
+        {
+            azureStorageRepository.DeleteImage(item.MainImageName);
+            item.ImagesNames.ForEach(imageName => azureStorageRepository.DeleteImage(imageName));
+            itemRepository.DeleteItemById(item.Id);
         }
 
         public IEnumerable<ItemResponse> SearchItems(string search) // return items by containing keyword in there names

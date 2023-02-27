@@ -89,6 +89,10 @@ namespace AuctionHouse.DAOs.UserDAO
             User user = dataContext.Users
                 .Where(user => user.Email.Equals(email))
                 .SingleOrDefault();
+            if (user == null)
+            {
+                throw new Exception("User not found");
+            }
             user.PasswordResetToken = Guid.NewGuid();
             user.PasswordResetTokenExpires = DateTime.UtcNow.AddDays(1);
             dataContext.SaveChanges();

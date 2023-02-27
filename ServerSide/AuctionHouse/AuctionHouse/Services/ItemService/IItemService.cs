@@ -37,6 +37,8 @@ namespace AuctionHouse.Services.ItemService
         
         Item FindItemByGuid(Guid itemId);
 
+        void DeleteItem(Item item);
+
         IEnumerable<ItemResponse> SearchItems(string search);
 
         void AcceptItem(Guid itemId);

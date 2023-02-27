@@ -1,15 +1,21 @@
 ﻿using AuctionHouse.DAO.ItemDAO;
 using AuctionHouse.Models;
+using AuctionHouse.Services.EmailService;
+using AuctionHouse.Services.ItemService;
 
 namespace AuctionHouse.Services.ServiceManagement
 {
     public class ServiceManagement : IServiceManagement
     {
         private readonly IItemRepository itemRepository;
+        private readonly IItemService itemService;
+        private readonly IEmailService emailService;
 
-        public ServiceManagement(IItemRepository itemRepository)
+        public ServiceManagement(IItemRepository itemRepository, IEmailService emailService, IItemService itemService)
         {
             this.itemRepository = itemRepository;
+            this.emailService = emailService;
+            this.itemService = itemService;
         }
 
         public void CheckForExpiredAuctions()
@@ -21,7 +27,7 @@ namespace AuctionHouse.Services.ServiceManagement
                 {
                     if (item.BidderId == null) 
                     {
-                        itemRepository.DeleteItemById(item.Id);
+                        itemService.DeleteItem(item);
                     }
                     else
                     {
@@ -33,6 +39,8 @@ namespace AuctionHouse.Services.ServiceManagement
                             UserId = (Guid)item.BidderId
                         };
                         itemRepository.ExpireItem(item, newOrder);
+                        User winner = itemRepository.GetUserByGuid((Guid)item.BidderId);
+                        emailService.SendEmailToNotifyWon(winner.Email, item.Name, item.Bid);
                     }
                 }
             });

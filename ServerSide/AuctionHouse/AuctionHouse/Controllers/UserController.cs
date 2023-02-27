@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using AuctionHouse.Services.UserService;
 using Microsoft.AspNetCore.Authorization;
 using AuctionHouse.Models;
+using SendGrid;
+using SendGrid.Helpers.Mail;
 
 namespace AuctionHouse.Controllers
 {
@@ -16,32 +18,14 @@ namespace AuctionHouse.Controllers
         {
             this.userService = userService;
         }
-
-        [HttpPost]
-        [Route("send-text-mail")]
-        [AllowAnonymous]
-        public async Task<IActionResult> SendPlainTextEmail(EmailDTO emailDTO)
-        {
-            // Name = AuctionHouse
-            // Email = houseauction89@gmail.com
-            try
-            {
-                await userService.SendEmail("danipaynera00@gmail.com");
-            }
-            catch (Exception exception)
-            {
-                return BadRequest(exception.ToString());
-            }
-            return Ok();
-        }
-        
+    
         [HttpPost("register")]
         [AllowAnonymous]
-        public IActionResult Register(RegisterDTO registerDTO)
+        public async Task<IActionResult> RegisterAsync(RegisterDTO registerDTO)
         {
             try 
             {
-                userService.Register(registerDTO);
+                await userService.RegisterAsync(registerDTO);
             }
             catch (Exception exception) 
             {
@@ -58,21 +42,22 @@ namespace AuctionHouse.Controllers
             {
                 Guid userId = userService.Login(loginDTO);
                 HttpContext.Session.SetString("userId", userId.ToString());
-                
                 if (userService.IsRoled(userId, Role.User))
                 {
                     HttpContext.Session.SetString("Role", "User");
+                    float balance = userService.GetBalanceByUserId(userId);
+                    return Ok(balance);
                 }
                 else 
                 {
                     HttpContext.Session.SetString("Role", "Admin");
+                    return Ok("Admin");
                 }
             }
             catch (Exception exception) 
             {
                 return BadRequest(exception.Message);
             }
-            return Ok();
         }
 
         [HttpPost("logout")]
@@ -131,36 +116,6 @@ namespace AuctionHouse.Controllers
                 return BadRequest(exception.Message);
             }
             return Ok();
-        }
-
-        [HttpGet("isUser")]
-        [AllowAnonymous]
-        public IActionResult IsUser()
-        {
-            if (HttpContext.Session.GetString("Role") is null)
-            {
-                return BadRequest("Don't have exist session.");
-            }
-            if (HttpContext.Session.GetString("Role") == "User")
-            {
-                return Ok(userService.GetBalanceByUserId(Guid.Parse(HttpContext.Session.GetString("userId"))));
-            }
-            return BadRequest("You are not admin.");
-        }
-
-        [HttpGet("isAdmin")]
-        [AllowAnonymous]
-        public IActionResult IsAdmin()
-        {
-            if (HttpContext.Session.GetString("Role") is null)
-            {
-                return BadRequest("Don't have exist session.");
-            }
-            if (HttpContext.Session.GetString("Role") == "Admin")
-            {
-                return Ok();
-            }
-            return BadRequest("You are not admin.");
         }
 
         [HttpGet("profile")]
