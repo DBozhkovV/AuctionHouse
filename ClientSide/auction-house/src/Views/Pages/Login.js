@@ -3,13 +3,13 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "../../css/Login.css";
 import Fail from "../../Components/Alerts/Fail";
+import Button from 'react-bootstrap/Button';
 
 const Login = () => {
     const [username, setUsername] = useState(null);
     const [password, setPassword] = useState(null);
     const [showFail, setShowFail] = useState(false);
     const [message, setMessage] = useState(null);
-
     const navigate = useNavigate();
 
     const routeChange = () =>{ 
@@ -29,12 +29,18 @@ const Login = () => {
             }, {
                 withCredentials: true
             })
-            .then(() => {
+            .then(response => {
+                if (response.data === "Admin") {
+                    sessionStorage.setItem("isAdmin", true);
+                } else if (response.data !== "Admin" && response.data !== null) {
+                    sessionStorage.setItem("isUser", response.data);
+                }
                 routeChange();
             })
             .catch(error => {
                 setShowFail(true);
-                setMessage(error.response.data);
+                setMessage("Wrong username or password.");
+                console.error(error);
             })
         }
     }
@@ -70,9 +76,18 @@ const Login = () => {
                             onChange={(e) => { setPassword(e.target.value) }}
                         />
                     </div>
+                    <div className="forgot-button">
+                        Forgot password? <a href="/forgotpassword">Click here</a>
+                    </div>
                     <br />
                     <div className="d-flex justify-content-center">
-                        <button type="submit" className="btn btn-primary" onClick={handleSubmit}>Submit</button>
+                        <Button 
+                            type="submit" 
+                            variant="primary"
+                            onClick={handleSubmit}
+                        >
+                            Submit
+                        </Button>
                     </div>
                 </form>
             </div>

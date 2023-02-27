@@ -1,0 +1,33 @@
+.forgot-password-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.forgot-password-header {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+}
+.verification-header {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 1rem;
+}
+
+.verification-button {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+    width: 5rem;
+    height: 3rem;
+}
+
+.verification-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 1rem;
+}

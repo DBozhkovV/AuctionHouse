@@ -217,8 +217,7 @@ const Post = () => {
                         </Form.Select>
                         <Form.Control.Feedback type="invalid">
                             Please select a valid category.
-                        </Form.Control.Feedback>
-                            
+                        </Form.Control.Feedback>     
                     </Form.Group>
                     <br />
                     <div>
@@ -238,7 +237,7 @@ const Post = () => {
                     </div>
                 </Form>
                 <div className="d-flex justify-content-center">
-                    <Button variant="outline-primary" onClick={(e) => handleSubmit(e)}>Create post</Button>
+                    <Button variant="primary" onClick={(e) => handleSubmit(e)}>Create post</Button>
                 </div>
             </div>
         </div>

@@ -113,13 +113,13 @@ const NotAcceptedItem = () => {
                     <div>Bid: {item.bid}</div>
                     <hr/>
                     <div className="not-accepted-actions">
-                        <Button variant="outline-success" onClick={() => {AcceptItem(item.id); navigate(-1);}}>Accept</Button>
-                        <Button variant="outline-danger" onClick={() => {RejectItem(item.id); navigate(-1);}}>Reject</Button>
+                        <Button variant="success" onClick={() => {AcceptItem(item.id); navigate(-1);}}>Accept</Button>
+                        <Button variant="danger" onClick={() => {RejectItem(item.id); navigate(-1);}}>Reject</Button>
                     </div>
                 </div>
             </div>
             <div className="item-buttons">
-                <Button variant="outline-primary" onClick={() => navigate(-1)}>Go back</Button>
+                <Button variant="primary" onClick={() => navigate(-1)}>Go back</Button>
             </div>
         </div>
     );

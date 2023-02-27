@@ -1,22 +1,19 @@
 import React, { useState } from 'react';
 import { Container, Nav, Navbar, NavDropdown, Form, Button } from 'react-bootstrap';
-import Logout from '../Components/Authorization/Logout';
-import IsUser from '../Components/Authorization/IsUser';
-import IsAdmin from '../Components/Authorization/IsAdmin';
-import logo from '../Assets/images/user-profile-icon.svg';
-import "../css/Navbar.css"
+import Logout from '../../Components/Authorization/Logout';
+import logo from '../../Assets/images/user-profile-icon.svg';
+import "../../css/Navbar.css"
 
 const NavbarComponent = () => {
     const [search, setSearch] = useState(null);
     const [LogoutShow, setLogoutShow] = useState(false);
+    const isUser = sessionStorage.getItem("isUser"); // null if is not admin
+    const isAdmin = sessionStorage.getItem("isAdmin"); // null if is not user if the both are null then it is not logged in
 
     const handleSubmit = (e) => {
         e.preventDefault();
         window.location.href = `/items/search/${search}`;
     }
-
-    const isUser = IsUser();
-    const isAdmin = IsAdmin();
 
     const ShowAuthNavigation = () => {
         if (isUser) {
@@ -41,7 +38,7 @@ const NavbarComponent = () => {
                 </>
             );
         }
-        if (isAdmin === false) {
+        if (isAdmin === null) {
             return (
                 <>
                     <Nav.Link href="/login">Login</Nav.Link>

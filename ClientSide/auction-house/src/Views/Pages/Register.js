@@ -1,12 +1,9 @@
 import axios from "axios";
-import React, { useState } from "react";
-import BrandLogo from "../../Assets/images/BigBrandLogo.png";
+import React, { useEffect, useState } from "react";
 import Fail from "../../Components/Alerts/Fail";
 import Success from "../../Components/Alerts/Success";
 
-// Da dobavq proverka dali password i confrimed password sa ednakvi
 const RegistrationForm = () => {
-    
     const [firstName, setFirstName] = useState(null);
     const [lastName, setLastName] = useState(null);
     const [email, setEmail] = useState(null);
@@ -41,7 +38,6 @@ const RegistrationForm = () => {
             })
             .then(() => {
                 setShowSuccess(true);
-                document.getElementById("register-form").reset();
             })
             .catch(error => {
                 setShowFail(true);
@@ -55,8 +51,6 @@ const RegistrationForm = () => {
             {showSuccess ? <Success /> : null}
             {showFail ? <Fail error={message} /> : null}
             <h3 className="register-header">
-                {/* eslint-disable-next-line  */} {/*Remove the warning of the next line because in img tag we should have alt */}
-                {/* <img src={BrandLogo} /> */}
                 <br />
                 Welcome to Auction house!
             </h3>
@@ -96,7 +90,6 @@ const RegistrationForm = () => {
                                     type="email" 
                                     className="form-control" 
                                     id="email" 
-                                    // aria-describedby="emailHelp" 
                                     placeholder="Enter email" 
                                     onChange={(e) => { setEmail(e.target.value) }}
                                 />
@@ -159,7 +152,7 @@ const RegistrationForm = () => {
                         </div>
                     </div>
                     <div className="d-flex justify-content-center">
-                        <button type="submit" className="btn btn-primary" onClick={handleSubmit}>Sign up</button>
+                        <button type="submit" className="btn btn-primary" onClick={(e) => handleSubmit(e)}>Sign up</button>
                     </div>
                 </form>
             </div>

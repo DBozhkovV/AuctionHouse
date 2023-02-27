@@ -1,6 +1,6 @@
 import './App.css';
 import React from 'react';
-import Layout from './Layout/Layout';
+import Layout from './Views/Layout/Layout';
 import Home from './Views/Pages/Home';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Login from './Views/Pages/Login';
@@ -18,6 +18,9 @@ import BidPage from './Components/Bids/BidPage';
 import SortByHighToLow from './Components/Items/SortingType/SortByHighToLow';
 import SortByLowToHigh from './Components/Items/SortingType/SortByLowToHigh';
 import SortByNewest from './Components/Items/SortingType/SortByNewest';
+import Verification from './Components/Authorization/Verification';
+import ForgotPassword from './Components/Authorization/ForgotPassword';
+import ResetPassword from './Components/Authorization/ResetPassword';
 
 function App() {
   return (
@@ -40,6 +43,9 @@ function App() {
           <Route path="/notaccepteditem/:id" element={<NotAcceptedItem />} />
           <Route path="/category/:category" element={<ItemsByCategory />} />
           <Route path="/bids" element={<BidPage />} />
+          <Route path="/verify/:token" element={<Verification />} />
+          <Route path="/forgotpassword" element={<ForgotPassword />} />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
         </Routes>
       </Layout>
     </BrowserRouter>

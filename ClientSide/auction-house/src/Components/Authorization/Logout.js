@@ -7,13 +7,14 @@ import { useNavigate } from "react-router-dom";
 const Logout = (props) => {
     const navigate = useNavigate();
 
-    const routeChange = () =>{ 
-        navigate(`/`);
-        window.location.reload();
-    }
-
     const handleLogout = async () => {
-        axios.post(`${process.env.REACT_APP_API}/logout`, {}, { withCredentials: true })
+        await axios.post(`${process.env.REACT_APP_API}/logout`, {}, { withCredentials: true })
+        .then(() => {
+            sessionStorage.removeItem("isUser");
+            sessionStorage.removeItem("isAdmin");
+            navigate(`/`);
+            window.location.reload();
+        })
         .catch(error => {
             console.log(error);
         })
@@ -34,7 +35,7 @@ const Logout = (props) => {
                 <p>Are you sure you want to logout?</p>
             </ModalBody>
             <Modal.Footer>
-                <Button onClick={() => {handleLogout(); routeChange();}} variant="outline-success">Yes</Button>
+                <Button onClick={() => handleLogout()} variant="outline-success">Yes</Button>
                 <Button onClick={props.onHide} variant="outline-danger">No</Button>
             </Modal.Footer>
         </Modal>
