@@ -5,12 +5,16 @@ import { Button } from "react-bootstrap";
 import "../../css/Item.css";
 import { VscArrowRight } from "react-icons/vsc";
 import { VscArrowLeft } from "react-icons/vsc";
+import Reject from "./AdminActions/Reject";
+import Accept from "./AdminActions/Accept";
 
 const NotAcceptedItem = () => {
     const params = useParams();
     const [item, setItem] = useState(null);
     const imagesToDisplay = [];
     const [imageIndex, setImageIndex] = useState(0);
+    const [showReject, setShowReject] = useState(false);
+    const [showAccept, setShowAccept] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -39,20 +43,6 @@ const NotAcceptedItem = () => {
     imagesToDisplay.push(item.mainImage);
     for (let i = 0; i < item.images.length; i++) {
         imagesToDisplay.push(item.images[i]);
-    }
-
-    const AcceptItem = (id) => {
-        axios.put(`${process.env.REACT_APP_API}/items/accept/${id}`, {}, { withCredentials: true })
-            .catch(error => {
-                console.log(error);
-            })
-    }
-
-    const RejectItem = (id) => {
-        axios.put(`${process.env.REACT_APP_API}/items/reject/${id}`, {}, { withCredentials: true })
-            .catch(error => {
-                console.log(error);
-            })
     }
 
     return (
@@ -113,8 +103,10 @@ const NotAcceptedItem = () => {
                     <div>Bid: {item.bid}</div>
                     <hr/>
                     <div className="not-accepted-actions">
-                        <Button variant="success" onClick={() => {AcceptItem(item.id); navigate(-1);}}>Accept</Button>
-                        <Button variant="danger" onClick={() => {RejectItem(item.id); navigate(-1);}}>Reject</Button>
+                        <Button variant="success" onClick={() => setShowAccept(true)}>Accept</Button>
+                        <Accept show={showAccept} itemID={item.id} onHide={() => setShowAccept(false)} />
+                        <Button variant="danger" onClick={() => setShowReject(true)}>Reject</Button>
+                        <Reject show={showReject} itemID={item.id} onHide={() => setShowReject(false)} />
                     </div>
                 </div>
             </div>
