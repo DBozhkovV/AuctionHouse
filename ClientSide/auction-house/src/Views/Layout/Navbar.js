@@ -1,19 +1,34 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container, Nav, Navbar, NavDropdown, Form, Button } from 'react-bootstrap';
 import Logout from '../../Components/Authorization/Logout';
 import logo from '../../Assets/images/user-profile-icon.svg';
 import "../../css/Navbar.css"
+import axios from 'axios';
 
 const NavbarComponent = () => {
     const [search, setSearch] = useState(null);
     const [LogoutShow, setLogoutShow] = useState(false);
-    const isUser = sessionStorage.getItem("isUser"); // null if is not admin
-    const isAdmin = sessionStorage.getItem("isAdmin"); // null if is not user if the both are null then it is not logged in
+    const isUser = sessionStorage.getItem("isUser"); // null if is not user if the both are null then it is not logged in
+    const isAdmin = sessionStorage.getItem("isAdmin"); // null if is not admin
+    const [balance, setBalance] = useState(null);
 
     const handleSubmit = (e) => {
         e.preventDefault();
         window.location.href = `/items/search/${search}`;
     }
+
+    useEffect(() => {
+        const getBalance = async () => {
+            axios.get(`${process.env.REACT_APP_API}/balance`, { withCredentials: true })
+                .then(response => {
+                    setBalance(response.data);
+                })
+                .catch(error => {    
+                    console.log(error);
+                })
+        }
+        getBalance();
+    }, []);
 
     const ShowAuthNavigation = () => {
         if (isUser) {
@@ -33,7 +48,7 @@ const NavbarComponent = () => {
                     />
                     </Navbar.Brand>
                     <Navbar.Text>
-                        Balance: {isUser} $
+                        Balance: {balance} $
                     </Navbar.Text>
                 </>
             );

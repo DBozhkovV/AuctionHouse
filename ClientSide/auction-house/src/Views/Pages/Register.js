@@ -1,7 +1,7 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Fail from "../../Components/Alerts/Fail";
-import Success from "../../Components/Alerts/Success";
+import ConfirmAccount from "../../Components/Alerts/ConfirmAccount";
 
 const RegistrationForm = () => {
     const [firstName, setFirstName] = useState(null);
@@ -12,12 +12,12 @@ const RegistrationForm = () => {
     const [password, setPassword] = useState(null);
     const [confirmPassword, setConfirmPassword] = useState(null);
     const [showFail, setShowFail] = useState(false);
-    const [showSuccess, setShowSuccess] = useState(false);
+    const [showConfirmAccount, setShowConfirmAccount] = useState(false);
     const [message, setMessage] = useState(null);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        setShowSuccess(false);
+        setShowConfirmAccount(false);
         setShowFail(false)
         if (firstName === null || lastName === null || email === null || username === null || phoneNumber === null || password === null || confirmPassword === null) {
             setShowFail(true);
@@ -37,7 +37,7 @@ const RegistrationForm = () => {
                 phoneNumber: phoneNumber
             })
             .then(() => {
-                setShowSuccess(true);
+                setShowConfirmAccount(true);
             })
             .catch(error => {
                 setShowFail(true);
@@ -48,7 +48,7 @@ const RegistrationForm = () => {
 
     return (
         <div>
-            {showSuccess ? <Success /> : null}
+            {showConfirmAccount ? <ConfirmAccount /> : null}
             {showFail ? <Fail error={message} /> : null}
             <h3 className="register-header">
                 <br />
