@@ -293,7 +293,6 @@ namespace AuctionHouse.Controllers
         [Authorize(Policy = "User")]
         public IActionResult Bid(BidDTO bidDTO)
         {
-
             try 
             {
                 if (HttpContext.Session.GetString("userId") is null)

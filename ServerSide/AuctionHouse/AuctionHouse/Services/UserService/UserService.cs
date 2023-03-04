@@ -31,9 +31,9 @@ namespace AuctionHouse.Services.UserService
                 throw new Exception("Invalid confirmed password");
             }
 
-            if (userRepository.GetUserByUsername(registerDTO.Username) != null)
+            if (userRepository.GetUserByUsernameForRegister(registerDTO.Username) != null)
             {
-                if (userRepository.GetUserByUsername(registerDTO.Username).Username == registerDTO.Username)
+                if (userRepository.GetUserByUsernameForRegister(registerDTO.Username).Username == registerDTO.Username)
                 {
                     throw new Exception("Username is already used.");
                 }
@@ -167,6 +167,15 @@ namespace AuctionHouse.Services.UserService
         {
             return userRepository.IsRoled(userId, role);
         }
-        
+
+        public User GetUserByUsername(string username) 
+        {
+            return userRepository.GetUserByUsername(username);
+        }
+
+        public User GetUserById(Guid userId)
+        {
+            return userRepository.GetUserById(userId);
+        }
     }
 }

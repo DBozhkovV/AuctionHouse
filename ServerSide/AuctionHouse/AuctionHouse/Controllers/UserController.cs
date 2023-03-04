@@ -137,6 +137,22 @@ namespace AuctionHouse.Controllers
             }
         }
 
+        [HttpGet("balance")]
+        [Authorize(Policy = "User")]
+        public IActionResult GetBalance()
+        {
+            try
+            {
+                Guid userId = Guid.Parse(HttpContext.Session.GetString("userId"));
+                float balance = userService.GetBalanceByUserId(userId);
+                return Ok(balance);
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
+        }
+
         [HttpDelete]
         [Authorize(Policy = "User")]
         public IActionResult DeleteUser()

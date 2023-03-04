@@ -24,5 +24,9 @@ namespace AuctionHouse.DTOs
         
         [Required]
         public string PhoneNumber { get; set; }
+
+        public RegisterDTO()
+        {
+        }
     }
 }

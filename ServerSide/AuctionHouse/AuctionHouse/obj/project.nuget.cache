@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "rRt9dvWnRfXt5YDoOP/ZoKxvi8gEMFtbOr/GctuMrCOgI+gxL+ekq0QXu31RL4n+id4/7zcZiEbZpt5Vs7RD3g==",
+  "dgSpecHash": "qBMMREXGdVjoSBj/J+Px1ZlxoDMoXKlaFzCkSHSN49bUooAFdowBmp7mtptkzcR2L4l/kKLUHhtGIWT/+AI2tw==",
   "success": true,
   "projectFilePath": "C:\\Users\\Bozhkov\\Desktop\\AuctionHouse\\AuctionHouse\\AuctionHouse.csproj",
   "expectedPackageFiles": [
@@ -147,7 +147,14 @@
     "C:\\Users\\Bozhkov\\.nuget\\packages\\system.xml.readerwriter\\4.3.0\\system.xml.readerwriter.4.3.0.nupkg.sha512",
     "C:\\Users\\Bozhkov\\.nuget\\packages\\system.xml.xdocument\\4.3.0\\system.xml.xdocument.4.3.0.nupkg.sha512",
     "C:\\Users\\Bozhkov\\.nuget\\packages\\twilio\\6.2.3\\twilio.6.2.3.nupkg.sha512",
-    "C:\\Users\\Bozhkov\\.nuget\\packages\\windowsazure.storage\\9.3.3\\windowsazure.storage.9.3.3.nupkg.sha512"
+    "C:\\Users\\Bozhkov\\.nuget\\packages\\windowsazure.storage\\9.3.3\\windowsazure.storage.9.3.3.nupkg.sha512",
+    "C:\\Users\\Bozhkov\\.nuget\\packages\\xunit\\2.4.2\\xunit.2.4.2.nupkg.sha512",
+    "C:\\Users\\Bozhkov\\.nuget\\packages\\xunit.abstractions\\2.0.3\\xunit.abstractions.2.0.3.nupkg.sha512",
+    "C:\\Users\\Bozhkov\\.nuget\\packages\\xunit.analyzers\\1.0.0\\xunit.analyzers.1.0.0.nupkg.sha512",
+    "C:\\Users\\Bozhkov\\.nuget\\packages\\xunit.assert\\2.4.2\\xunit.assert.2.4.2.nupkg.sha512",
+    "C:\\Users\\Bozhkov\\.nuget\\packages\\xunit.core\\2.4.2\\xunit.core.2.4.2.nupkg.sha512",
+    "C:\\Users\\Bozhkov\\.nuget\\packages\\xunit.extensibility.core\\2.4.2\\xunit.extensibility.core.2.4.2.nupkg.sha512",
+    "C:\\Users\\Bozhkov\\.nuget\\packages\\xunit.extensibility.execution\\2.4.2\\xunit.extensibility.execution.2.4.2.nupkg.sha512"
   ],
   "logs": [
     {

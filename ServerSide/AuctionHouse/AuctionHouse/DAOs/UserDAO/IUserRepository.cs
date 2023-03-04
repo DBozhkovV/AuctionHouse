@@ -9,6 +9,8 @@ namespace AuctionHouse.DAOs.UserDAO
 
         User GetUserByUsername(string username);
 
+        User GetUserByUsernameForRegister(string username);
+
         User GetUserByEmail(string email);
 
         User GetUserById(Guid id);

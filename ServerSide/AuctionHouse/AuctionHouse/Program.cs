@@ -52,7 +52,7 @@ builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
     options.Cookie.Name = "ASP.NET";
-    options.IdleTimeout = TimeSpan.FromDays(7); // da go pomislq 
+    options.IdleTimeout = TimeSpan.FromDays(1);
     options.Cookie.IsEssential = true;
     options.Cookie.HttpOnly = true;
 });

@@ -23,6 +23,13 @@ namespace AuctionHouse.DAOs.UserDAO
         {
             return dataContext.Users
                 .Where(user => user.Username.Equals(username))
+                .Single();
+        }
+
+        public User GetUserByUsernameForRegister(string username) 
+        {
+            return dataContext.Users
+                .Where(user => user.Username.Equals(username))
                 .SingleOrDefault();
         }
 

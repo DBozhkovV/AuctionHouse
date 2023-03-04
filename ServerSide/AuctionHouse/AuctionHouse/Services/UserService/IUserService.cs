@@ -22,5 +22,9 @@ namespace AuctionHouse.Services.UserService
         void DeleteUser(Guid userId);
        
         bool IsRoled(Guid userId, Role role);
+
+        User GetUserByUsername(string username);
+
+        User GetUserById(Guid userId);
     }
 }

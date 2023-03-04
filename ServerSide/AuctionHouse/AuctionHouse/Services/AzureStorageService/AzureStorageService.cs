@@ -20,13 +20,13 @@ namespace AuctionHouse.Services.AzureStorageService
         public async Task SaveImageAsync(IFormFile formFile, string blobName)
         {
             CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
-            CloudBlobContainer container = blobClient.GetContainerReference("itemimage");
-            CloudBlockBlob blockBlob = container.GetBlockBlobReference(blobName);
+            CloudBlobContainer container = blobClient.GetContainerReference("itemimage"); // return a reference to the container
+            CloudBlockBlob blockBlob = container.GetBlockBlobReference(blobName); // Create a blob with the name of the file
 
-            using (var stream = formFile.OpenReadStream())
+            using (var stream = formFile.OpenReadStream()) 
             {
-                byte[] imageBytes = new byte[formFile.Length];
-                stream.Read(imageBytes, 0, (int)formFile.Length);
+                byte[] imageBytes = new byte[formFile.Length]; // Create byte array
+                stream.Read(imageBytes, 0, (int)formFile.Length); // reads into imageBytes
                 await blockBlob.UploadFromByteArrayAsync(imageBytes, 0, (int)stream.Length);
                 stream.Close();
             }
