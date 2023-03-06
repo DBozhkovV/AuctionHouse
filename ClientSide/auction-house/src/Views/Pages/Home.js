@@ -34,7 +34,7 @@ const Home = () => {
     }
 
     return (
-        <div>
+        <div className='background-home'>
             <h1 className='home-header'>Welcome to the Auction house!</h1>
             <hr />
             <div>
@@ -73,6 +73,7 @@ const Home = () => {
                 </div> 
                 <hr /> 
             </div>
+            <h1 className='home-footer'>Don't rush the process. Good things take time!</h1>
         </div>
     );
 }

@@ -2,9 +2,28 @@
     display: flex;
     justify-content: center;
     margin-top: 1rem;
+    font-family: cursive;
 }
 
 .newest-item-header {
+    font-family: cursive;
     display: flex;
+    justify-content: center;
+}
+
+.background-home {
+    background-image: url("../Assets/images/background.jpg");
+    /* width: 100%; */
+    margin-top: -1rem;
+    height: 55rem;
+    background-size: cover;
+    background-position: center;
+}
+
+.home-footer{
+    margin-top: 8rem;
+    color: oldlace;
+    display: flex;
+    font-family: cursive;
     justify-content: center;
 }
