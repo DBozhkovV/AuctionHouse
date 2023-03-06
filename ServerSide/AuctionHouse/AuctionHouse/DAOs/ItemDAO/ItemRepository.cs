@@ -100,7 +100,7 @@ namespace AuctionHouse.DAO.ItemDAO
             return dataContext.Items.Single(item => item.Id.Equals(id));
         }
 
-        public void Bid(Item item, User user, float money)  // proverka dali usera ima tolkova pari
+        public void Bid(Item item, User user, float money)
         {
             user.Balance -= money;
             item.BidderId = user.Id;

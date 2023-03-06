@@ -122,10 +122,6 @@ namespace AuctionHouse.Controllers
         [Authorize(Policy = "User")]
         public IActionResult Profile() 
         {
-            if (HttpContext.Session.GetString("userId") is null) 
-            {
-                return Unauthorized();
-            }
             try
             {
                 Guid userId = Guid.Parse(HttpContext.Session.GetString("userId"));

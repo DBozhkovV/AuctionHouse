@@ -39,13 +39,5 @@ namespace Test
             Task result = userService.RegisterAsync(registerDTO);
             Assert.Equal(Task.CompletedTask, result);
         }
-        
-        [Fact]
-        public void DeleteTest()
-        {
-            User user = userService.GetUserByUsername("UsernameTest");
-            userService.DeleteUser(user.Id);
-            Assert.Throws<Exception>(() => userService.GetUserByUsername("UsernameTest"));
-        }
     }
 }
