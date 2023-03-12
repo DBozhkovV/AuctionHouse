@@ -48,7 +48,7 @@ const Home = () => {
                         size={100}
                     /> : null }
                 </div>
-                <div className="items-frame">
+                <div className="home-frame">
                     {items.map(item => (
                         <Card key={item.id} className="item-card">
                             <Card.Img 
