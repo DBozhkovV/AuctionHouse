@@ -34,7 +34,7 @@ const Home = () => {
     }
 
     return (
-        <div className='background-home'>
+        <div>
             <h1 className='home-header'>Welcome to the Auction house!</h1>
             <hr />
             <div>
@@ -73,7 +73,7 @@ const Home = () => {
                 </div> 
                 <hr /> 
             </div>
-            <h1 className='home-footer'>Don't rush the process. Good things take time!</h1>
+            <h1 className='home-footer'>Here you can buy, bid and sell items.</h1>
         </div>
     );
 }
