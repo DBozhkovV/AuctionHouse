@@ -2,9 +2,19 @@
     display: flex;
     justify-content: center;
     margin-top: 1rem;
+    font-family: cursive;
 }
 
 .newest-item-header {
+    font-family: cursive;
     display: flex;
+    justify-content: center;
+}
+
+.home-footer{
+    /* margin-top: 2rem; */
+    color: oldlace;
+    display: flex;
+    font-family: cursive;
     justify-content: center;
 }
