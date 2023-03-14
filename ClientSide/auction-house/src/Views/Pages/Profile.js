@@ -7,12 +7,10 @@ import { useNavigate } from 'react-router-dom';
 import profileLogo from '../../Assets/images/user-profile-icon.svg';
 import "../../css/Loading.css";
 import MoonLoader from "react-spinners/MoonLoader";
-import DeleteProfile from '../../Components/Authorization/DeleteProfile';
 
 const Profile = () => {
     const [profile, setProfile] = useState([]);
     const [DeleteOrderShow, setDeleteOrderShow] = useState(false);
-    const [DeleteProfileShow, setDeleteProfileShow] = useState(false);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
@@ -77,7 +75,7 @@ const Profile = () => {
                                         <p>Bid now: {item.bid} $</p>
                                         <p>Status: {getStatus(item)}</p>
                                         <div className='column-element-buttons'>
-                                            <Button variant="primary" onClick={() => routePostChange(item.id)}>View</Button>
+                                            <Button variant="outline-primary" onClick={() => routePostChange(item.id)}>View</Button>
                                         </div>
                                     </div>
                                 </div>
@@ -110,8 +108,6 @@ const Profile = () => {
                                 <h5>Balance: {profile.balance} $</h5>
                                 <hr/>
                             </div>
-                            <Button variant="danger" onClick={() => setDeleteProfileShow(true)}>Delete</Button>
-                            <DeleteProfile show={DeleteProfileShow} onHide={() => setDeleteProfileShow(false)} />
                         </div>
                     </div>
                     <div className='columns-frame'>
@@ -133,8 +129,8 @@ const Profile = () => {
                                         <p>Bought for: {order.itemResponse.boughtFor} $</p>
                                         <p>Date ordered: {new Date(Date.parse(order.dateOrdered)).toLocaleDateString()}</p>
                                         <div className='column-element-buttons'>
-                                            <Button variant="primary" onClick={() => routeOrderChange(order.id)}>View</Button>
-                                            <Button variant="danger" onClick={() => setDeleteOrderShow(true)}>Delete</Button>
+                                            <Button variant="outline-primary" onClick={() => routeOrderChange(order.id)}>View</Button>
+                                            <Button variant="outline-danger" onClick={() => setDeleteOrderShow(true)}>Delete</Button>
                                             <DeleteOrder show={DeleteOrderShow} onHide={() => setDeleteOrderShow(false)} itemID={order.id} />
                                         </div>
                                     </div>

@@ -48,7 +48,7 @@ const Home = () => {
                         size={100}
                     /> : null }
                 </div>
-                <div className="home-frame">
+                <div className="items-frame">
                     {items.map(item => (
                         <Card key={item.id} className="item-card">
                             <Card.Img 
@@ -73,7 +73,6 @@ const Home = () => {
                 </div> 
                 <hr /> 
             </div>
-            <h1 className='home-footer'>Here you can buy, bid and sell items.</h1>
         </div>
     );
 }

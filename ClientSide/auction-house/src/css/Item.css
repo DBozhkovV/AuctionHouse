@@ -58,8 +58,6 @@
 .image-frame {
     display: flex;
     align-items: center;
-    width: 55rem;
-    margin-top: -3rem;
 }
 
 .item-card {
@@ -70,11 +68,6 @@
 .card-image {
     width: 20rem;
     height: 15rem;
-}
-
-.item-images {
-    width: 55rem;
-    height: 35rem;
 }
 
 .card-footer {

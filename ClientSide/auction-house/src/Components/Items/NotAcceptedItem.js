@@ -3,14 +3,16 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Button } from "react-bootstrap";
 import "../../css/Item.css";
+import { VscArrowRight } from "react-icons/vsc";
+import { VscArrowLeft } from "react-icons/vsc";
 import Reject from "./AdminActions/Reject";
 import Accept from "./AdminActions/Accept";
-import Carousel from 'react-bootstrap/Carousel';
 
 const NotAcceptedItem = () => {
     const params = useParams();
     const [item, setItem] = useState(null);
     const imagesToDisplay = [];
+    const [imageIndex, setImageIndex] = useState(0);
     const [showReject, setShowReject] = useState(false);
     const [showAccept, setShowAccept] = useState(false);
     const navigate = useNavigate();
@@ -28,6 +30,12 @@ const NotAcceptedItem = () => {
         getItem();
     }, []);
 
+    useEffect(() => {
+        if (item) {
+            return;
+        }
+    }, [imageIndex]);
+
     if(!item) { 
         return null 
     };
@@ -42,28 +50,57 @@ const NotAcceptedItem = () => {
             <h3 className="item-head">{item.name}</h3>
             <hr/>
             <div className="item-frame">
-                <div className="image-frame">
-                    <Carousel>
-                        {imagesToDisplay.map((image, index) => (
-                            <Carousel.Item key={index}>
-                                <img
-                                    className="item-images"
-                                    src={image}
-                                />
-                            </Carousel.Item>
-                        ))}
-                    </Carousel>
+            <div className="image-frame">
+                    {imageIndex !== 0 && 
+                        <div className="button-previous-img-frame">
+                            <Button 
+                                className="button-img" 
+                                variant="outline-primary"
+                                onClick={() =>  {
+                                    if (imageIndex === 0) {
+                                        return;
+                                    }else {
+                                        setImageIndex(imageIndex - 1);
+                                    }
+                                }}
+                            >
+                                <VscArrowLeft className="arrow-next"/>
+                            </Button>
+                        </div>
+                    }
+                    <img 
+                        className="item-img" 
+                        src={imagesToDisplay[imageIndex]}
+                        alt=""
+                    />
+                    {imageIndex !== imagesToDisplay.length - 1 && ( 
+                        <div className="button-next-img-frame">
+                            <Button 
+                                className="button-img" 
+                                variant="outline-primary"
+                                onClick={() =>  {
+                                    if (imageIndex === imagesToDisplay.length - 1) {
+                                        return;
+                                    }else {
+                                        setImageIndex(imageIndex + 1);
+                                    }
+                                }}
+                            >
+                                <VscArrowRight className="arrow-next"/>
+                            </Button>
+                        </div>
+                    )}
                 </div>
                 <div>
                     <div>{item.description}</div>
                     <hr/>
-                    <div>Buy Price: {item.buyPrice} $</div>
-                    <div>Starting Price: {item.startingPrice} $</div>
+                    <div>Buy Price: {item.buyPrice}</div>
+                    <div>Starting Price: {item.startingPrice}</div>
                     <hr/>
-                    <div>End Bid Date: {new Date(item.endBidDate).toLocaleString()}</div>
-                    <div>Date Added: {new Date(item.dateAdded).toLocaleString()}</div>
+                    <div>End Bid Date: {item.endBidDate}</div>
+                    <div>Date Added: {item.dateAdded}</div>
                     <hr/>
-                    <div>Bid: {item.bid} $</div>
+                    <div>Bid: {item.bid}</div>
                     <hr/>
                     <div className="not-accepted-actions">
                         <Button variant="success" onClick={() => setShowAccept(true)}>Accept</Button>

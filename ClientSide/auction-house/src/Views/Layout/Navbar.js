@@ -1,44 +1,31 @@
-import React, { useEffect, useState } from 'react';
-import { Container, Nav, Navbar, NavDropdown, Form, Button } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { MDBCollapse, MDBNavbar, MDBNavbarLink, 
+    MDBDropdownMenu, MDBNavbarToggler, MDBDropdownItem, 
+    MDBContainer, MDBNavbarBrand, MDBNavbarNav, MDBBtn } from 'mdb-react-ui-kit';
 import Logout from '../../Components/Authorization/Logout';
 import logo from '../../Assets/images/user-profile-icon.svg';
 import "../../css/Navbar.css"
-import axios from 'axios';
 
 const NavbarComponent = () => {
     const [search, setSearch] = useState(null);
     const [LogoutShow, setLogoutShow] = useState(false);
-    const isUser = sessionStorage.getItem("isUser"); // null if is not user if the both are null then it is not logged in
-    const isAdmin = sessionStorage.getItem("isAdmin"); // null if is not admin
-    const [balance, setBalance] = useState(null);
+    const isUser = sessionStorage.getItem("isUser"); // null if is not admin
+    const isAdmin = sessionStorage.getItem("isAdmin"); // null if is not user if the both are null then it is not logged in
 
     const handleSubmit = (e) => {
         e.preventDefault();
         window.location.href = `/items/search/${search}`;
     }
 
-    useEffect(() => {
-        const getBalance = async () => {
-            axios.get(`${process.env.REACT_APP_API}/balance`, { withCredentials: true })
-                .then(response => {
-                    setBalance(response.data);
-                })
-                .catch(error => {    
-                    console.log(error);
-                })
-        }
-        getBalance();
-    }, []);
-
     const ShowAuthNavigation = () => {
         if (isUser) {
             return  (
                 <>
-                    <Nav.Link href="/post">Post</Nav.Link>
-                    <Nav.Link onClick={() => setLogoutShow(true)}>Logout</Nav.Link>
+                    <MDBNavbarLink href="/post">Post</MDBNavbarLink>
+                    <MDBNavbarLink onClick={() => setLogoutShow(true)}>Logout</MDBNavbarLink>
                         <Logout show = {LogoutShow} onHide={() => setLogoutShow(false)} /> 
-                    <Nav.Link className='nav-bids' href="/bids">Your bids</Nav.Link>
-                    <Navbar.Brand href="/profile">
+                    <MDBNavbarLink className='nav-bids' href="/bids">Your bids</MDBNavbarLink>
+                    <MDBNavbarBrand href="/profile">
                     <img
                         src={logo}
                         width="30"
@@ -46,18 +33,18 @@ const NavbarComponent = () => {
                         className="d-inline-block align-top"
                         alt=""
                     />
-                    </Navbar.Brand>
-                    <Navbar.Text>
-                        Balance: {balance} $
-                    </Navbar.Text>
+                    </MDBNavbarBrand>
+                    <MDBNavbarLink>
+                        Balance: {isUser} $
+                    </MDBNavbarLink>
                 </>
             );
         }
         if (isAdmin === null) {
             return (
                 <>
-                    <Nav.Link href="/login">Login</Nav.Link>
-                    <Nav.Link href="/register">Register</Nav.Link>
+                    <MDBNavbarLink href="/login">Login</MDBNavbarLink>
+                    <MDBNavbarLink href="/register">Register</MDBNavbarLink>
                 </>
             );
         }
@@ -67,8 +54,8 @@ const NavbarComponent = () => {
         if (isAdmin) {
             return (
                 <>
-                    <Nav.Link href="/admin">Admin</Nav.Link>
-                    <Nav.Link onClick={() => setLogoutShow(true)}>Logout</Nav.Link>
+                    <MDBNavbarLink href="/admin">Admin</MDBNavbarLink>
+                    <MDBNavbarLink onClick={() => setLogoutShow(true)}>Logout</MDBNavbarLink>
                         <Logout show = {LogoutShow} onHide={() => setLogoutShow(false)}/> 
                 </>
             );
@@ -76,43 +63,43 @@ const NavbarComponent = () => {
     };
 
     return(
-        <Navbar className="nav-color" variant="dark">
-            <Container>
-            <Navbar.Brand href="/"> Auction House </Navbar.Brand>
-            <Navbar.Toggle aria-controls="basic-navbar-nav" />
-            <Navbar.Collapse id="responsive-navbar-nav">
-                <Nav variant="pills" className="me-auto" >
-                <Nav.Link href="/">Home</Nav.Link>
-                <Nav.Link href="/items/1">Items</Nav.Link>
-                <NavDropdown title="Category" id="basic-nav-dropdown">
-                    <NavDropdown.Item href="/category/Jewellery">Jewellery</NavDropdown.Item>
-                    <NavDropdown.Item href="/category/Watch">Watch</NavDropdown.Item>
-                    <NavDropdown.Item href="/category/Car">Car</NavDropdown.Item>
-                    <NavDropdown.Item href="/category/Alcohol">Alcohol</NavDropdown.Item>
-                    <NavDropdown.Item href="/category/Painting">Painting</NavDropdown.Item>
-                    <NavDropdown.Divider />
-                    <NavDropdown.Item href="/category/other">
+        <MDBNavbar  className="nav-color" variant="dark">
+            <MDBContainer>
+            <MDBNavbarBrand  href="/"> Auction House </MDBNavbarBrand >
+            <MDBNavbarToggler aria-controls="basic-navbar-nav" />
+            <MDBCollapse  id="responsive-navbar-nav">
+                <MDBNavbarNav variant="pills" className="me-auto" >
+                <MDBNavbarLink href="/">Home</MDBNavbarLink>
+                <MDBNavbarLink href="/items/1">Items</MDBNavbarLink>
+                <MDBDropdownMenu title="Category" id="basic-nav-dropdown">
+                    <MDBDropdownItem href="/category/Jewellery">Jewellery</MDBDropdownItem>
+                    <MDBDropdownItem href="/category/Watch">Watch</MDBDropdownItem>
+                    <MDBDropdownItem href="/category/Car">Car</MDBDropdownItem>
+                    <MDBDropdownItem href="/category/Alcohol">Alcohol</MDBDropdownItem>
+                    <MDBDropdownItem href="/category/Painting">Painting</MDBDropdownItem>
+                    <MDBDropdownItem divider />
+                    <MDBDropdownItem href="/category/other">
                         Other
-                    </NavDropdown.Item>
-                </NavDropdown>
-                </Nav>
-                <Form className="d-flex search-box">
-                    <Form.Control
+                    </MDBDropdownItem>
+                </MDBDropdownMenu>
+                </MDBNavbarNav>
+                <form className="d-flex search-box">
+                    <input
                         type="search"
                         placeholder="Search"
                         className="me-2"
                         aria-label="Search"
                         onChange={(e) => { setSearch(e.target.value) }}
                     />
-                    <Button type="submit" variant="outline-info" onClick={(e) => handleSubmit(e)}>Search</Button>
-                </Form>
-                <Nav className="nav-forms">
+                    <MDBBtn type="submit" variant="outline-info" onClick={(e) => handleSubmit(e)}>Search</MDBBtn>
+                </form >
+                <MDBNavbarNav className="nav-forms">
                     {ShowAuthNavigation()}
                     {ShowAdminNavigation()}
-                </Nav>
-                </Navbar.Collapse>
-            </Container>
-        </Navbar>
+                </MDBNavbarNav>
+                </MDBCollapse >
+            </MDBContainer>
+        </MDBNavbar >
     );
 }
 
